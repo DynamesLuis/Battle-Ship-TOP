@@ -5,14 +5,24 @@ export default class GameBoard {
     this.ships = [];
     this.attackedCells = new Set();
     this.occupiedCells = new Map();
+    this.length = 10;
+    this.height = 10;
+  }
+
+  getLength() {
+    return this.length;
+  }
+
+  getHeight() {
+    return this.height;
   }
 
   getAttackedCells() {
-    return this.attackedCells;
+    return new Set(this.attackedCells);
   }
 
   getOccupiedCells() {
-    return this.occupiedCells;
+    return new Map(this.occupiedCells);
   }
 
   receiveAttack(xCoordinate, yCoordinate) {

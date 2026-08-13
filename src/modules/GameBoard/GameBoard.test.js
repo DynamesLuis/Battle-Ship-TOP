@@ -89,4 +89,40 @@ describe("GameBoard", () => {
       sunkedShip: true,
     });
   });
+
+  test("returns the board length", () => {
+    const board = new GameBoard(10, 10);
+
+    expect(board.getLength()).toBe(10);
+  });
+
+  test("returns the board height", () => {
+    const board = new GameBoard(10, 10);
+
+    expect(board.getHeight()).toBe(10);
+  });
+
+  test("returns a copy of the attacked cells", () => {
+    const board = new GameBoard(10, 10);
+
+    board.receiveAttack(3, 4);
+
+    const attackedCells = board.getAttackedCells();
+
+    expect(attackedCells).toEqual(new Set(["3, 4"]));
+    expect(attackedCells).not.toBe(board.attackedCells);
+  });
+
+  test("returns a copy of the occupied cells", () => {
+    const board = new GameBoard(10, 10);
+
+    board.placeShip(0, 0, "x", 3);
+
+    const occupiedCells = board.getOccupiedCells();
+
+    expect(occupiedCells.has("0, 0")).toBe(true);
+    expect(occupiedCells.has("1, 0")).toBe(true);
+    expect(occupiedCells.has("2, 0")).toBe(true);
+    expect(occupiedCells).not.toBe(board.occupiedCells);
+  });
 });
