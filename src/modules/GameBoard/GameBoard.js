@@ -17,10 +17,17 @@ export default class GameBoard {
 
   receiveAttack(xCoordinate, yCoordinate) {
     const ship = this.occupiedCells.get(`${xCoordinate}, ${yCoordinate}`);
+    let isHit = "miss";
     if (ship) {
       ship.hit();
+      isHit = "hit";
     }
     this.attackedCells.add(`${xCoordinate}, ${yCoordinate}`);
+
+    return {
+      attackResult: isHit,
+      sunkedShip: ship ? ship.isSunk() : false,
+    };
   }
 
   placeShip(xStartCoordinate, yStartCoordinate, direction, length) {

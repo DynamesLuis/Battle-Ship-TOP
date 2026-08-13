@@ -52,4 +52,41 @@ describe("GameBoard", () => {
 
     expect(board.getAttackedCells().has("3, 4")).toBe(true);
   });
+
+  test("receiveAttack returns miss when attacking an empty cell", () => {
+    const board = new GameBoard();
+
+    const result = board.receiveAttack(3, 4);
+
+    expect(result).toEqual({
+      attackResult: "miss",
+      sunkedShip: false,
+    });
+  });
+
+  test("receiveAttack returns hit when attacking a ship without sinking it", () => {
+    const board = new GameBoard();
+
+    board.placeShip(0, 0, "x", 2);
+
+    const result = board.receiveAttack(0, 0);
+
+    expect(result).toEqual({
+      attackResult: "hit",
+      sunkedShip: false,
+    });
+  });
+
+  test("receiveAttack returns hit and sunkedShip true when the attack sinks a ship", () => {
+    const board = new GameBoard();
+
+    board.placeShip(0, 0, "x", 1);
+
+    const result = board.receiveAttack(0, 0);
+
+    expect(result).toEqual({
+      attackResult: "hit",
+      sunkedShip: true,
+    });
+  });
 });
