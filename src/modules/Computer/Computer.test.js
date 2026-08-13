@@ -63,4 +63,23 @@ describe("Computer", () => {
 
     expect(attackedCells.size).toBe(50);
   });
+
+  test("attack returns the result from the enemy board", () => {
+    const computer = new Computer("Computer");
+
+    const attackResult = {
+      attackResult: "hit",
+      sunkedShip: true,
+    };
+
+    const enemyBoard = {
+      getAttackedCells: jest.fn(() => new Set()),
+      receiveAttack: jest.fn(() => attackResult),
+    };
+
+    const result = computer.attack(enemyBoard);
+
+    expect(result).toEqual(attackResult);
+    expect(enemyBoard.receiveAttack).toHaveBeenCalledTimes(1);
+  });
 });

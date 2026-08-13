@@ -3,7 +3,7 @@ import Player from "../Player/Player";
 export default class Computer extends Player {
   attack(enemyBoard) {
     const [xCoordinate, yCoordinate] = this.#getRandomCoordinates(enemyBoard);
-    enemyBoard.receiveAttack(xCoordinate, yCoordinate);
+    return enemyBoard.receiveAttack(xCoordinate, yCoordinate);
   }
 
   #getRandomCoordinates(enemyBoard) {
