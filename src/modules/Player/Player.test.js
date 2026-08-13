@@ -45,4 +45,22 @@ describe("Player", () => {
 
     expect(enemyBoard.receiveAttack).toHaveBeenCalledWith(3, 4);
   });
+
+  test("attack returns the result from the enemy board", () => {
+    const player = new Player("Player");
+
+    const attackResult = {
+      attackResult: "hit",
+      sunkedShip: true,
+    };
+
+    const enemyBoard = {
+      receiveAttack: jest.fn(() => attackResult),
+    };
+
+    const result = player.attack(enemyBoard, 3, 4);
+
+    expect(result).toEqual(attackResult);
+    expect(enemyBoard.receiveAttack).toHaveBeenCalledWith(3, 4);
+  });
 });

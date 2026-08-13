@@ -7,7 +7,7 @@ export default class Player {
   }
 
   attack(enemyBoard, xCoordinate, yCoordinate) {
-    enemyBoard.receiveAttack(xCoordinate, yCoordinate);
+    return enemyBoard.receiveAttack(xCoordinate, yCoordinate);
   }
 
   getName() {
