@@ -9,12 +9,17 @@
     "build": "vite build",
     "preview": "vite preview"
   },
+  "jest": {
+    "testEnvironment": "jsdom"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@babel/preset-env": "^7.29.7",
+    "@testing-library/jest-dom": "^7.0.1",
     "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1",
     "vite": "^8.2.1"
   }
 }

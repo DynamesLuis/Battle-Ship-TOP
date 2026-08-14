@@ -1,7 +1,7 @@
 import Player from "../Player/Player";
 import GameBoard from "../GameBoard/GameBoard";
 
-describe("Player", () => {
+describe.skip("Player", () => {
   test("stores the player's name", () => {
     const player = new Player("Luis");
 

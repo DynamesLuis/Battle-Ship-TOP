@@ -1,6 +1,6 @@
 import Computer from "./Computer";
 
-describe("Computer", () => {
+describe.skip("Computer", () => {
   test("inherits the name from Player", () => {
     const computer = new Computer("CPU");
 

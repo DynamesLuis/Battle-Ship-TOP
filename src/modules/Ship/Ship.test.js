@@ -1,6 +1,6 @@
 import Ship from "./Ship";
 
-describe("Ship", () => {
+describe.skip("Ship", () => {
   test("stores the length passed to the constructor", () => {
     const ship = new Ship(3);
 

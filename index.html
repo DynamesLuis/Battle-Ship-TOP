@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BattleShip</title>
+    <script type="module" src="/src/index.js"></script>
+  </head>
+  <body>
+    <main class="game">
+      <header class="game-header">
+        <h1>BATTLESHIP</h1>
+        <p>The Battle for Azeroth</p>
+      </header>
+
+      <section id="turn-result" class="battle-report">
+        <h2>Battle Report</h2>
+
+        <div class="battle-content">
+          <div class="character-portrait">
+            <img src="" alt="Character portrait" />
+          </div>
+
+          <div class="battle-message">
+            <p>Your turn!</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="boards-container">
+        <div class="board-wrapper">
+          <h2>⚓ Your Fleet</h2>
+          <div id="my-board"></div>
+        </div>
+
+        <div class="board-wrapper">
+          <h2>☠ Enemy Fleet</h2>
+          <div id="enemy-board"></div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
