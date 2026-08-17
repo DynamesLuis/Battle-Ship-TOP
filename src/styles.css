@@ -253,6 +253,8 @@ body {
 .cell.attacked {
   position: relative;
   background-color: #355664;
+  pointer-events: none;
+  cursor: not-allowed;
 }
 
 /* Ataque sobre un barco */

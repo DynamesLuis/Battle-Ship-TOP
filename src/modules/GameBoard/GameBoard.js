@@ -33,7 +33,6 @@ export default class GameBoard {
       isHit = "hit";
     }
     this.attackedCells.add(`${xCoordinate}, ${yCoordinate}`);
-
     return {
       attackResult: isHit,
       sunkedShip: ship ? ship.isSunk() : false,

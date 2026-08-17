@@ -52,8 +52,6 @@ export default class BoardRender {
           occupiedCells.has(`${row}, ${col}`)
         ) {
           cell.classList.add("occupied");
-          console.log("same");
-          
         }
 
         $container.append(cell);

@@ -12,7 +12,6 @@ export default class Game {
         xCoordinate,
         yCoordinate,
       );
-      
     } else {
       results = this.attacker.attack(this.defender.getGameBoard());
     }
@@ -41,6 +40,3 @@ export default class Game {
     return null;
   }
 }
-
-//modificar gameboard y player para que retoner el resultado del ataque, de esta forma se puede saber
-//desde game, y poder retornar el resultado del turn, modificar los test
