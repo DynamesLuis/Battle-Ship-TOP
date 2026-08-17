@@ -1,11 +1,16 @@
 export default class BoardRender {
-  renderMyBoard(gameBoard, $container) {
-    $container.innerHTML = "";
-    const occupiedCells = gameBoard.getOccupiedCells(); //Map
-    const attackedCells = gameBoard.getAttackedCells(); //set
+  constructor(myBoard, enemyBoard) {
+    this.myBoard = myBoard;
+    this.enemyBoard = enemyBoard;
+  }
 
-    for (let col = 0; col < gameBoard.getLength(); col++) {
-      for (let row = 0; row < gameBoard.getHeight(); row++) {
+  renderMyBoard($container) {
+    $container.innerHTML = "";
+    const occupiedCells = this.myBoard.getOccupiedCells(); //Map
+    const attackedCells = this.myBoard.getAttackedCells(); //set
+
+    for (let col = 0; col < this.myBoard.getLength(); col++) {
+      for (let row = 0; row < this.myBoard.getHeight(); row++) {
         const cell = document.createElement("div");
 
         cell.dataset.coordinate = `${row}, ${col}`;
@@ -25,13 +30,13 @@ export default class BoardRender {
     }
   }
 
-  renderEnemyBoard(gameBoard, $container) {
+  renderEnemyBoard($container) {
     $container.innerHTML = "";
-    const attackedCells = gameBoard.getAttackedCells();
-    const occupiedCells = gameBoard.getOccupiedCells();//set
+    const attackedCells = this.enemyBoard.getAttackedCells();
+    const occupiedCells = this.enemyBoard.getOccupiedCells(); //set
 
-    for (let col = 0; col < gameBoard.getLength(); col++) {
-      for (let row = 0; row < gameBoard.getHeight(); row++) {
+    for (let col = 0; col < this.enemyBoard.getLength(); col++) {
+      for (let row = 0; row < this.enemyBoard.getHeight(); row++) {
         const cell = document.createElement("div");
 
         cell.dataset.coordinate = `${row}, ${col}`;
@@ -42,8 +47,13 @@ export default class BoardRender {
           cell.classList.add("attacked");
         }
 
-        if (attackedCells.has(`${row}, ${col}`) && occupiedCells.has(`${row}, ${col}`)) {
+        if (
+          attackedCells.has(`${row}, ${col}`) &&
+          occupiedCells.has(`${row}, ${col}`)
+        ) {
           cell.classList.add("occupied");
+          console.log("same");
+          
         }
 
         $container.append(cell);
@@ -51,4 +61,3 @@ export default class BoardRender {
     }
   }
 }
-

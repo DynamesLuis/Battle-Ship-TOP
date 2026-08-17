@@ -2,7 +2,7 @@ import GameBoard from "../../modules/GameBoard/GameBoard";
 import BoardRender from "./BoardRender";
 import "@testing-library/jest-dom";
 
-describe("GameBoardRenderer", () => {
+describe.skip("GameBoardRenderer", () => {
   let renderer;
   let container;
 

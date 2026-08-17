@@ -12,6 +12,7 @@ export default class Game {
         xCoordinate,
         yCoordinate,
       );
+      
     } else {
       results = this.attacker.attack(this.defender.getGameBoard());
     }
