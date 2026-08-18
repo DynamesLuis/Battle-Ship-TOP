@@ -1,6 +1,6 @@
 import GameBoard from "../../modules/GameBoard/GameBoard";
 import UIController from "./UIController";
-import "@testing-library/jest-dom"
+import "@testing-library/jest-dom";
 
 let mockEnemyBoardContainer;
 let mockTurnResult;
@@ -197,6 +197,59 @@ describe("UIController", () => {
       uiController.displayResults(results);
 
       expect(mockTurnResult).toHaveTextContent(/Player 1/i);
+    });
+
+    test("finishes the game when there is a winner", () => {
+      const winner = {
+        getName: jest.fn(() => "Player 1"),
+      };
+
+      const results = {
+        winner,
+        attackResult: "hit",
+        sunkedShip: true,
+      };
+
+      game.playTurn.mockReturnValue(results);
+
+      const finishGameSpy = jest.spyOn(uiController, "finishGame");
+
+      const cell = document.createElement("div");
+      cell.classList.add("cell");
+      cell.dataset.coordinate = "3, 0";
+
+      mockEnemyBoardContainer.appendChild(cell);
+
+      uiController.initEvents();
+
+      cell.click();
+
+      expect(finishGameSpy).toHaveBeenCalledWith(winner);
+    });
+
+    test("does not play another turn after the game has finished", () => {
+      const winner = {
+        getName: jest.fn(() => "Player 1"),
+      };
+
+      game.playTurn.mockReturnValue({
+        winner,
+        attackResult: "hit",
+        sunkedShip: true,
+      });
+
+      const cell = document.createElement("div");
+      cell.classList.add("cell");
+      cell.dataset.coordinate = "3, 0";
+
+      mockEnemyBoardContainer.appendChild(cell);
+
+      uiController.initEvents();
+
+      cell.click();
+      cell.click();
+
+      expect(game.playTurn).toHaveBeenCalledTimes(1);
     });
   });
 });

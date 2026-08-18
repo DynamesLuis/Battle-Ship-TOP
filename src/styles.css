@@ -230,6 +230,10 @@ body {
     0 8px 20px rgba(0, 0, 0, 0.6);
 }
 
+#enemy-board.desactivated {
+  pointer-events: none;
+}
+
 .cell {
   width: 40px;
   height: 40px;

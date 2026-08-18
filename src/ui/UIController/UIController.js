@@ -4,6 +4,7 @@ export default class UIController {
   constructor(boardRender, game) {
     this.boardRender = boardRender;
     this.game = game;
+    this.isFinished = false;
   }
 
   initEvents() {
@@ -13,6 +14,10 @@ export default class UIController {
   }
 
   handleEnemyBoardClick(event) {
+    if (this.isFinished) {
+      return;
+    }
+    
     const $target = event.target;
 
     if (!$target.classList.contains("cell")) {
@@ -25,6 +30,14 @@ export default class UIController {
     const turnResults = this.game.playTurn(x, y);
     this.displayResults(turnResults);
     this.boardRender.renderEnemyBoard($enemyBoardContainer);
+    if (turnResults.winner) {
+      this.finishGame(turnResults.winner);
+    }
+  }
+
+  finishGame(winner) {
+    $enemyBoardContainer.classList.add("desactivated");
+    this.isFinished = true;
   }
 
   displayResults(results) {
