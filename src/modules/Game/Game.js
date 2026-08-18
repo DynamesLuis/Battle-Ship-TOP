@@ -4,6 +4,30 @@ export default class Game {
     this.defender = player2;
   }
 
+  playRound(xCoordinate, yCoordinate) {
+    let playerResults = null;
+    let computerResults = null;
+    let winner = null;
+
+    playerResults = this.playTurn(xCoordinate, yCoordinate);
+
+    if (!playerResults.winner) {
+      computerResults = this.playTurn();
+    }
+
+    if (playerResults.winner) {
+      winner = playerResults.winner;
+    } else if (computerResults.winner) {
+      winner = computerResults.winner;
+    }
+
+    return {
+      playerResults,
+      computerResults,
+      winner,
+    };
+  }
+
   playTurn(xCoordinate, yCoordinate) {
     let results = null;
     if (arguments.length > 0) {

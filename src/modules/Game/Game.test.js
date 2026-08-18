@@ -172,3 +172,100 @@ describe.skip("Game", () => {
     });
   });
 });
+
+describe("playRound", () => {
+  let player;
+  let computer;
+  let game;
+
+  beforeEach(() => {
+    player = new Player("Player 1");
+    computer = new Computer("Computer");
+
+    game = new Game(player, computer);
+  });
+
+  test("plays the player and computer turns and returns both results", () => {
+    const playerResult = {
+      winner: null,
+      attackResult: "hit",
+      sunkedShip: false,
+    };
+
+    const computerResult = {
+      winner: null,
+      attackResult: "miss",
+      sunkedShip: false,
+    };
+
+    jest
+      .spyOn(game, "playTurn")
+      .mockReturnValueOnce(playerResult)
+      .mockReturnValueOnce(computerResult);
+
+    const results = game.playRound();
+
+    expect(game.playTurn).toHaveBeenCalledTimes(2);
+
+    expect(results).toEqual({
+      playerResults: playerResult,
+      computerResults: computerResult,
+      winner: null,
+    });
+
+    expect(game.attacker).toBe(player);
+    expect(game.defender).toBe(computer);
+  });
+
+  test("does not play the computer turn if the player wins", () => {
+    const playerResult = {
+      winner: player,
+      attackResult: "hit",
+      sunkedShip: true,
+    };
+
+    jest.spyOn(game, "playTurn").mockReturnValueOnce(playerResult);
+
+    const results = game.playRound();
+
+    expect(game.playTurn).toHaveBeenCalledTimes(1);
+
+    expect(results).toEqual({
+      playerResults: playerResult,
+      computerResults: null,
+      winner: player,
+    });
+
+    expect(game.attacker).toBe(player);
+    expect(game.defender).toBe(computer);
+  });
+
+  test("plays the computer turn and returns the winner if computer wins", () => {
+    const playerResult = {
+      winner: null,
+      attackResult: "miss",
+      sunkedShip: false,
+    };
+
+    const computerResult = {
+      winner: computer,
+      attackResult: "hit",
+      sunkedShip: true,
+    };
+
+    jest
+      .spyOn(game, "playTurn")
+      .mockReturnValueOnce(playerResult)
+      .mockReturnValueOnce(computerResult);
+
+    const results = game.playRound();
+
+    expect(game.playTurn).toHaveBeenCalledTimes(2);
+
+    expect(results).toEqual({
+      playerResults: playerResult,
+      computerResults: computerResult,
+      winner: computer,
+    });
+  });
+});
