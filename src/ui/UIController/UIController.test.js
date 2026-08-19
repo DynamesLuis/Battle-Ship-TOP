@@ -3,11 +3,16 @@ import UIController from "./UIController";
 import "@testing-library/jest-dom";
 
 let mockEnemyBoardContainer;
+let mockMyBoardContainer;
 let mockTurnResult;
 
 jest.mock("../domSelector", () => ({
   get $enemyBoardContainer() {
     return mockEnemyBoardContainer;
+  },
+
+  get $myBoardContainer() {
+    return mockMyBoardContainer;
   },
 
   get $turnResult() {
@@ -24,7 +29,11 @@ describe.skip("UIController", () => {
     mockEnemyBoardContainer = document.createElement("div");
 
     game = {
-      playTurn: jest.fn(),
+      playRound: jest.fn().mockReturnValue({
+        playerResults: null,
+        computerResults: null,
+        winner: null,
+      }),
     };
 
     boardRenderer = {
@@ -54,7 +63,7 @@ describe.skip("UIController", () => {
     );
   });
 
-  test("clicking a cell calls game.playTurn with its coordinates", () => {
+  test("clicking a cell calls game.playRound with its coordinates", () => {
     const cell = document.createElement("div");
 
     cell.classList.add("cell");
@@ -66,7 +75,7 @@ describe.skip("UIController", () => {
 
     cell.click();
 
-    expect(game.playTurn).toHaveBeenCalledWith(3, 0);
+    expect(game.playRound).toHaveBeenCalledWith(3, 0);
   });
 
   test("clicking outside a cell does not start a turn", () => {
@@ -74,19 +83,30 @@ describe.skip("UIController", () => {
 
     mockEnemyBoardContainer.click();
 
-    expect(game.playTurn).not.toHaveBeenCalled();
+    expect(game.playRound).not.toHaveBeenCalled();
   });
 
-  test("receives the result of a successful playTurn", () => {
-    const turnResult = {
+  test("receives the player and computer results from playRound", () => {
+    const playerResults = {
       attackResult: "hit",
       sunkedShip: false,
+    };
+
+    const computerResults = {
+      attackResult: "miss",
+      sunkedShip: false,
+    };
+
+    const roundResults = {
+      playerResults,
+      computerResults,
       winner: null,
     };
 
-    game.playTurn.mockReturnValue(turnResult);
+    game.playRound.mockReturnValue(roundResults);
 
     const cell = document.createElement("div");
+
     cell.classList.add("cell");
     cell.dataset.coordinate = "3, 0";
 
@@ -96,19 +116,31 @@ describe.skip("UIController", () => {
 
     cell.click();
 
-    expect(game.playTurn).toHaveReturnedWith(turnResult);
+    expect(game.playRound).toHaveReturnedWith(roundResults);
   });
 
-  test("renders the enemy board again after a successful playTurn", () => {
-    const turnResult = {
-      attackResult: "hit",
-      sunkedShip: false,
-      winner: null,
+  test("finishes the game when the player wins", () => {
+    const winner = {
+      getName: jest.fn(() => "Player 1"),
     };
 
-    game.playTurn.mockReturnValue(turnResult);
+    const playerResults = {
+      attackResult: "hit",
+      sunkedShip: true,
+    };
+
+    const roundResults = {
+      playerResults,
+      computerResults: null,
+      winner,
+    };
+
+    game.playRound.mockReturnValue(roundResults);
+
+    const finishGame = jest.spyOn(uiController, "finishGame");
 
     const cell = document.createElement("div");
+
     cell.classList.add("cell");
     cell.dataset.coordinate = "3, 0";
 
@@ -118,13 +150,83 @@ describe.skip("UIController", () => {
 
     cell.click();
 
-    expect(boardRenderer.renderEnemyBoard).toHaveBeenCalledWith(
-      mockEnemyBoardContainer,
-    );
+    expect(finishGame).toHaveBeenCalledWith(winner);
+  });
+
+  test("does not finish the game when there is no winner", () => {
+    const roundResults = {
+      playerResults: {
+        attackResult: "hit",
+        sunkedShip: false,
+      },
+
+      computerResults: {
+        attackResult: "miss",
+        sunkedShip: false,
+      },
+
+      winner: null,
+    };
+
+    game.playRound.mockReturnValue(roundResults);
+
+    const finishGame = jest.spyOn(uiController, "finishGame");
+
+    const cell = document.createElement("div");
+
+    cell.classList.add("cell");
+    cell.dataset.coordinate = "3, 0";
+
+    mockEnemyBoardContainer.appendChild(cell);
+
+    uiController.initEvents();
+
+    cell.click();
+
+    expect(finishGame).not.toHaveBeenCalled();
+  });
+
+  test("finishes the game when the computer wins", () => {
+    const winner = {
+      getName: jest.fn(() => "Computer"),
+    };
+
+    const playerResults = {
+      attackResult: "miss",
+      sunkedShip: false,
+    };
+
+    const computerResults = {
+      attackResult: "hit",
+      sunkedShip: true,
+    };
+
+    const roundResults = {
+      playerResults,
+      computerResults,
+      winner,
+    };
+
+    game.playRound.mockReturnValue(roundResults);
+
+    const finishGame = jest.spyOn(uiController, "finishGame");
+
+    const cell = document.createElement("div");
+
+    cell.classList.add("cell");
+    cell.dataset.coordinate = "3, 0";
+
+    mockEnemyBoardContainer.appendChild(cell);
+
+    uiController.initEvents();
+
+    cell.click();
+
+    expect(finishGame).toHaveBeenCalledWith(winner);
   });
 });
 
-describe("UIController", () => {
+describe("Renders", () => {
   let game;
   let boardRenderer;
   let uiController;
@@ -134,122 +236,189 @@ describe("UIController", () => {
     mockTurnResult = document.createElement("p");
 
     game = {
-      playTurn: jest.fn(),
+      playRound: jest.fn(),
     };
 
     boardRenderer = {
       myBoard: new GameBoard(),
       enemyBoard: new GameBoard(),
       renderEnemyBoard: jest.fn(),
+      renderMyBoard: jest.fn(),
     };
 
     uiController = new UIController(boardRenderer, game);
   });
 
-  describe("displayResults", () => {
-    test("displays miss when the attack misses", () => {
-      const results = {
-        winner: null,
+  test("renders both boards after a complete round", async () => {
+    jest.useFakeTimers();
+    game.playRound.mockReturnValue({
+      playerResults: {
+        attackResult: "hit",
+        sunkedShip: false,
+      },
+      computerResults: {
         attackResult: "miss",
         sunkedShip: false,
-      };
-
-      uiController.displayResults(results);
-
-      expect(mockTurnResult).toHaveTextContent(/miss/i);
+      },
+      winner: null,
     });
 
-    test("displays hit when the attack hits a ship", () => {
-      const results = {
-        winner: null,
-        attackResult: "hit",
-        sunkedShip: false,
-      };
+    const cell = document.createElement("div");
+    cell.classList.add("cell");
+    cell.dataset.coordinate = "3, 0";
 
-      uiController.displayResults(results);
+    mockEnemyBoardContainer.appendChild(cell);
 
-      expect(mockTurnResult).toHaveTextContent(/hit/i);
-    });
+    uiController.initEvents();
 
-    test("displays that a ship was sunk", () => {
-      const results = {
-        winner: null,
-        attackResult: "hit",
-        sunkedShip: true,
-      };
+    cell.click();
 
-      uiController.displayResults(results);
+    expect(boardRenderer.renderEnemyBoard).toHaveBeenCalled();
+    await jest.advanceTimersByTimeAsync(2000);
+    expect(boardRenderer.renderMyBoard).toHaveBeenCalled();
+    jest.useRealTimers();
+  });
 
-      expect(mockTurnResult).toHaveTextContent(/sunk/i);
-    });
-
-    test("displays the winner", () => {
-      const winner = {
-        getName: jest.fn(() => "Player 1"),
-      };
-
-      const results = {
-        winner,
+  test("does not render myBoard when computer did not play", () => {
+    game.playRound.mockReturnValue({
+      playerResults: {
         attackResult: "hit",
         sunkedShip: true,
-      };
-
-      uiController.displayResults(results);
-
-      expect(mockTurnResult).toHaveTextContent(/Player 1/i);
+      },
+      computerResults: null,
+      winner: {},
     });
 
-    test("finishes the game when there is a winner", () => {
-      const winner = {
-        getName: jest.fn(() => "Player 1"),
-      };
+    const cell = document.createElement("div");
+    cell.classList.add("cell");
+    cell.dataset.coordinate = "3, 0";
 
-      const results = {
-        winner,
-        attackResult: "hit",
-        sunkedShip: true,
-      };
+    mockEnemyBoardContainer.appendChild(cell);
 
-      game.playTurn.mockReturnValue(results);
+    uiController.initEvents();
 
-      const finishGameSpy = jest.spyOn(uiController, "finishGame");
+    cell.click();
 
-      const cell = document.createElement("div");
-      cell.classList.add("cell");
-      cell.dataset.coordinate = "3, 0";
+    expect(boardRenderer.renderEnemyBoard).toHaveBeenCalled();
 
-      mockEnemyBoardContainer.appendChild(cell);
+    expect(boardRenderer.renderMyBoard).not.toHaveBeenCalled();
+  });
 
-      uiController.initEvents();
+  test("displays player results first and computer results after", async () => {
+    jest.useFakeTimers();
 
-      cell.click();
+    const playerResults = {
+      attackResult: "hit",
+      sunkedShip: false,
+    };
 
-      expect(finishGameSpy).toHaveBeenCalledWith(winner);
+    const computerResults = {
+      attackResult: "miss",
+      sunkedShip: false,
+    };
+
+    game.playRound.mockReturnValue({
+      playerResults,
+      computerResults,
+      winner: null,
     });
 
-    test("does not play another turn after the game has finished", () => {
-      const winner = {
-        getName: jest.fn(() => "Player 1"),
-      };
+    const displayResults = jest.spyOn(uiController, "displayResults");
 
-      game.playTurn.mockReturnValue({
-        winner,
-        attackResult: "hit",
-        sunkedShip: true,
-      });
+    const cell = document.createElement("div");
+    cell.classList.add("cell");
+    cell.dataset.coordinate = "3, 0";
 
-      const cell = document.createElement("div");
-      cell.classList.add("cell");
-      cell.dataset.coordinate = "3, 0";
+    mockEnemyBoardContainer.appendChild(cell);
 
-      mockEnemyBoardContainer.appendChild(cell);
+    uiController.initEvents();
 
-      uiController.initEvents();
+    cell.click();
 
-      cell.click();
-      cell.click();
+    expect(displayResults).toHaveBeenCalledWith(playerResults);
 
-      expect(game.playTurn).toHaveBeenCalledTimes(1);
+    await jest.advanceTimersByTimeAsync(2000);
+
+    expect(displayResults).toHaveBeenNthCalledWith(2, computerResults);
+
+    jest.useRealTimers();
+  });
+
+  test("only displays player results when computerResults is null", () => {
+    const playerResults = {
+      attackResult: "hit",
+      sunkedShip: true,
+    };
+
+    game.playRound.mockReturnValue({
+      playerResults,
+      computerResults: null,
+      winner: {},
     });
+
+    const displayResults = jest.spyOn(uiController, "displayResults");
+
+    const cell = document.createElement("div");
+    cell.classList.add("cell");
+    cell.dataset.coordinate = "3, 0";
+
+    mockEnemyBoardContainer.appendChild(cell);
+
+    uiController.initEvents();
+
+    cell.click();
+
+    expect(displayResults).toHaveBeenCalledTimes(1);
+
+    expect(displayResults).toHaveBeenCalledWith(playerResults);
+  });
+
+  test("displays computer results after a delay", async () => {
+    jest.useFakeTimers();
+
+    const playerResults = {
+      attackResult: "hit",
+      sunkedShip: false,
+    };
+
+    const computerResults = {
+      attackResult: "miss",
+      sunkedShip: false,
+    };
+
+    game.playRound.mockReturnValue({
+      playerResults,
+      computerResults,
+      winner: null,
+    });
+
+    const displayResults = jest.spyOn(uiController, "displayResults");
+
+    const cell = document.createElement("div");
+    cell.classList.add("cell");
+    cell.dataset.coordinate = "3, 0";
+
+    mockEnemyBoardContainer.appendChild(cell);
+
+    uiController.initEvents();
+
+    cell.click();
+
+    expect(displayResults).toHaveBeenCalledTimes(1);
+
+    expect(displayResults).toHaveBeenNthCalledWith(1, playerResults);
+
+    jest.advanceTimersByTime(999);
+
+    expect(displayResults).toHaveBeenCalledTimes(1);
+
+    jest.advanceTimersByTime(1);
+    await jest.advanceTimersByTimeAsync(1000);
+
+    expect(displayResults).toHaveBeenCalledTimes(2);
+
+    expect(displayResults).toHaveBeenNthCalledWith(2, computerResults);
+
+    jest.useRealTimers();
   });
 });

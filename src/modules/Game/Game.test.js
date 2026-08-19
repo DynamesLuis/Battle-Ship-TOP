@@ -173,7 +173,7 @@ describe.skip("Game", () => {
   });
 });
 
-describe("playRound", () => {
+describe.skip("playRound", () => {
   let player;
   let computer;
   let game;

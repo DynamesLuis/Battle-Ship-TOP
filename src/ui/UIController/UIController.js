@@ -1,4 +1,10 @@
-import { $enemyBoardContainer, $turnResult } from "../domSelector";
+import {
+  $enemyBoardContainer,
+  $myBoardContainer,
+  $turnResult,
+} from "../domSelector";
+
+import delay from "../../helpers/delay";
 
 export default class UIController {
   constructor(boardRender, game) {
@@ -13,11 +19,11 @@ export default class UIController {
     );
   }
 
-  handleEnemyBoardClick(event) {
+  async handleEnemyBoardClick(event) {
     if (this.isFinished) {
       return;
     }
-    
+
     const $target = event.target;
 
     if (!$target.classList.contains("cell")) {
@@ -27,11 +33,22 @@ export default class UIController {
     const coordinates = $target.dataset.coordinate;
     const [x, y] = coordinates.split(",").map(Number);
 
-    const turnResults = this.game.playTurn(x, y);
-    this.displayResults(turnResults);
+    const { playerResults, computerResults, winner } = this.game.playRound(
+      x,
+      y,
+    );
+
     this.boardRender.renderEnemyBoard($enemyBoardContainer);
-    if (turnResults.winner) {
-      this.finishGame(turnResults.winner);
+    this.displayResults(playerResults);
+
+    if (computerResults) {
+      await delay(2000);
+      this.boardRender.renderMyBoard($myBoardContainer);
+      this.displayResults(computerResults);
+    }
+  
+    if (winner) {
+      this.finishGame(winner);
     }
   }
 
