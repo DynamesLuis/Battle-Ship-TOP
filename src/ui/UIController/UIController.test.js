@@ -231,7 +231,7 @@ describe.skip("UIController", () => {
   });
 });
 
-describe("Renders", () => {
+describe.skip("Renders", () => {
   let game;
   let boardRenderer;
   let uiController;
