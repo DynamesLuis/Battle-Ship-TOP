@@ -5,6 +5,7 @@ import "@testing-library/jest-dom";
 let mockEnemyBoardContainer;
 let mockMyBoardContainer;
 let mockTurnResult;
+let mockFinishedGameModal;
 
 jest.mock("../domSelector", () => ({
   get $enemyBoardContainer() {
@@ -17,6 +18,10 @@ jest.mock("../domSelector", () => ({
 
   get $turnResult() {
     return mockTurnResult;
+  },
+
+  get $finishedGameModal() {
+    return mockFinishedGameModal;
   },
 }));
 
@@ -234,6 +239,7 @@ describe("Renders", () => {
   beforeEach(() => {
     mockEnemyBoardContainer = document.createElement("div");
     mockTurnResult = document.createElement("p");
+    mockFinishedGameModal = document.createElement("div");
 
     game = {
       playRound: jest.fn(),
@@ -420,5 +426,13 @@ describe("Renders", () => {
     expect(displayResults).toHaveBeenNthCalledWith(2, computerResults);
 
     jest.useRealTimers();
+  });
+
+  test("shows the finished game modal", () => {
+    mockFinishedGameModal.classList.add("hidden");
+
+    uiController.finishGame();
+
+    expect(mockFinishedGameModal).not.toHaveClass("hidden");
   });
 });

@@ -1,5 +1,6 @@
 import {
   $enemyBoardContainer,
+  $finishedGameModal,
   $myBoardContainer,
   $turnResult,
 } from "../domSelector";
@@ -46,7 +47,7 @@ export default class UIController {
       this.boardRender.renderMyBoard($myBoardContainer);
       this.displayResults(computerResults);
     }
-  
+
     if (winner) {
       this.finishGame(winner);
     }
@@ -55,6 +56,7 @@ export default class UIController {
   finishGame(winner) {
     $enemyBoardContainer.classList.add("desactivated");
     this.isFinished = true;
+    $finishedGameModal.classList.remove("hidden");
   }
 
   displayResults(results) {
