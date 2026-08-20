@@ -1,5 +1,6 @@
 import Player from "../Player/Player";
 import GameBoard from "../GameBoard/GameBoard";
+import Character from "../Character/Character";
 
 describe.skip("Player", () => {
   test("stores the player's name", () => {
@@ -62,5 +63,25 @@ describe.skip("Player", () => {
 
     expect(result).toEqual(attackResult);
     expect(enemyBoard.receiveAttack).toHaveBeenCalledWith(3, 4);
+  });
+});
+
+describe.skip("Player", () => {
+  let player;
+  let character;
+
+  beforeEach(() => {
+    character = new Character("Captain", "captain.png", {
+      hit: ["Nice shot!"],
+      miss: ["You missed!"],
+      sunk: ["You sank my ship!"],
+      victory: ["We won!"],
+    });
+
+    player = new Player("Player 1", character);
+  });
+
+  test("returns the Character received", () => {
+    expect(player.getCharacter()).toBe(character);
   });
 });

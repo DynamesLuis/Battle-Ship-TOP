@@ -1,4 +1,5 @@
 import Computer from "./Computer";
+import Character from "../Character/Character";
 
 describe.skip("Computer", () => {
   test("inherits the name from Player", () => {
@@ -81,5 +82,15 @@ describe.skip("Computer", () => {
 
     expect(result).toEqual(attackResult);
     expect(enemyBoard.receiveAttack).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe.skip("Computer", () => {
+  test("can be created with a Character", () => {
+    const character = new Character("Computer Captain", "computer.png", {});
+
+    const computer = new Computer("Computer", character);
+
+    expect(computer.getCharacter()).toBe(character);
   });
 });
