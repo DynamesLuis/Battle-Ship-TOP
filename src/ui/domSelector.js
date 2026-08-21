@@ -1,11 +1,15 @@
 const $enemyBoardContainer = document.querySelector("#enemy-board");
 const $myBoardContainer = document.querySelector("#my-board");
-const $turnResult = document.querySelector(".battle-message p");
 const $finishedGameModal = document.querySelector("#game-over-modal");
+const $characterImg = document.querySelector(".character-portrait img");
+const $characterName = document.querySelector(".character");
+const $battleMessage = document.querySelector(".message");
 
 export {
   $enemyBoardContainer,
   $myBoardContainer,
-  $turnResult,
   $finishedGameModal,
+  $characterImg,
+  $characterName,
+  $battleMessage,
 };

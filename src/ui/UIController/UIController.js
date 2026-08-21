@@ -2,7 +2,9 @@ import {
   $enemyBoardContainer,
   $finishedGameModal,
   $myBoardContainer,
-  $turnResult,
+  $battleMessage,
+  $characterImg,
+  $characterName,
 } from "../domSelector";
 
 import delay from "../../helpers/delay";
@@ -40,12 +42,12 @@ export default class UIController {
     );
 
     this.boardRender.renderEnemyBoard($enemyBoardContainer);
-    this.displayResults(playerResults);
+    this.displayResults(playerResults, this.game.getPlayer1());
 
     if (computerResults) {
       await delay(2000);
       this.boardRender.renderMyBoard($myBoardContainer);
-      this.displayResults(computerResults);
+      this.displayResults(computerResults, this.game.getPlayer2());
     }
 
     if (winner) {
@@ -59,19 +61,28 @@ export default class UIController {
     $finishedGameModal.classList.remove("hidden");
   }
 
-  displayResults(results) {
+  displayResults(results, player) {
+    const character = player.getCharacter();
     if (results.winner) {
-      $turnResult.textContent = results.winner.getName();
+      $characterImg.src = character.getImg();
+      $characterName.textContent = character.getName();
+      $battleMessage.textContent = character.getRandomDialogue("win");
       return;
     }
     if (results.attackResult === "miss") {
-      $turnResult.textContent = results.attackResult;
+      $characterImg.src = character.getImg();
+      $characterName.textContent = character.getName();
+      $battleMessage.textContent = character.getRandomDialogue("miss");
       return;
     } else if (results.sunkedShip) {
-      $turnResult.textContent = "sunk";
+      $characterImg.src = character.getImg();
+      $characterName.textContent = character.getName();
+      $battleMessage.textContent = character.getRandomDialogue("sunk");
       return;
     } else {
-      $turnResult.textContent = results.attackResult;
+      $characterImg.src = character.getImg();
+      $characterName.textContent = character.getName();
+      $battleMessage.textContent = character.getRandomDialogue("hit");
       return;
     }
   }

@@ -1,5 +1,7 @@
 export default class Game {
   constructor(player1, player2) {
+    this.player1 = player1;
+    this.player2 = player2;
     this.attacker = player1;
     this.defender = player2;
   }
@@ -62,5 +64,13 @@ export default class Game {
     }
 
     return null;
+  }
+
+  getPlayer1() {
+    return this.player1;
+  }
+
+  getPlayer2() {
+    return this.player2;
   }
 }
