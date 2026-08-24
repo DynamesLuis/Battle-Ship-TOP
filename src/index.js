@@ -5,9 +5,24 @@ import BoardRender from "./ui/BoardRender/BoardRender";
 import { $enemyBoardContainer, $myBoardContainer } from "./ui/domSelector";
 import UIController from "./ui/UIController/UIController";
 import Game from "./modules/Game/Game";
+import Character from "./modules/Character/Character";
 
-const player1 = new Player("Dynames");
-const player2 = new Computer("Exia");
+const dialogues1 = {
+  hit: ["Nice shot!", "Got you!"],
+  miss: ["You missed!", "Try again!"],
+  sunk: ["You sank my ship!", "That's one down!"],
+  win: ["We won!", "Victory!"],
+};
+const dialogues2 = {
+  hit: ["Nice shot!", "Got you!"],
+  miss: ["You missed!", "Try again!"],
+  sunk: ["You sank my ship!", "That's one down!"],
+  win: ["We won!", "Victory!"],
+};
+const character1 = new Character("Lockon", dialogues1, "img.png");
+const character2 = new Character("Setsuna", dialogues2, "img2.png");
+const player1 = new Player("Dynames", character1);
+const player2 = new Computer("Exia", character2);
 const myBoard = player1.getGameBoard();
 const enemyBoard = player2.getGameBoard();
 myBoard.placeShip(0, 0, "x", 2);
