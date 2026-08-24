@@ -5,6 +5,9 @@ import {
   $battleMessage,
   $characterImg,
   $characterName,
+  $characterDialogueGameOver,
+  $characterImgGameOver,
+  $playerNameGameOver,
 } from "../domSelector";
 
 import delay from "../../helpers/delay";
@@ -51,14 +54,24 @@ export default class UIController {
     }
 
     if (winner) {
+      await delay(2000);
       this.finishGame(winner);
     }
   }
 
   finishGame(winner) {
-    $enemyBoardContainer.classList.add("desactivated");
     this.isFinished = true;
+    $enemyBoardContainer.classList.add("desactivated");
+    this.displayModal(winner);
     $finishedGameModal.classList.remove("hidden");
+  }
+
+  displayModal(winner) {
+    $characterImgGameOver.src = winner.getCharacter().getImg();
+    $characterDialogueGameOver.textContent = winner
+      .getCharacter()
+      .getRandomDialogue("win");
+    $playerNameGameOver.textContent = winner.getName();
   }
 
   displayResults(results, player) {

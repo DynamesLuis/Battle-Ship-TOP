@@ -8,6 +8,9 @@ let mockFinishedGameModal;
 let mockCharacterImg;
 let mockCharacterName;
 let mockBattleMessage;
+let mockCharacterImgGameOver;
+let mockCharacterDialogueGameOver;
+let mockPlayerNameGameOver;
 let character1;
 let character2;
 let player1;
@@ -37,6 +40,18 @@ jest.mock("../domSelector", () => ({
   get $battleMessage() {
     return mockBattleMessage;
   },
+
+  get $characterDialogueGameOver() {
+    return mockCharacterDialogueGameOver;
+  },
+
+  get $characterImgGameOver() {
+    return mockCharacterImgGameOver;
+  },
+
+  get $playerNameGameOver() {
+    return mockPlayerNameGameOver;
+  },
 }));
 
 describe("UIController", () => {
@@ -50,6 +65,9 @@ describe("UIController", () => {
     mockCharacterImg = document.createElement("img");
     mockCharacterName = document.createElement("p");
     mockBattleMessage = document.createElement("p");
+    mockCharacterDialogueGameOver = document.createElement("p");
+    mockPlayerNameGameOver = document.createElement("strong");
+    mockCharacterImgGameOver = document.createElement("img");
 
     character1 = {
       getName: jest.fn().mockReturnValue("Player 1"),
@@ -179,7 +197,9 @@ describe("UIController", () => {
       expect(game.playRound).toHaveReturnedWith(roundResults);
     });
 
-    test("finishes the game when the player wins", () => {
+    test("finishes the game when the player wins", async () => {
+      jest.useFakeTimers();
+
       const winner = player1;
 
       const playerResults = {
@@ -198,7 +218,6 @@ describe("UIController", () => {
       const finishGame = jest.spyOn(uiController, "finishGame");
 
       const cell = document.createElement("div");
-
       cell.classList.add("cell");
       cell.dataset.coordinate = "3, 0";
 
@@ -207,8 +226,13 @@ describe("UIController", () => {
       uiController.initEvents();
 
       cell.click();
+      expect(finishGame).not.toHaveBeenCalled();
+
+      await jest.advanceTimersByTimeAsync(2000);
 
       expect(finishGame).toHaveBeenCalledWith(winner);
+
+      jest.useRealTimers();
     });
 
     test("does not finish the game when there is no winner", () => {
@@ -280,7 +304,8 @@ describe("UIController", () => {
       cell.click();
 
       expect(finishGame).not.toHaveBeenCalled();
-      await jest.advanceTimersByTimeAsync(2000);
+      //await 2000 to show computer results and 2000 to finishGame
+      await jest.advanceTimersByTimeAsync(4000);
 
       expect(finishGame).toHaveBeenCalledWith(winner);
 
@@ -503,7 +528,7 @@ describe("UIController", () => {
     });
   });
 
-  describe.skip("display with delay", () => {
+  describe.skip("display results with delay", () => {
     test("displays player results first and computer results after", async () => {
       jest.useFakeTimers();
 
@@ -625,6 +650,87 @@ describe("UIController", () => {
         computerResults,
         player2,
       );
+
+      jest.useRealTimers();
+    });
+  });
+
+  describe.skip("display game over modal with delay", () => {
+    test("calls displayModal with the winner", () => {
+      const winner = player1;
+
+      const displayModal = jest.spyOn(uiController, "displayModal");
+
+      uiController.finishGame(winner);
+
+      expect(displayModal).toHaveBeenCalledWith(winner);
+    });
+
+    test("gets the winner character", () => {
+      const winner = player1;
+
+      uiController.displayModal(winner);
+
+      expect(player1.getCharacter).toHaveBeenCalled();
+    });
+
+    test("gets the winner name, image and win dialogue", () => {
+      const winner = player1;
+
+      uiController.displayModal(winner);
+
+      expect(winner.getName).toHaveBeenCalled();
+      expect(character1.getImg).toHaveBeenCalled();
+      expect(character1.getRandomDialogue).toHaveBeenCalledWith("win");
+    });
+
+    test("displays the winner character information in the modal", () => {
+      const winner = player1;
+
+      uiController.displayModal(winner);
+
+      expect(mockCharacterImgGameOver.src).toContain("player1.png");
+
+      expect(mockPlayerNameGameOver.textContent).toBe("Player 1");
+
+      expect(mockCharacterDialogueGameOver.textContent).toBe("Nice shot!");
+    });
+
+    test("finishes the game after a delay when there is a winner", async () => {
+      jest.useFakeTimers();
+
+      const winner = player1;
+
+      game.playRound.mockReturnValue({
+        playerResults: {
+          attackResult: "hit",
+          sunkedShip: true,
+        },
+        computerResults: null,
+        winner,
+      });
+
+      const finishGame = jest.spyOn(uiController, "finishGame");
+
+      const cell = document.createElement("div");
+      cell.classList.add("cell");
+      cell.dataset.coordinate = "3, 0";
+
+      mockEnemyBoardContainer.appendChild(cell);
+
+      uiController.initEvents();
+
+      cell.click();
+
+      expect(finishGame).not.toHaveBeenCalled();
+
+      await jest.advanceTimersByTimeAsync(1999);
+
+      expect(finishGame).not.toHaveBeenCalled();
+
+      await jest.advanceTimersByTimeAsync(1);
+
+      expect(finishGame).toHaveBeenCalledWith(winner);
 
       jest.useRealTimers();
     });

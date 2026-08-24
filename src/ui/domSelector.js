@@ -4,6 +4,11 @@ const $finishedGameModal = document.querySelector("#game-over-modal");
 const $characterImg = document.querySelector(".character-portrait img");
 const $characterName = document.querySelector(".character");
 const $battleMessage = document.querySelector(".message");
+const $characterImgGameOver = document.querySelector(
+  ".game-over-character img",
+);
+const $characterDialogueGameOver = document.querySelector(".game-over-quote p");
+const $playerNameGameOver = document.querySelector(".game-over-winner strong");
 
 export {
   $enemyBoardContainer,
@@ -12,4 +17,7 @@ export {
   $characterImg,
   $characterName,
   $battleMessage,
+  $characterImgGameOver,
+  $characterDialogueGameOver,
+  $playerNameGameOver,
 };
