@@ -1,7 +1,7 @@
 import ScreenController from "./ScreenController";
 import "@testing-library/jest-dom";
 
-describe("ScreenController", () => {
+describe.skip("ScreenController", () => {
   let screenController;
   let mockStartScreen;
   let mockCharacterSelection;

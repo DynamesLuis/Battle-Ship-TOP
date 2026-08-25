@@ -13,6 +13,8 @@ const $startScreen = document.querySelector(".startScreen");
 const $characterSelection = document.querySelector(".characterSelection");
 const $shipPlacement = document.querySelector(".shipPlacement");
 const $game = document.querySelector(".game");
+const $playerNameInput = document.querySelector("#playerName");
+const $startAppBtn = document.querySelector(".start-app-btn");
 
 export {
   $enemyBoardContainer,
@@ -24,8 +26,10 @@ export {
   $characterImgGameOver,
   $characterDialogueGameOver,
   $playerNameGameOver,
-  $startsScreen,
+  $startScreen,
   $characterSelection,
   $shipPlacement,
   $game,
+  $startAppBtn,
+  $playerNameInput,
 };
