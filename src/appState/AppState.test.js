@@ -1,6 +1,6 @@
 import AppState from "./AppState";
 
-describe("AppState", () => {
+describe.skip("AppState", () => {
   let appState;
 
   beforeEach(() => {

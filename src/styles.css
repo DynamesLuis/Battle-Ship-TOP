@@ -25,6 +25,18 @@ body {
   font-family: Georgia, "Times New Roman", serif;
 }
 
+/* =========================================
+   SCREENS
+   ========================================= */
+.startsScreen.hidden,
+.characterSelection.hidden,
+.shipPlacement.hidden,
+.game.hidden {
+  display: none;
+}
+/* =========================================
+   GAME
+   ========================================= */
 .game {
   width: min(1400px, 100%);
   min-height: 100vh;

@@ -9,6 +9,10 @@ const $characterImgGameOver = document.querySelector(
 );
 const $characterDialogueGameOver = document.querySelector(".game-over-quote p");
 const $playerNameGameOver = document.querySelector(".game-over-winner strong");
+const $startScreen = document.querySelector(".startScreen");
+const $characterSelection = document.querySelector(".characterSelection");
+const $shipPlacement = document.querySelector(".shipPlacement");
+const $game = document.querySelector(".game");
 
 export {
   $enemyBoardContainer,
@@ -20,4 +24,8 @@ export {
   $characterImgGameOver,
   $characterDialogueGameOver,
   $playerNameGameOver,
+  $startsScreen,
+  $characterSelection,
+  $shipPlacement,
+  $game,
 };
