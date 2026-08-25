@@ -31,19 +31,19 @@ export default class AppState {
     this.name = name;
   }
 
-  getCharacter1(character1) {
+  setCharacter1(character1) {
     this.character1 = character1;
   }
 
-  getCharacter2(character2) {
+  setCharacter2(character2) {
     this.character2 = character2;
   }
 
-  getPlayer1(player1) {
+  setPlayer1(player1) {
     this.player1 = player1;
   }
 
-  getPlayer2(player2) {
+  setPlayer2(player2) {
     this.player2 = player2;
   }
 }
