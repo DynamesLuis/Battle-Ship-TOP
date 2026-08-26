@@ -28,7 +28,7 @@ body {
 /* =========================================
    SCREENS
    ========================================= */
-.startsScreen.hidden,
+.startScreen.hidden,
 .characterSelection.hidden,
 .shipPlacement.hidden,
 .game.hidden {

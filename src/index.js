@@ -1,40 +1,26 @@
 import "./styles.css";
-import Player from "./modules/Player/Player";
-import Computer from "./modules/Computer/Computer";
-import BoardRender from "./ui/BoardRender/BoardRender";
-import { $enemyBoardContainer, $myBoardContainer } from "./ui/domSelector";
-import UIController from "./ui/UIController/UIController";
-import Game from "./modules/Game/Game";
-import Character from "./modules/Character/Character";
+import AppController from "./appController/AppController";
+import ScreenController from "./ui/ScreenController/ScreenController";
+import StartScreenController from "./ui/StartScreenController/StartScreenController";
+import AppState from "./appState/AppState";
+import {
+  $characterSelection,
+  $game,
+  $shipPlacement,
+  $startScreen,
+} from "./ui/domSelector";
 
-const dialogues1 = {
-  hit: ["Nice shot!", "Got you!"],
-  miss: ["You missed!", "Try again!"],
-  sunk: ["You sank my ship!", "That's one down!"],
-  win: ["We won!", "Victory!"],
-};
-const dialogues2 = {
-  hit: ["Nice shot!", "Got you!"],
-  miss: ["You missed!", "Try again!"],
-  sunk: ["You sank my ship!", "That's one down!"],
-  win: ["We won!", "Victory!"],
-};
-const character1 = new Character("Lockon", dialogues1, "img.png");
-const character2 = new Character("Setsuna", dialogues2, "img2.png");
-const player1 = new Player("Dynames", character1);
-const player2 = new Computer("Exia", character2);
-const myBoard = player1.getGameBoard();
-const enemyBoard = player2.getGameBoard();
-myBoard.placeShip(0, 0, "x", 2);
-enemyBoard.placeShip(1, 1, "x", 2);
-enemyBoard.receiveAttack(2, 1);
-enemyBoard.receiveAttack(0, 1);
-myBoard.receiveAttack(0, 0);
-myBoard.receiveAttack(0, 1);
-const game = new Game(player1, player2);
-const boardRender = new BoardRender(myBoard, enemyBoard);
-const uiController = new UIController(boardRender, game);
+const appState = new AppState();
+const screenController = new ScreenController(
+  $startScreen,
+  $characterSelection,
+  $shipPlacement,
+  $game,
+);
+const appController = new AppController(appState, screenController);
+const startScreenController = new StartScreenController(
+  appController.startGame.bind(appController),
+);
 
-boardRender.renderMyBoard($myBoardContainer);
-boardRender.renderEnemyBoard($enemyBoardContainer);
-uiController.initEvents();
+startScreenController.initEvents();
+appController.startApp();
