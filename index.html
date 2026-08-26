@@ -7,7 +7,27 @@
     <script type="module" src="/src/index.js"></script>
   </head>
   <body>
-    <main class="game">
+    <main class="startScreen hidden">
+      <div class="start-panel">
+        <header class="start-header">
+          <h1>Battleship</h1>
+          <p>The Battle for Azeroth</p>
+        </header>
+
+        <div class="start-decoration">⚔</div>
+
+        <div class="start-form">
+          <label for="playerName">Enter your name general:</label>
+
+          <input type="text" id="playerName" />
+
+          <button class="start-app-btn">Start</button>
+        </div>
+      </div>
+    </main>
+    <main class="characterSelection hidden">character selection</main>
+    <main class="shipPlacement hidden">ship shipPlacement</main>
+    <main class="game hidden">
       <header class="game-header">
         <h1>BATTLESHIP</h1>
         <p>The Battle for Azeroth</p>
