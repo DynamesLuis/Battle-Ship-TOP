@@ -1,4 +1,4 @@
-import { $playerNameInput, $startAppBtn } from "../domSelector";
+import { $factionInputs, $playerNameInput, $startAppBtn } from "../domSelector";
 
 export default class StartScreenController {
   constructor(onStart) {
@@ -11,8 +11,17 @@ export default class StartScreenController {
 
   handleStartClick() {
     const playerName = $playerNameInput.value;
-    if (playerName) {
-      this.onStart(playerName);
+    let selectedFaction = null;
+    const $inputChecked = Array.from($factionInputs).find(
+      (input) => input.checked,
+    );
+
+    if ($inputChecked) {
+      selectedFaction = $inputChecked.value;
+    }
+
+    if (playerName && selectedFaction) {
+      this.onStart(playerName, selectedFaction);
     }
   }
 }

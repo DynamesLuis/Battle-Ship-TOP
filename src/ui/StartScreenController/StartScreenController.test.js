@@ -2,6 +2,7 @@ import StartScreenController from "./StartScreenController";
 
 let mockPlayerNameInput;
 let mockStartAppBtn;
+let mockFactionInputs;
 
 jest.mock("../domSelector", () => ({
   get $playerNameInput() {
@@ -10,6 +11,10 @@ jest.mock("../domSelector", () => ({
 
   get $startAppBtn() {
     return mockStartAppBtn;
+  },
+
+  get $factionInputs() {
+    return mockFactionInputs;
   },
 }));
 
@@ -22,6 +27,19 @@ describe.skip("StartScreenController", () => {
     mockPlayerNameInput = document.createElement("input");
 
     onStart = jest.fn();
+
+    mockFactionInputs = [
+      Object.assign(document.createElement("input"), {
+        type: "radio",
+        name: "faction",
+        value: "horde",
+      }),
+      Object.assign(document.createElement("input"), {
+        type: "radio",
+        name: "faction",
+        value: "alliance",
+      }),
+    ];
 
     startScreenController = new StartScreenController(onStart);
   });
@@ -41,13 +59,27 @@ describe.skip("StartScreenController", () => {
     );
   });
 
-  test("calls onStart with the entered name", () => {
+  test("calls onStart with the entered name and selected faction", () => {
     mockPlayerNameInput.value = "Luis";
+
+    mockFactionInputs[0].checked = true;
 
     startScreenController.initEvents();
 
     mockStartAppBtn.click();
 
-    expect(onStart).toHaveBeenCalledWith("Luis");
+    expect(onStart).toHaveBeenCalledWith("Luis", "horde");
+  });
+
+  test("calls onStart with the selected alliance faction", () => {
+    mockPlayerNameInput.value = "Luis";
+
+    mockFactionInputs[1].checked = true;
+
+    startScreenController.initEvents();
+
+    mockStartAppBtn.click();
+
+    expect(onStart).toHaveBeenCalledWith("Luis", "alliance");
   });
 });

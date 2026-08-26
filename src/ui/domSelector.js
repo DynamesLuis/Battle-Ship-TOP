@@ -18,6 +18,7 @@ const $startAppBtn = document.querySelector(".start-app-btn");
 const $playerCharacters = document.querySelector("#player-characters");
 const $enemyCharacters = document.querySelector("#enemy-characters");
 const $nextBtn = document.querySelector(".nextButton");
+const $factionInputs = document.querySelectorAll('[name="faction"]');
 
 export {
   $enemyBoardContainer,
@@ -38,4 +39,5 @@ export {
   $playerCharacters,
   $enemyCharacters,
   $nextBtn,
+  $factionInputs,
 };
