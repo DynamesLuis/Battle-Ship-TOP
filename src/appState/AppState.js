@@ -1,6 +1,7 @@
 export default class AppState {
   constructor() {
     this.name = null;
+    this.playerFaction = null;
     this.character1 = null;
     this.character2 = null;
     this.player1 = null;
@@ -9,6 +10,10 @@ export default class AppState {
 
   getName() {
     return this.name;
+  }
+
+  getPlayerFaction() {
+    return this.playerFaction;
   }
 
   getCharacter1() {
@@ -29,6 +34,10 @@ export default class AppState {
 
   setName(name) {
     this.name = name;
+  }
+
+  setPlayerFaction(faction) {
+    this.player1 = faction;
   }
 
   setCharacter1(character1) {
