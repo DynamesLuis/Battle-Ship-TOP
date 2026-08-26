@@ -8,8 +8,10 @@ export default class AppController {
     this.screenController.showStartScreen();
   }
 
-  startGame(playerName) {
+  startGame(playerName, playerFaction) {
     this.appState.setName(playerName);
+    this.appState.setPlayerFaction(playerFaction);
     this.screenController.showCharacterSelection();
   }
+
 }

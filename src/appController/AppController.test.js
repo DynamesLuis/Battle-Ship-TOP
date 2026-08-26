@@ -1,6 +1,6 @@
 import AppController from "./AppController";
 
-describe.skip("AppController", () => {
+describe("AppController", () => {
   let appController;
   let appState;
   let screenController;
@@ -8,6 +8,7 @@ describe.skip("AppController", () => {
   beforeEach(() => {
     appState = {
       setName: jest.fn(),
+      setPlayerFaction: jest.fn(),
     };
 
     screenController = {
@@ -28,11 +29,21 @@ describe.skip("AppController", () => {
     expect(screenController.showStartScreen).toHaveBeenCalled();
   });
 
+  //startGame
   test("startGame stores the player name and shows character selection", () => {
-    appController.startGame("Luis");
+    appController.startGame("Luis", "horde");
 
     expect(appState.setName).toHaveBeenCalledWith("Luis");
 
     expect(screenController.showCharacterSelection).toHaveBeenCalled();
   });
+
+  test("startGame stores the player faction and shows character selection", () => {
+    appController.startGame("Luis", "horde");
+
+    expect(appState.setPlayerFaction).toHaveBeenCalledWith("horde");
+
+    expect(screenController.showCharacterSelection).toHaveBeenCalled();
+  });
+
 });
