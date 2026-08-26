@@ -15,6 +15,9 @@ const $shipPlacement = document.querySelector(".shipPlacement");
 const $game = document.querySelector(".game");
 const $playerNameInput = document.querySelector("#playerName");
 const $startAppBtn = document.querySelector(".start-app-btn");
+const $playerCharacters = document.querySelector("#player-characters");
+const $enemyCharacters = document.querySelector("#enemy-characters");
+const $nextBtn = document.querySelector(".nextButton");
 
 export {
   $enemyBoardContainer,
@@ -32,4 +35,7 @@ export {
   $game,
   $startAppBtn,
   $playerNameInput,
+  $playerCharacters,
+  $enemyCharacters,
+  $nextBtn,
 };
