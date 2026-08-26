@@ -18,8 +18,31 @@
 
         <div class="start-form">
           <label for="playerName">Enter your name general:</label>
-
           <input type="text" id="playerName" />
+
+          <fieldset class="faction-selection">
+            <legend>Choose your faction</legend>
+
+            <div class="faction-options">
+              <label class="faction-option">
+                <input type="radio" name="faction" value="horde" />
+
+                <span class="faction-card">
+                  <span class="faction-icon">⚔</span>
+                  <span class="faction-name">Horde</span>
+                </span>
+              </label>
+
+              <label class="faction-option">
+                <input type="radio" name="faction" value="alliance" />
+
+                <span class="faction-card">
+                  <span class="faction-icon">⚔</span>
+                  <span class="faction-name">Alliance</span>
+                </span>
+              </label>
+            </div>
+          </fieldset>
 
           <button class="start-app-btn">Start</button>
         </div>
