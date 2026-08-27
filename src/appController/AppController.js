@@ -6,6 +6,10 @@ export default class AppController {
     this.screenController = screenController;
   }
 
+  setCharacterSelectionController(characterSelectionController) {
+    this.characterSelectionController = characterSelectionController;
+  }
+
   startApp() {
     this.screenController.showStartScreen();
   }
@@ -13,6 +17,7 @@ export default class AppController {
   startGame(playerName, playerFaction) {
     this.appState.setName(playerName);
     this.appState.setPlayerFaction(playerFaction);
+    this.characterSelectionController.init();
     this.screenController.showCharacterSelection();
   }
 

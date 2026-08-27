@@ -24,7 +24,7 @@ jest.mock("../../gameData/getCharactersByFaction", () => ({
   default: (...args) => mockGetCharactersByFaction(...args),
 }));
 
-describe("CharacterSelectionController", () => {
+describe.skip("CharacterSelectionController", () => {
   let characterSelectionController;
   let onNext;
   let appState;

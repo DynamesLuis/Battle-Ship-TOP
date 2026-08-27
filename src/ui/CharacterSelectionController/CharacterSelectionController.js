@@ -9,6 +9,11 @@ export default class CharacterSelectionController {
     this.appState = appState;
   }
 
+  init() {
+    this.initEvents();
+    this.renderCharacterSelection();
+  }
+
   initEvents() {
     $enemyCharacters.addEventListener("click", (e) =>
       this.handleEnemyCharacterClick(e),
@@ -46,13 +51,10 @@ export default class CharacterSelectionController {
   }
 
   renderCharacterSelection() {
-    //obtener la facción de player y la facción de enemy
     const playerFaction = this.appState.getPlayerFaction();
     const enemyFaction = playerFaction === "horde" ? "alliance" : "horde";
-    //obtener character from cada faction
     const playerCharacters = getCharactersByFaction(playerFaction);
     const enemyCharacters = getCharactersByFaction(enemyFaction);
-    //renderizarlos en sus containers
     playerCharacters.forEach((character) => {
       const $characterCard = document.createElement("div");
       $characterCard.classList.add("character-card");
