@@ -25,23 +25,27 @@ export default class CharacterSelectionController {
   }
 
   handleEnemyCharacterClick(e) {
-    const $target = e.target;
-    if (!$target.classList.contains("character")) {
-      return;
-    }
+    const $card = e.target.closest(".character-card");
+    if (!$card) return;
 
-    const character = $target.dataset.id;
+    const character = $card.dataset.id;
     this.enemySelection = character;
+    this.selectCard($enemyCharacters, $card);
   }
 
   handlePlayerCharacterClick(e) {
-    const $target = e.target;
-    if (!$target.classList.contains("character")) {
-      return;
-    }
+    const $card = e.target.closest(".character-card");
+    if (!$card) return;
 
-    const character = $target.dataset.id;
+    const character = $card.dataset.id;
     this.playerSelection = character;
+    this.selectCard($playerCharacters, $card);
+  }
+
+  selectCard($container, $card) {
+    const $cards = $container.querySelectorAll(".character-card");
+    $cards.forEach(($card) => $card.classList.remove("selected"));
+    $card.classList.add("selected");
   }
 
   handleNextClick() {

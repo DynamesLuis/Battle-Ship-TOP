@@ -1,4 +1,5 @@
 import CharacterSelectionController from "./CharacterSelectionController";
+import "@testing-library/jest-dom";
 
 let mockPlayerCharacters;
 let mockEnemyCharacters;
@@ -370,5 +371,50 @@ describe.skip("CharacterSelectionController", () => {
     expect(mockEnemyCharacters.querySelector('[data-id="2"]')).toBeTruthy();
 
     expect(mockEnemyCharacters.querySelector('[data-id="1"]')).toBeNull();
+  });
+
+  //selected card
+  test("adds selected class to the clicked card", () => {
+    const card = document.createElement("div");
+    card.classList.add("character-card");
+
+    mockPlayerCharacters.appendChild(card);
+
+    characterSelectionController.selectCard(mockPlayerCharacters, card);
+
+    expect(card).toHaveClass("selected");
+  });
+
+  test("removes selected class from other cards", () => {
+    const selectedCard = document.createElement("div");
+    selectedCard.classList.add("character-card", "selected");
+
+    const otherCard = document.createElement("div");
+    otherCard.classList.add("character-card");
+
+    mockPlayerCharacters.append(selectedCard, otherCard);
+
+    characterSelectionController.selectCard(mockPlayerCharacters, otherCard);
+
+    expect(selectedCard).not.toHaveClass("selected");
+    expect(otherCard).toHaveClass("selected");
+  });
+
+  test("keeps only the passed card selected", () => {
+    const card1 = document.createElement("div");
+    const card2 = document.createElement("div");
+    const card3 = document.createElement("div");
+
+    card1.classList.add("character-card", "selected");
+    card2.classList.add("character-card", "selected");
+    card3.classList.add("character-card");
+
+    mockPlayerCharacters.append(card1, card2, card3);
+
+    characterSelectionController.selectCard(mockPlayerCharacters, card3);
+
+    expect(card1).not.toHaveClass("selected");
+    expect(card2).not.toHaveClass("selected");
+    expect(card3).toHaveClass("selected");
   });
 });
