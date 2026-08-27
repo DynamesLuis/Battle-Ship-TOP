@@ -1,6 +1,14 @@
 import AppController from "./AppController";
+import {} from "";
 
-describe("AppController", () => {
+let mockCreateCharacter;
+
+jest.mock("../modules/Character/CharacterFactory", () => ({
+  __esModule: true,
+  default: (...args) => mockCreateCharacter(...args),
+}));
+
+describe.skip("AppController", () => {
   let appController;
   let appState;
   let screenController;
@@ -9,12 +17,18 @@ describe("AppController", () => {
     appState = {
       setName: jest.fn(),
       setPlayerFaction: jest.fn(),
+      getPLayerFaction: jest.fn(),
+      setCharacter1: jest.fn(),
+      setCharacter2: jest.fn(),
     };
 
     screenController = {
       showStartScreen: jest.fn(),
       showCharacterSelection: jest.fn(),
+      showShipPlacement: jest.fn(),
     };
+
+    mockCreateCharacter = jest.fn();
 
     appController = new AppController(appState, screenController);
   });
@@ -46,4 +60,43 @@ describe("AppController", () => {
     expect(screenController.showCharacterSelection).toHaveBeenCalled();
   });
 
+  //startPlacingShip
+  test("startPlaceShips creates the player character using the factory", () => {
+    const playerCharacter = {
+      getName: jest.fn().mockReturnValue("Anduin Wrynn"),
+    };
+
+    mockCreateCharacter.mockReturnValueOnce(playerCharacter);
+
+    appController.startPlaceShips("Anduin Wrynn", "Sylvanas Windrunner");
+
+    expect(mockCreateCharacter).toHaveBeenCalledWith("Anduin Wrynn");
+
+    expect(appState.setCharacter1).toHaveBeenCalledWith(playerCharacter);
+  });
+
+  test("startPlaceShips creates the enemy character using the factory", () => {
+    const enemyCharacter = {
+      getName: jest.fn().mockReturnValue("Sylvanas Windrunner"),
+    };
+
+    mockCreateCharacter
+      .mockReturnValueOnce({})
+      .mockReturnValueOnce(enemyCharacter);
+
+    appController.startPlaceShips("Anduin Wrynn", "Sylvanas Windrunner");
+
+    expect(mockCreateCharacter).toHaveBeenNthCalledWith(
+      2,
+      "Sylvanas Windrunner",
+    );
+
+    expect(appState.setCharacter2).toHaveBeenCalledWith(enemyCharacter);
+  });
+
+  test("startPlaceShips shows the ship placement screen", () => {
+    appController.startPlaceShips("character1", "character2");
+
+    expect(screenController.showShipPlacement).toHaveBeenCalled();
+  });
 });

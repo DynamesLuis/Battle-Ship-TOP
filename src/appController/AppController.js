@@ -1,3 +1,5 @@
+import createCharacter from "../modules/Character/CharacterFactory";
+
 export default class AppController {
   constructor(appState, screenController) {
     this.appState = appState;
@@ -14,4 +16,12 @@ export default class AppController {
     this.screenController.showCharacterSelection();
   }
 
+  startPlaceShips(playerCharacterSelection, enemyCharacterSelection) {
+    const playerCharacter = createCharacter(playerCharacterSelection);
+    const enemyCharacter = createCharacter(enemyCharacterSelection);
+    this.appState.setCharacter1(playerCharacter);
+    this.appState.setCharacter2(enemyCharacter);
+
+    this.screenController.showShipPlacement();
+  }
 }
