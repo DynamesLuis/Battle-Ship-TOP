@@ -1,6 +1,7 @@
 const charactersData = {
   alliance: [
     {
+      id: "1",
       name: "Anduin Wrynn",
       dialogues: {
         hit: [
@@ -28,6 +29,7 @@ const charactersData = {
     },
 
     {
+      id: "2",
       name: "Jaina Proudmoore",
       dialogues: {
         hit: [
@@ -55,6 +57,7 @@ const charactersData = {
     },
 
     {
+      id: "3",
       name: "Varian Wrynn",
       dialogues: {
         hit: [
@@ -82,6 +85,7 @@ const charactersData = {
     },
 
     {
+      id: "4",
       name: "Tyrande Whisperwind",
       dialogues: {
         hit: [
@@ -109,6 +113,7 @@ const charactersData = {
     },
 
     {
+      id: "5",
       name: "Muradin Bronzebeard",
       dialogues: {
         hit: [
@@ -138,6 +143,7 @@ const charactersData = {
 
   horde: [
     {
+      id: "6",
       name: "Thrall",
       dialogues: {
         hit: [
@@ -165,6 +171,7 @@ const charactersData = {
     },
 
     {
+      id: "7",
       name: "Sylvanas Windrunner",
       dialogues: {
         hit: [
@@ -192,6 +199,7 @@ const charactersData = {
     },
 
     {
+      id: "8",
       name: "Garrosh Hellscream",
       dialogues: {
         hit: [
@@ -219,6 +227,7 @@ const charactersData = {
     },
 
     {
+      id: "9",
       name: "Vol'jin",
       dialogues: {
         hit: [
@@ -246,6 +255,7 @@ const charactersData = {
     },
 
     {
+      id: "10",
       name: "Baine Bloodhoof",
       dialogues: {
         hit: [

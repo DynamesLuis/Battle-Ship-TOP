@@ -4,35 +4,34 @@ import charactersData from "../../gameData/charactersData";
 
 describe.skip("createCharacter", () => {
   test("creates a Character from the alliance faction", () => {
-    const character = createCharacter("Anduin Wrynn", "alliance");
+    const character = createCharacter("1", "alliance");
 
     expect(character).toBeInstanceOf(Character);
     expect(character.getName()).toBe("Anduin Wrynn");
   });
 
   test("creates a Character from the horde faction", () => {
-    const character = createCharacter("Thrall", "horde");
+    const character = createCharacter("6", "horde");
 
     expect(character).toBeInstanceOf(Character);
     expect(character.getName()).toBe("Thrall");
   });
 
   test("uses alliance as the default faction", () => {
-    const character = createCharacter("Anduin Wrynn");
+    const character = createCharacter("1");
 
     expect(character).toBeInstanceOf(Character);
     expect(character.getName()).toBe("Anduin Wrynn");
   });
 
   test("creates the Character using its predefined data", () => {
-    const characterName = "Anduin Wrynn";
-    const character = createCharacter("Anduin Wrynn", "alliance");
-    const charecerData = charactersData["alliance"].find(char => char.name === characterName);
+    const character = createCharacter("1", "alliance");
+    const charecerData = charactersData["alliance"].find(
+      (char) => char.id === "1",
+    );
 
     expect(character.getName()).toBe("Anduin Wrynn");
     expect(character.getImg()).toBe(charecerData.img);
-    expect(character.getDialogues()).toEqual(
-      charecerData.dialogues,
-    );
+    expect(character.getDialogues()).toEqual(charecerData.dialogues);
   });
 });

@@ -23,7 +23,7 @@ export default class CharacterSelectionController {
       return;
     }
 
-    const character = $target.dataset.character;
+    const character = $target.dataset.id;
     this.enemySelection = character;
   }
 
@@ -33,7 +33,7 @@ export default class CharacterSelectionController {
       return;
     }
 
-    const character = $target.dataset.character;
+    const character = $target.dataset.id;
     this.playerSelection = character;
   }
 
