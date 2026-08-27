@@ -22,8 +22,14 @@ export default class AppController {
   }
 
   startPlaceShips(playerCharacterSelection, enemyCharacterSelection) {
-    const playerCharacter = createCharacter(playerCharacterSelection);
-    const enemyCharacter = createCharacter(enemyCharacterSelection);
+    const playerCharacter = createCharacter(
+      playerCharacterSelection,
+      this.appState.getPlayerFaction(),
+    );
+    const enemyCharacter = createCharacter(
+      enemyCharacterSelection,
+      this.appState.getPlayerFaction() === "horde" ? "alliance" : "horde",
+    );
     this.appState.setCharacter1(playerCharacter);
     this.appState.setCharacter2(enemyCharacter);
 
