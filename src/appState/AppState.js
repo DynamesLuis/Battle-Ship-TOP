@@ -37,7 +37,7 @@ export default class AppState {
   }
 
   setPlayerFaction(faction) {
-    this.player1 = faction;
+    this.playerFaction = faction;
   }
 
   setCharacter1(character1) {
