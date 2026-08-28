@@ -7,6 +7,12 @@ describe.skip("Ship", () => {
     expect(ship.getLength()).toBe(3);
   });
 
+  test("stores the name passed to the constructor", () => {
+    const ship = new Ship(3, "carrier");
+
+    expect(ship.getName()).toBe("carrier");
+  });
+
   test("is not sunk when it is created", () => {
     const ship = new Ship(3);
 
