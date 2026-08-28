@@ -1,4 +1,5 @@
 import createCharacter from "../modules/Character/CharacterFactory";
+import Player from "../modules/Player/Player";
 
 export default class AppController {
   constructor(appState, screenController) {
@@ -32,6 +33,13 @@ export default class AppController {
     );
     this.appState.setCharacter1(playerCharacter);
     this.appState.setCharacter2(enemyCharacter);
+
+    const player1 = new Player(
+      this.appState.getName(),
+      this.appState.getCharacter1(),
+    );
+
+    this.appState.setPlayer1(player1);
 
     this.screenController.showShipPlacement();
   }

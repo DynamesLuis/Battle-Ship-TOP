@@ -1,5 +1,5 @@
 import AppController from "./AppController";
-import {} from "";
+import Player from "../modules/Player/Player";
 
 let mockCreateCharacter;
 
@@ -7,19 +7,30 @@ jest.mock("../modules/Character/CharacterFactory", () => ({
   __esModule: true,
   default: (...args) => mockCreateCharacter(...args),
 }));
+jest.mock("../modules/Player/Player", () => ({
+  __esModule: true,
+  default: jest.fn(),
+}));
 
-describe.skip("AppController", () => {
+describe("AppController", () => {
   let appController;
   let appState;
   let screenController;
+  let characterSelectionController;
 
   beforeEach(() => {
+    jest.clearAllMocks();
+    Player.mockReset();
+
     appState = {
       setName: jest.fn(),
+      getName: jest.fn(),
       setPlayerFaction: jest.fn(),
-      getPLayerFaction: jest.fn(),
+      getPlayerFaction: jest.fn(),
       setCharacter1: jest.fn(),
+      getCharacter1: jest.fn(),
       setCharacter2: jest.fn(),
+      setPlayer1: jest.fn(),
     };
 
     screenController = {
@@ -28,9 +39,14 @@ describe.skip("AppController", () => {
       showShipPlacement: jest.fn(),
     };
 
+    characterSelectionController = {
+      init: jest.fn(),
+    };
+
     mockCreateCharacter = jest.fn();
 
     appController = new AppController(appState, screenController);
+    appController.setCharacterSelectionController(characterSelectionController);
   });
 
   test("can be created", () => {
@@ -66,11 +82,12 @@ describe.skip("AppController", () => {
       getName: jest.fn().mockReturnValue("Anduin Wrynn"),
     };
 
+    appState.getPlayerFaction.mockReturnValue("alliance");
     mockCreateCharacter.mockReturnValueOnce(playerCharacter);
 
-    appController.startPlaceShips("Anduin Wrynn", "Sylvanas Windrunner");
+    appController.startPlaceShips("1", "6");
 
-    expect(mockCreateCharacter).toHaveBeenCalledWith("Anduin Wrynn");
+    expect(mockCreateCharacter).toHaveBeenCalledWith("1", "alliance");
 
     expect(appState.setCharacter1).toHaveBeenCalledWith(playerCharacter);
   });
@@ -84,12 +101,11 @@ describe.skip("AppController", () => {
       .mockReturnValueOnce({})
       .mockReturnValueOnce(enemyCharacter);
 
-    appController.startPlaceShips("Anduin Wrynn", "Sylvanas Windrunner");
+    appState.getPlayerFaction.mockReturnValue("alliance");
 
-    expect(mockCreateCharacter).toHaveBeenNthCalledWith(
-      2,
-      "Sylvanas Windrunner",
-    );
+    appController.startPlaceShips("1", "7");
+
+    expect(mockCreateCharacter).toHaveBeenNthCalledWith(2, "7", "horde");
 
     expect(appState.setCharacter2).toHaveBeenCalledWith(enemyCharacter);
   });
@@ -98,5 +114,29 @@ describe.skip("AppController", () => {
     appController.startPlaceShips("character1", "character2");
 
     expect(screenController.showShipPlacement).toHaveBeenCalled();
+  });
+
+  test("startPlaceShips creates the player and stores it in appState", () => {
+    const playerCharacter = {
+      getName: jest.fn().mockReturnValue("Anduin Wrynn"),
+    };
+
+    const player = {
+      getName: jest.fn().mockReturnValue("Luis"),
+      getCharacter: jest.fn().mockReturnValue(playerCharacter),
+    };
+
+    appState.getName.mockReturnValue("Luis");
+    appState.getPlayerFaction.mockReturnValue("alliance");
+    appState.getCharacter1.mockReturnValue(playerCharacter);
+
+    mockCreateCharacter.mockReturnValueOnce(playerCharacter);
+    Player.mockReturnValueOnce(player);
+
+    appController.startPlaceShips("1", "6");
+
+    expect(Player).toHaveBeenCalledWith("Luis", playerCharacter);
+
+    expect(appState.setPlayer1).toHaveBeenCalledWith(player);
   });
 });
