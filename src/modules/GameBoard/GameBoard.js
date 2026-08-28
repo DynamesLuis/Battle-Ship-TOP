@@ -40,6 +40,16 @@ export default class GameBoard {
   }
 
   placeShip(xStartCoordinate, yStartCoordinate, direction, length) {
+    if (direction === "x") {
+      if (xStartCoordinate + length > this.length) {
+        return false;
+      }
+    } else {
+      if (yStartCoordinate + length > this.height) {
+        return false;
+      }
+    }
+
     const newShip = new Ship(length);
     this.ships.push(newShip);
 
@@ -53,6 +63,8 @@ export default class GameBoard {
     coordinatesLenght.forEach((coordinate) =>
       this.occupiedCells.set(coordinate, newShip),
     );
+
+    return true;
   }
 
   allShipsSunk() {

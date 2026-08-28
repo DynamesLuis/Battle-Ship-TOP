@@ -125,4 +125,82 @@ describe.skip("GameBoard", () => {
     expect(occupiedCells.has("2, 0")).toBe(true);
     expect(occupiedCells).not.toBe(board.occupiedCells);
   });
+
+  //placeShips
+
+  test("places a ship horizontally when it fits on the board", () => {
+    const gameBoard = new GameBoard();
+
+    const result = gameBoard.placeShip(5, 0, "x", 2);
+
+    expect(result).toBe(true);
+
+    const occupiedCells = gameBoard.getOccupiedCells();
+
+    expect(occupiedCells.size).toBe(2);
+    expect(occupiedCells.has("5, 0")).toBe(true);
+    expect(occupiedCells.has("6, 0")).toBe(true);
+  });
+
+  test("places a ship vertically when it fits on the board", () => {
+    const gameBoard = new GameBoard();
+
+    const result = gameBoard.placeShip(0, 5, "y", 2);
+
+    expect(result).toBe(true);
+
+    const occupiedCells = gameBoard.getOccupiedCells();
+
+    expect(occupiedCells.size).toBe(2);
+    expect(occupiedCells.has("0, 5")).toBe(true);
+    expect(occupiedCells.has("0, 6")).toBe(true);
+  });
+
+  test("returns false when a horizontal ship exceeds the board", () => {
+    const gameBoard = new GameBoard();
+
+    const result = gameBoard.placeShip(8, 0, "x", 4);
+
+    expect(result).toBe(false);
+
+    const occupiedCells = gameBoard.getOccupiedCells();
+
+    expect(occupiedCells.size).toBe(0);
+  });
+
+  test("returns false when a vertical ship exceeds the board", () => {
+    const gameBoard = new GameBoard();
+
+    const result = gameBoard.placeShip(0, 8, "y", 4);
+
+    expect(result).toBe(false);
+
+    const occupiedCells = gameBoard.getOccupiedCells();
+
+    expect(occupiedCells.size).toBe(0);
+  });
+
+  test("does not partially place a ship when it exceeds the board", () => {
+    const gameBoard = new GameBoard();
+
+    const result = gameBoard.placeShip(8, 0, "x", 4);
+
+    expect(result).toBe(false);
+    expect(gameBoard.getOccupiedCells().size).toBe(0);
+  });
+
+  test("assigns the same ship to every occupied coordinate", () => {
+    const gameBoard = new GameBoard();
+
+    gameBoard.placeShip(5, 0, "x", 3);
+
+    const occupiedCells = gameBoard.getOccupiedCells();
+
+    const ship1 = occupiedCells.get("5, 0");
+    const ship2 = occupiedCells.get("6, 0");
+    const ship3 = occupiedCells.get("7, 0");
+
+    expect(ship1).toBe(ship2);
+    expect(ship2).toBe(ship3);
+  });
 });
