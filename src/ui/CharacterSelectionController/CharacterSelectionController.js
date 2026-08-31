@@ -30,7 +30,7 @@ export default class CharacterSelectionController {
 
     const character = $card.dataset.id;
     this.enemySelection = character;
-    this.selectCard($enemyCharacters, $card);
+    this.#selectCard($enemyCharacters, $card);
   }
 
   handlePlayerCharacterClick(e) {
@@ -39,10 +39,10 @@ export default class CharacterSelectionController {
 
     const character = $card.dataset.id;
     this.playerSelection = character;
-    this.selectCard($playerCharacters, $card);
+    this.#selectCard($playerCharacters, $card);
   }
 
-  selectCard($container, $card) {
+  #selectCard($container, $card) {
     const $cards = $container.querySelectorAll(".character-card");
     $cards.forEach(($card) => $card.classList.remove("selected"));
     $card.classList.add("selected");
