@@ -35,6 +35,7 @@ export default class ShipPlacementController {
     this.selectedShip = ship;
     this.#selectCard($availableShips, $shipCard);
   }
+
   handleDirectionSelection(e) {
     const $button = e.target.closest(".direction-btn");
     if (!$button) return;
@@ -42,6 +43,19 @@ export default class ShipPlacementController {
     const direction = $button.dataset.direction;
     this.shipDirection = direction;
     this.#selectButton($directionBtnContainer, $button);
+  }
+
+  calculateCoordinates(xStartCoordinate, yStartCoordinate, direction, length) {
+    const coordinates = [];
+    for (let index = 0; index < length; index++) {
+      if (direction === "x") {
+        coordinates.push([xStartCoordinate + index, yStartCoordinate]);
+      } else {
+        coordinates.push([xStartCoordinate, yStartCoordinate + index]);
+      }
+    }
+
+    return coordinates;
   }
 
   #selectButton($container, $button) {

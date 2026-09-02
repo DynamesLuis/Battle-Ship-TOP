@@ -206,4 +206,87 @@ describe("ShipPlacementController", () => {
     expect(verticalButton).toHaveClass("selected");
     expect(horizontalButton).not.toHaveClass("selected");
   });
+
+
+  //calculateCoordinates
+  test("calculates coordinates horizontally", () => {
+    const coordinates = shipPlacementController.calculateCoordinates(
+      2,
+      3,
+      "x",
+      3,
+    );
+
+    expect(coordinates).toEqual([
+      [2, 3],
+      [3, 3],
+      [4, 3],
+    ]);
+  });
+
+  test("calculates coordinates vertically", () => {
+    const coordinates = shipPlacementController.calculateCoordinates(
+      2,
+      3,
+      "y",
+      3,
+    );
+
+    expect(coordinates).toEqual([
+      [2, 3],
+      [2, 4],
+      [2, 5],
+    ]);
+  });
+
+  test("includes the initial coordinate", () => {
+    const coordinates = shipPlacementController.calculateCoordinates(
+      2,
+      3,
+      "x",
+      3,
+    );
+
+    expect(coordinates[0]).toEqual([2, 3]);
+  });
+
+  test("returns as many coordinates as length", () => {
+    const length = 4;
+
+    const coordinates = shipPlacementController.calculateCoordinates(
+      2,
+      3,
+      "x",
+      length,
+    );
+
+    expect(coordinates).toHaveLength(length);
+  });
+
+  test("returns one coordinate when length is 1", () => {
+    const coordinates = shipPlacementController.calculateCoordinates(
+      2,
+      3,
+      "x",
+      1,
+    );
+
+    expect(coordinates).toEqual([[2, 3]]);
+  });
+
+  test("can return coordinates outside the board", () => {
+    const coordinates = shipPlacementController.calculateCoordinates(
+      8,
+      3,
+      "x",
+      4,
+    );
+
+    expect(coordinates).toEqual([
+      [8, 3],
+      [9, 3],
+      [10, 3],
+      [11, 3],
+    ]);
+  });
 });
