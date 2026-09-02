@@ -1,4 +1,4 @@
-import { $availableShips } from "../domSelector";
+import { $availableShips, $directionBtnContainer } from "../domSelector";
 import shipsData from "../../gameData/shipsData";
 
 export default class ShipPlacementController {
@@ -14,6 +14,9 @@ export default class ShipPlacementController {
     $availableShips.addEventListener("click", (e) =>
       this.handleShipSelection(e),
     );
+    $directionBtnContainer.addEventListener("click", (e) => {
+      this.handleDirectionSelection(e);
+    });
   }
   renderShips() {
     shipsData.forEach((ship) => {
@@ -32,7 +35,20 @@ export default class ShipPlacementController {
     this.selectedShip = ship;
     this.#selectCard($availableShips, $shipCard);
   }
-  handleDirectionSelection() {}
+  handleDirectionSelection(e) {
+    const $button = e.target.closest(".direction-btn");
+    if (!$button) return;
+
+    const direction = $button.dataset.direction;
+    this.shipDirection = direction;
+    this.#selectButton($directionBtnContainer, $button);
+  }
+
+  #selectButton($container, $button) {
+    const $buttons = $container.querySelectorAll(".direction-btn");
+    $buttons.forEach(($button) => $button.classList.remove("selected"));
+    $button.classList.add("selected");
+  }
 
   #selectCard($container, $card) {
     const $cards = $container.querySelectorAll(".ship-card");

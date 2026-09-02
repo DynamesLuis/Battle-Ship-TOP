@@ -2,10 +2,15 @@ import ShipPlacementController from "./ShipPlacementController";
 import "@testing-library/jest-dom";
 
 let mockAvailableShips;
+let mockDirectionBtnContainer;
 
 jest.mock("../domSelector", () => ({
   get $availableShips() {
     return mockAvailableShips;
+  },
+
+  get $directionBtnContainer() {
+    return mockDirectionBtnContainer;
   },
 }));
 
@@ -21,6 +26,8 @@ describe("ShipPlacementController", () => {
       <div class="ship-card" data-id="1"></div>
       <div class="ship-card" data-id="2"></div>
     `;
+
+    mockDirectionBtnContainer = document.createElement("div");
 
     appState = {
       getPlayer1: jest.fn(),
@@ -111,5 +118,92 @@ describe("ShipPlacementController", () => {
 
     expect(cruiser).toHaveClass("selected");
     expect(carrier).not.toHaveClass("selected");
+  });
+
+  //direction
+  test("initEvents registers a click event on the direction button container", () => {
+    const addEventListener = jest.spyOn(
+      mockDirectionBtnContainer,
+      "addEventListener",
+    );
+
+    shipPlacementController.initEvents();
+
+    expect(addEventListener).toHaveBeenCalledWith(
+      "click",
+      expect.any(Function),
+    );
+  });
+
+  test("selects horizontal direction", () => {
+    const horizontalButton = document.createElement("button");
+    horizontalButton.classList.add("direction-btn");
+    horizontalButton.dataset.direction = "x";
+
+    mockDirectionBtnContainer.appendChild(horizontalButton);
+
+    shipPlacementController.initEvents();
+
+    horizontalButton.click();
+
+    expect(shipPlacementController.shipDirection).toBe("x");
+  });
+
+  test("selects vertical direction", () => {
+    const verticalButton = document.createElement("button");
+    verticalButton.classList.add("direction-btn");
+    verticalButton.dataset.direction = "y";
+
+    mockDirectionBtnContainer.appendChild(verticalButton);
+
+    shipPlacementController.initEvents();
+
+    verticalButton.click();
+
+    expect(shipPlacementController.shipDirection).toBe("y");
+  });
+
+  test("selecting another direction replaces the previous selection", () => {
+    const horizontalButton = document.createElement("button");
+    horizontalButton.dataset.direction = "x";
+
+    const verticalButton = document.createElement("button");
+    verticalButton.dataset.direction = "y";
+
+    horizontalButton.classList.add("direction-btn");
+    verticalButton.classList.add("direction-btn");
+
+    mockDirectionBtnContainer.append(horizontalButton, verticalButton);
+
+    shipPlacementController.initEvents();
+
+    horizontalButton.click();
+    verticalButton.click();
+
+    expect(shipPlacementController.shipDirection).toBe("y");
+  });
+
+  test("selected direction is visually marked", () => {
+    const horizontalButton = document.createElement("button");
+    horizontalButton.classList.add("direction-btn");
+    horizontalButton.dataset.direction = "x";
+
+    const verticalButton = document.createElement("button");
+    verticalButton.classList.add("direction-btn");
+    verticalButton.dataset.direction = "y";
+
+    mockDirectionBtnContainer.append(horizontalButton, verticalButton);
+
+    shipPlacementController.initEvents();
+
+    horizontalButton.click();
+
+    expect(horizontalButton).toHaveClass("selected");
+    expect(verticalButton).not.toHaveClass("selected");
+
+    verticalButton.click();
+
+    expect(verticalButton).toHaveClass("selected");
+    expect(horizontalButton).not.toHaveClass("selected");
   });
 });

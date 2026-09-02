@@ -19,7 +19,8 @@ const $playerCharacters = document.querySelector("#player-characters");
 const $enemyCharacters = document.querySelector("#enemy-characters");
 const $nextBtn = document.querySelector(".nextButton");
 const $factionInputs = document.querySelectorAll('[name="faction"]');
-const $availableShips = document.querySelectorAll('.availableShips');
+const $availableShips = document.querySelectorAll(".availableShips");
+const $directionBtnContainer = document.querySelectorAll(".direction-Btn-Container");
 
 export {
   $enemyBoardContainer,
@@ -41,5 +42,6 @@ export {
   $enemyCharacters,
   $nextBtn,
   $factionInputs,
-  $availableShips
+  $availableShips,
+  $directionBtnContainer,
 };
