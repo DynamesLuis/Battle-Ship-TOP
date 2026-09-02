@@ -40,14 +40,9 @@ export default class GameBoard {
   }
 
   placeShip(xStartCoordinate, yStartCoordinate, direction, length) {
-    if (direction === "x") {
-      if (xStartCoordinate + length > this.length) {
-        return false;
-      }
-    } else {
-      if (yStartCoordinate + length > this.height) {
-        return false;
-      }
+    const canPlaceShip = this.canPlaceShip(xStartCoordinate, yStartCoordinate, direction, length);
+    if (!canPlaceShip) {
+      return canPlaceShip;
     }
 
     const newShip = new Ship(length);
@@ -65,6 +60,29 @@ export default class GameBoard {
     );
 
     return true;
+  }
+
+  canPlaceShip(xStartCoordinate, yStartCoordinate, direction, length) {
+    const ship = this.occupiedCells.get(
+      `${xStartCoordinate}, ${yStartCoordinate}`,
+    );
+    if (ship) {
+      return false;
+    }
+
+    if (direction === "x") {
+      if (xStartCoordinate + length > this.length) {
+        return false;
+      }
+    } else {
+      if (yStartCoordinate + length > this.height) {
+        return false;
+      }
+    }
+
+
+    return true;
+
   }
 
   allShipsSunk() {

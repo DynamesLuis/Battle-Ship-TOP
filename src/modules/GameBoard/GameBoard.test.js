@@ -1,6 +1,12 @@
 import GameBoard from "./GameBoard";
 
-describe.skip("GameBoard", () => {
+describe("GameBoard", () => {
+  let gameBoard;
+
+  beforeEach(() => {
+     gameBoard = new GameBoard();
+  });
+
   test("a new board has no sunk ships", () => {
     const board = new GameBoard();
 
@@ -202,5 +208,35 @@ describe.skip("GameBoard", () => {
 
     expect(ship1).toBe(ship2);
     expect(ship2).toBe(ship3);
+  });
+
+  //canPlaceShip
+
+  describe("canPlaceShip", () => {
+    test("returns true for a valid horizontal position", () => {
+      expect(gameBoard.canPlaceShip(1, 2, "x", 4)).toBe(true);
+    });
+
+    test("returns true for a valid vertical position", () => {
+      expect(gameBoard.canPlaceShip(1, 2, "y", 4)).toBe(true);
+    });
+
+    test("returns false when the ship goes out of the board", () => {
+      expect(gameBoard.canPlaceShip(8, 2, "x", 4)).toBe(false);
+    });
+
+    test("returns false when the ship collides with another ship", () => {
+      gameBoard.placeShip(1, 2, "x", 4);
+
+      expect(gameBoard.canPlaceShip(2, 2, "y", 3)).toBe(false);
+    });
+
+    test("does not modify the board", () => {
+      const occupiedCellsBefore = new Map(gameBoard.getOccupiedCells());
+
+      gameBoard.canPlaceShip(1, 2, "x", 4);
+
+      expect(gameBoard.getOccupiedCells()).toEqual(occupiedCellsBefore);
+    });
   });
 });
