@@ -1,14 +1,23 @@
-import { $availableShips, $directionBtnContainer } from "../domSelector";
+import ShipPlacementRenderer from "../ShipPlacementRenderer/ShipPlacementRenderer";
+import {
+  $availableShips,
+  $directionBtnContainer,
+  $myBoardPlacement,
+} from "../domSelector";
 import shipsData from "../../gameData/shipsData";
+import getShipInfoById from "../../gameData/getShipById";
 
 export default class ShipPlacementController {
-  constructor() {
+  constructor(appState) {
     this.shipDirection = "x";
     this.selectedShip = null;
+    this.appState = appState;
+    this.shipPlacementRenderer = null;
   }
   init() {
     this.initEvents();
     this.renderShips();
+    this.shipPlacementRenderer = new ShipPlacementRenderer(this.appState.getPlayer1().getGameBoard());
   }
   initEvents() {
     $availableShips.addEventListener("click", (e) =>

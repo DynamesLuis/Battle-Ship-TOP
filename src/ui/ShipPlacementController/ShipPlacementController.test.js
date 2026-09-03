@@ -1,8 +1,17 @@
 import ShipPlacementController from "./ShipPlacementController";
+import ShipPlacementRenderer from "../ShipPlacementRenderer/ShipPlacementRenderer";
 import "@testing-library/jest-dom";
 
 let mockAvailableShips;
 let mockDirectionBtnContainer;
+let mockMyBoardPlacement;
+let mockShipPlacementRenderer;
+let mockRenderer;
+
+jest.mock("../ShipPlacementRenderer/ShipPlacementRenderer", () => ({
+  __esModule: true,
+  default: jest.fn(() => mockRenderer),
+}));
 
 jest.mock("../domSelector", () => ({
   get $availableShips() {
@@ -12,6 +21,10 @@ jest.mock("../domSelector", () => ({
   get $directionBtnContainer() {
     return mockDirectionBtnContainer;
   },
+
+  get $myBoardPlacement() {
+    return mockMyBoardPlacement;
+  },
 }));
 
 describe("ShipPlacementController", () => {
@@ -19,8 +32,16 @@ describe("ShipPlacementController", () => {
   let appState;
   let boardRenderer;
   let onNext;
+  let playerBoard;
+  let cell;
 
   beforeEach(() => {
+    mockRenderer = {
+      renderBoard: jest.fn(),
+      renderPreview: jest.fn(),
+      clearPreview: jest.fn(),
+    };
+
     mockAvailableShips = document.createElement("div");
     mockAvailableShips.innerHTML = `
       <div class="ship-card" data-id="1"></div>
@@ -28,6 +49,16 @@ describe("ShipPlacementController", () => {
     `;
 
     mockDirectionBtnContainer = document.createElement("div");
+    mockMyBoardPlacement = document.createElement("div");
+
+    cell = document.createElement("div");
+    cell.classList.add("cell");
+    cell.dataset.coordinate = "2, 3";
+    mockMyBoardPlacement.appendChild(cell);
+
+    playerBoard = {
+      canPlaceShip: jest.fn(),
+    };
 
     appState = {
       getPlayer1: jest.fn(),
@@ -35,6 +66,7 @@ describe("ShipPlacementController", () => {
 
     boardRenderer = {
       renderMyBoard: jest.fn(),
+      renderPreview: jest.fn(),
     };
 
     onNext = jest.fn();
@@ -44,13 +76,36 @@ describe("ShipPlacementController", () => {
       boardRenderer,
       onNext,
     );
+
+    shipPlacementController.selectedShip = {
+      getLenght: jest.fn().mockReturnValue(3),
+    };
   });
 
   test("can be created", () => {
     expect(shipPlacementController).toBeDefined();
   });
 
+  test("creates ShipPlacementRenderer with the player's GameBoard", () => {
+    const playerBoard = {};
+    const player = {
+      getGameBoard: jest.fn().mockReturnValue(playerBoard),
+    };
+
+    appState.getPlayer1 = jest.fn().mockReturnValue(player);
+
+    shipPlacementController.init();
+
+    expect(ShipPlacementRenderer).toHaveBeenCalledWith(playerBoard);
+  });
+
   test("init renders ships and initializes events", () => {
+    const playerBoard = {};
+    const player = {
+      getGameBoard: jest.fn().mockReturnValue(playerBoard),
+    };
+
+    appState.getPlayer1 = jest.fn().mockReturnValue(player);
     const renderShips = jest.spyOn(shipPlacementController, "renderShips");
 
     const initEvents = jest.spyOn(shipPlacementController, "initEvents");
@@ -206,7 +261,6 @@ describe("ShipPlacementController", () => {
     expect(verticalButton).toHaveClass("selected");
     expect(horizontalButton).not.toHaveClass("selected");
   });
-
 
   //calculateCoordinates
   test("calculates coordinates horizontally", () => {
