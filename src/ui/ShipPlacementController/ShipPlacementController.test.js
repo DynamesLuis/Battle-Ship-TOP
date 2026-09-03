@@ -70,9 +70,7 @@ describe("ShipPlacementController", () => {
       getPlayer1: jest.fn().mockReturnValue(player),
     };
 
-    shipPlacementController = new ShipPlacementController(
-      appState,
-    );
+    shipPlacementController = new ShipPlacementController(appState);
 
     shipPlacementController.selectedShip = "1";
     shipPlacementController.shipPlacementRenderer = mockShipPlacementRenderer;
@@ -420,7 +418,10 @@ describe("ShipPlacementController", () => {
       target: cell,
     });
 
-    expect(mockShipPlacementRenderer.renderPreview).toHaveBeenCalledWith(coordinates, true);
+    expect(mockShipPlacementRenderer.renderPreview).toHaveBeenCalledWith(
+      coordinates,
+      true,
+    );
   });
 
   test("renders an invalid preview when the ship cannot be placed", () => {
@@ -440,7 +441,10 @@ describe("ShipPlacementController", () => {
       target: cell,
     });
 
-    expect(mockShipPlacementRenderer.renderPreview).toHaveBeenCalledWith(coordinates, false);
+    expect(mockShipPlacementRenderer.renderPreview).toHaveBeenCalledWith(
+      coordinates,
+      false,
+    );
   });
 
   test("does not render a preview when no ship is selected", () => {
@@ -452,5 +456,11 @@ describe("ShipPlacementController", () => {
 
     expect(mockShipPlacementRenderer.renderPreview).not.toHaveBeenCalled();
     expect(playerBoard.canPlaceShip).not.toHaveBeenCalled();
+  });
+
+  test("clears the preview when leaving a cell", () => {
+    shipPlacementController.handleCellMouseLeave();
+
+    expect(mockShipPlacementRenderer.clearPreview).toHaveBeenCalled();
   });
 });

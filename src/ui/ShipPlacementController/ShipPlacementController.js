@@ -31,6 +31,9 @@ export default class ShipPlacementController {
     $myBoardPlacement.addEventListener("mouseenter", (e) => {
       this.handleCellMouseEnter(e);
     });
+    $myBoardPlacement.addEventListener("mouseleave", () =>
+      this.handleCellMouseLeave(),
+    );
   }
   renderShips() {
     shipsData.forEach((ship) => {
@@ -97,6 +100,10 @@ export default class ShipPlacementController {
       shipData.length,
     );
     this.shipPlacementRenderer.renderPreview(coordinates, isValid);
+  }
+
+  handleCellMouseLeave() {
+    this.shipPlacementRenderer.clearPreview();
   }
 
   #selectButton($container, $button) {
