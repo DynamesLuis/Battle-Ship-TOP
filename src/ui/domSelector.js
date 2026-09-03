@@ -21,6 +21,7 @@ const $nextBtn = document.querySelector(".nextButton");
 const $factionInputs = document.querySelectorAll('[name="faction"]');
 const $availableShips = document.querySelectorAll(".availableShips");
 const $directionBtnContainer = document.querySelectorAll(".direction-Btn-Container");
+const $myBoardPlacement = document.querySelectorAll(".player-placement-container");
 
 export {
   $enemyBoardContainer,
@@ -44,4 +45,5 @@ export {
   $factionInputs,
   $availableShips,
   $directionBtnContainer,
+  $myBoardPlacement
 };

@@ -17,7 +17,9 @@ export default class ShipPlacementController {
   init() {
     this.initEvents();
     this.renderShips();
-    this.shipPlacementRenderer = new ShipPlacementRenderer(this.appState.getPlayer1().getGameBoard());
+    this.shipPlacementRenderer = new ShipPlacementRenderer(
+      this.appState.getPlayer1().getGameBoard(),
+    );
   }
   initEvents() {
     $availableShips.addEventListener("click", (e) =>
@@ -25,6 +27,9 @@ export default class ShipPlacementController {
     );
     $directionBtnContainer.addEventListener("click", (e) => {
       this.handleDirectionSelection(e);
+    });
+    $myBoardPlacement.addEventListener("mouseenter", (e) => {
+      this.handleCellMouseEnter(e);
     });
   }
   renderShips() {
@@ -65,6 +70,33 @@ export default class ShipPlacementController {
     }
 
     return coordinates;
+  }
+
+  handleCellMouseEnter(e) {
+    const $cell = e.target.closest(".cell");
+    if (!$cell) return;
+    if (!this.selectedShip) return;
+
+    const [xStartCoordinate, yStartCoordinate] = $cell.dataset.coordinate
+      .split(", ")
+      .map(Number);
+
+    const shipData = getShipInfoById(this.selectedShip);
+    const playerBoard = this.appState.getPlayer1().getGameBoard();
+
+    const isValid = playerBoard.canPlaceShip(
+      xStartCoordinate,
+      yStartCoordinate,
+      this.shipDirection,
+      shipData.length,
+    );
+    const coordinates = this.calculateCoordinates(
+      xStartCoordinate,
+      yStartCoordinate,
+      this.shipDirection,
+      shipData.length,
+    );
+    this.shipPlacementRenderer.renderPreview(coordinates, isValid);
   }
 
   #selectButton($container, $button) {

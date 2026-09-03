@@ -1,16 +1,19 @@
 import ShipPlacementController from "./ShipPlacementController";
 import ShipPlacementRenderer from "../ShipPlacementRenderer/ShipPlacementRenderer";
+import getShipInfoById from "../../gameData/getShipById";
 import "@testing-library/jest-dom";
 
+//corregir mock
 let mockAvailableShips;
 let mockDirectionBtnContainer;
 let mockMyBoardPlacement;
 let mockShipPlacementRenderer;
-let mockRenderer;
+
+jest.mock("../../gameData/getShipById", () => jest.fn());
 
 jest.mock("../ShipPlacementRenderer/ShipPlacementRenderer", () => ({
   __esModule: true,
-  default: jest.fn(() => mockRenderer),
+  default: jest.fn(() => mockShipPlacementRenderer),
 }));
 
 jest.mock("../domSelector", () => ({
@@ -30,13 +33,12 @@ jest.mock("../domSelector", () => ({
 describe("ShipPlacementController", () => {
   let shipPlacementController;
   let appState;
-  let boardRenderer;
-  let onNext;
   let playerBoard;
+  let player;
   let cell;
 
   beforeEach(() => {
-    mockRenderer = {
+    mockShipPlacementRenderer = {
       renderBoard: jest.fn(),
       renderPreview: jest.fn(),
       clearPreview: jest.fn(),
@@ -60,26 +62,30 @@ describe("ShipPlacementController", () => {
       canPlaceShip: jest.fn(),
     };
 
+    player = {
+      getGameBoard: jest.fn().mockReturnValue(playerBoard),
+    };
+
     appState = {
-      getPlayer1: jest.fn(),
+      getPlayer1: jest.fn().mockReturnValue(player),
     };
-
-    boardRenderer = {
-      renderMyBoard: jest.fn(),
-      renderPreview: jest.fn(),
-    };
-
-    onNext = jest.fn();
 
     shipPlacementController = new ShipPlacementController(
       appState,
-      boardRenderer,
-      onNext,
     );
 
-    shipPlacementController.selectedShip = {
-      getLenght: jest.fn().mockReturnValue(3),
-    };
+    shipPlacementController.selectedShip = "1";
+    shipPlacementController.shipPlacementRenderer = mockShipPlacementRenderer;
+
+    getShipInfoById.mockReturnValue({
+      id: "1",
+      name: "Destroyer",
+      length: 3,
+    });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   test("can be created", () => {
@@ -342,5 +348,109 @@ describe("ShipPlacementController", () => {
       [10, 3],
       [11, 3],
     ]);
+  });
+
+  // //mouseEnter
+  test("gets the coordinate when entering a cell", () => {
+    const calculateCoordinates = jest
+      .spyOn(shipPlacementController, "calculateCoordinates")
+      .mockReturnValue([
+        [2, 3],
+        [3, 3],
+        [4, 3],
+      ]);
+
+    shipPlacementController.handleCellMouseEnter({
+      target: cell,
+    });
+
+    expect(calculateCoordinates).toHaveBeenCalledWith(2, 3, "x", 3);
+  });
+
+  test("calculates the coordinates of the selected ship", () => {
+    const calculateCoordinates = jest
+      .spyOn(shipPlacementController, "calculateCoordinates")
+      .mockReturnValue([
+        [2, 3],
+        [3, 3],
+        [4, 3],
+      ]);
+
+    shipPlacementController.handleCellMouseEnter({
+      target: cell,
+    });
+
+    expect(calculateCoordinates).toHaveBeenCalledWith(2, 3, "x", 3);
+  });
+
+  test("checks if the ship can be placed at the selected position", () => {
+    const coordinates = [
+      [2, 3],
+      [3, 3],
+      [4, 3],
+    ];
+
+    jest
+      .spyOn(shipPlacementController, "calculateCoordinates")
+      .mockReturnValue(coordinates);
+
+    playerBoard.canPlaceShip.mockReturnValue(true);
+
+    shipPlacementController.handleCellMouseEnter({
+      target: cell,
+    });
+
+    expect(playerBoard.canPlaceShip).toHaveBeenCalledWith(2, 3, "x", 3);
+  });
+
+  test("renders a valid preview when the ship can be placed", () => {
+    const coordinates = [
+      [2, 3],
+      [3, 3],
+      [4, 3],
+    ];
+
+    jest
+      .spyOn(shipPlacementController, "calculateCoordinates")
+      .mockReturnValue(coordinates);
+
+    playerBoard.canPlaceShip.mockReturnValue(true);
+
+    shipPlacementController.handleCellMouseEnter({
+      target: cell,
+    });
+
+    expect(mockShipPlacementRenderer.renderPreview).toHaveBeenCalledWith(coordinates, true);
+  });
+
+  test("renders an invalid preview when the ship cannot be placed", () => {
+    const coordinates = [
+      [2, 3],
+      [3, 3],
+      [4, 3],
+    ];
+
+    jest
+      .spyOn(shipPlacementController, "calculateCoordinates")
+      .mockReturnValue(coordinates);
+
+    playerBoard.canPlaceShip.mockReturnValue(false);
+
+    shipPlacementController.handleCellMouseEnter({
+      target: cell,
+    });
+
+    expect(mockShipPlacementRenderer.renderPreview).toHaveBeenCalledWith(coordinates, false);
+  });
+
+  test("does not render a preview when no ship is selected", () => {
+    shipPlacementController.selectedShip = null;
+
+    shipPlacementController.handleCellMouseEnter({
+      target: cell,
+    });
+
+    expect(mockShipPlacementRenderer.renderPreview).not.toHaveBeenCalled();
+    expect(playerBoard.canPlaceShip).not.toHaveBeenCalled();
   });
 });
