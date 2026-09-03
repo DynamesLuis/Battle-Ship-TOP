@@ -13,6 +13,7 @@ export default class ShipPlacementController {
     this.selectedShip = null;
     this.appState = appState;
     this.shipPlacementRenderer = null;
+    this.placedShips = new Set();
   }
   init() {
     this.initEvents();
@@ -34,6 +35,7 @@ export default class ShipPlacementController {
     $myBoardPlacement.addEventListener("mouseleave", () =>
       this.handleCellMouseLeave(),
     );
+    $myBoardPlacement.addEventListener("click", (e) => this.handleCellClick(e));
   }
   renderShips() {
     shipsData.forEach((ship) => {
@@ -104,6 +106,37 @@ export default class ShipPlacementController {
 
   handleCellMouseLeave() {
     this.shipPlacementRenderer.clearPreview();
+  }
+
+  handleCellClick(e) {
+    const $cell = e.target.closest(".cell");
+    if (!$cell || !this.selectedShip || !this.shipDirection) return;
+
+    const [xStartCoordinate, yStartCoordinate] = $cell.dataset.coordinate
+      .split(", ")
+      .map(Number);
+
+    const shipData = getShipInfoById(this.selectedShip);
+
+    const isPlaced = this.appState
+      .getPlayer1()
+      .getGameBoard()
+      .placeShip(
+        xStartCoordinate,
+        yStartCoordinate,
+        this.shipDirection,
+        shipData.length,
+      );
+
+    if (isPlaced) {
+      this.placedShips.add(this.selectedShip);
+      this.shipPlacementRenderer.renderBoard();
+      const $shipCard = $availableShips.querySelector(
+        `[data-id = "${this.selectedShip}"]`,
+      );
+      $shipCard.classList.add("placed");
+      this.selectedShip = null;
+    }
   }
 
   #selectButton($container, $button) {

@@ -36,6 +36,7 @@ describe("ShipPlacementController", () => {
   let playerBoard;
   let player;
   let cell;
+  let shipCard;
 
   beforeEach(() => {
     mockShipPlacementRenderer = {
@@ -58,8 +59,11 @@ describe("ShipPlacementController", () => {
     cell.dataset.coordinate = "2, 3";
     mockMyBoardPlacement.appendChild(cell);
 
+    shipCard = mockAvailableShips.querySelector('[data-id="1"]');
+
     playerBoard = {
       canPlaceShip: jest.fn(),
+      placeShip: jest.fn(),
     };
 
     player = {
@@ -77,8 +81,8 @@ describe("ShipPlacementController", () => {
 
     getShipInfoById.mockReturnValue({
       id: "1",
-      name: "Destroyer",
-      length: 3,
+      name: "Flagship",
+      length: 5,
     });
   });
 
@@ -362,7 +366,7 @@ describe("ShipPlacementController", () => {
       target: cell,
     });
 
-    expect(calculateCoordinates).toHaveBeenCalledWith(2, 3, "x", 3);
+    expect(calculateCoordinates).toHaveBeenCalledWith(2, 3, "x", 5);
   });
 
   test("calculates the coordinates of the selected ship", () => {
@@ -378,7 +382,7 @@ describe("ShipPlacementController", () => {
       target: cell,
     });
 
-    expect(calculateCoordinates).toHaveBeenCalledWith(2, 3, "x", 3);
+    expect(calculateCoordinates).toHaveBeenCalledWith(2, 3, "x", 5);
   });
 
   test("checks if the ship can be placed at the selected position", () => {
@@ -398,7 +402,7 @@ describe("ShipPlacementController", () => {
       target: cell,
     });
 
-    expect(playerBoard.canPlaceShip).toHaveBeenCalledWith(2, 3, "x", 3);
+    expect(playerBoard.canPlaceShip).toHaveBeenCalledWith(2, 3, "x", 5);
   });
 
   test("renders a valid preview when the ship can be placed", () => {
@@ -462,5 +466,90 @@ describe("ShipPlacementController", () => {
     shipPlacementController.handleCellMouseLeave();
 
     expect(mockShipPlacementRenderer.clearPreview).toHaveBeenCalled();
+  });
+
+  //handleCellClick
+
+  test("does not attempt to place a ship when no ship is selected", () => {
+    shipPlacementController.selectedShip = null;
+    shipPlacementController.selectedDirection = "x";
+
+    shipPlacementController.handleCellClick({ target: cell });
+
+    expect(playerBoard.placeShip).not.toHaveBeenCalled();
+  });
+
+  test("does not attempt to place a ship when no direction is selected", () => {
+    shipPlacementController.selectedShip = "1";
+    shipPlacementController.shipDirection = null;
+
+    shipPlacementController.handleCellClick({ target: cell });
+
+    expect(playerBoard.placeShip).not.toHaveBeenCalled();
+  });
+
+  test("attempts to place the selected ship with the correct data", () => {
+    shipPlacementController.selectedShip = "1";
+    shipPlacementController.selectedDirection = "x";
+
+    shipPlacementController.handleCellClick({ target: cell });
+
+    cell.click();
+
+    expect(playerBoard.placeShip).toHaveBeenCalledWith(2, 3, "x", 5);
+  });
+
+  describe("when the placement is valid", () => {
+    beforeEach(() => {
+      shipPlacementController.selectedShip = "1";
+      shipPlacementController.selectedDirection = "x";
+
+      playerBoard.placeShip.mockReturnValue(true);
+
+      shipPlacementController.handleCellClick({ target: cell });
+    });
+
+    test("registers the ship as placed", () => {
+      expect(shipPlacementController.placedShips).toContain("1");
+    });
+
+    test("marks the ship card as placed", () => {
+      expect(shipCard).toHaveClass("placed");
+    });
+
+    test("clears the selected ship", () => {
+      expect(shipPlacementController.selectedShip).toBeNull();
+    });
+
+    test("renders the board again", () => {
+      expect(mockShipPlacementRenderer.renderBoard).toHaveBeenCalled();
+    });
+  });
+
+  describe("when the placement is invalid", () => {
+    beforeEach(() => {
+      shipPlacementController.selectedShip = "1";
+      shipPlacementController.selectedDirection = "x";
+
+      playerBoard.placeShip.mockReturnValue(false);
+
+      cell.click();
+    });
+
+    test("does not register the ship as placed", () => {
+      expect(shipPlacementController.placedShips).not.toContain("1");
+    });
+
+    test("does not mark the ship card as placed", () => {
+      expect(shipCard).not.toHaveClass("placed");
+    });
+
+    test("keeps the selected ship", () => {
+      expect(shipPlacementController.selectedShip).toBe("1");
+    });
+
+    test("does not render the board", () => {
+      expect(mockShipPlacementRenderer.renderBoard).not.toHaveBeenCalled();
+    });
   });
 });
