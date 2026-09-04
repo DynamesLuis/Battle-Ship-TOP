@@ -41,8 +41,11 @@ describe("ShipPlacementController", () => {
   let player;
   let cell;
   let shipCard;
+  let onStartBattle;
 
   beforeEach(() => {
+    onStartBattle = jest.fn();
+
     mockShipPlacementRenderer = {
       renderBoard: jest.fn(),
       renderPreview: jest.fn(),
@@ -81,7 +84,10 @@ describe("ShipPlacementController", () => {
       getPlayer1: jest.fn().mockReturnValue(player),
     };
 
-    shipPlacementController = new ShipPlacementController(appState);
+    shipPlacementController = new ShipPlacementController(
+      appState,
+      onStartBattle,
+    );
 
     shipPlacementController.selectedShip = "1";
     shipPlacementController.shipPlacementRenderer = mockShipPlacementRenderer;
@@ -659,5 +665,64 @@ describe("ShipPlacementController", () => {
     shipPlacementController.handleCellClick({ target: cell });
 
     expect(mockStartBattleBtn.disabled).toBe(true);
+  });
+
+  //onStartBattle
+  test("receives the onStartBattle callback in the constructor", () => {
+    expect(shipPlacementController.onStartBattle).toBe(onStartBattle);
+  });
+
+  test("does not execute the callback when the button is disabled", () => {
+    mockStartBattleBtn.disabled = true;
+
+    shipPlacementController.initEvents();
+
+    mockStartBattleBtn.click();
+
+    expect(onStartBattle).not.toHaveBeenCalled();
+  });
+
+  test("executes the callback when Start Battle is clicked", () => {
+    mockStartBattleBtn.disabled = false;
+
+    shipPlacementController.initEvents();
+
+    mockStartBattleBtn.click();
+
+    expect(onStartBattle).toHaveBeenCalled();
+  });
+
+  test("executes the callback without arguments", () => {
+    mockStartBattleBtn.disabled = false;
+
+    shipPlacementController.initEvents();
+
+    mockStartBattleBtn.click();
+
+    expect(onStartBattle).toHaveBeenCalledWith();
+  });
+
+  test("initializes the Start Battle button event", () => {
+    const addEventListenerSpy = jest.spyOn(
+      mockStartBattleBtn,
+      "addEventListener",
+    );
+
+    shipPlacementController.initEvents();
+
+    expect(addEventListenerSpy).toHaveBeenCalledWith(
+      "click",
+      expect.any(Function),
+    );
+  });
+
+  test("executes the callback only once per click", () => {
+    mockStartBattleBtn.disabled = false;
+
+    shipPlacementController.initEvents();
+
+    mockStartBattleBtn.click();
+
+    expect(onStartBattle).toHaveBeenCalledTimes(1);
   });
 });

@@ -9,12 +9,13 @@ import shipsData from "../../gameData/shipsData";
 import getShipInfoById from "../../gameData/getShipById";
 
 export default class ShipPlacementController {
-  constructor(appState) {
+  constructor(appState, onStartBattle) {
     this.shipDirection = "x";
     this.selectedShip = null;
     this.appState = appState;
     this.shipPlacementRenderer = null;
     this.placedShips = new Set();
+    this.onStartBattle = onStartBattle;
   }
   init() {
     this.initEvents();
@@ -38,6 +39,9 @@ export default class ShipPlacementController {
       this.handleCellMouseLeave(),
     );
     $myBoardPlacement.addEventListener("click", (e) => this.handleCellClick(e));
+    $startBattleBtn.addEventListener("click", () =>
+      this.handleStartBattleClick(),
+    );
   }
   renderShips() {
     shipsData.forEach((ship) => {
@@ -146,6 +150,10 @@ export default class ShipPlacementController {
 
   areAllShipsPlaced() {
     return this.placedShips.size === shipsData.length;
+  }
+
+  handleStartBattleClick() {
+    this.onStartBattle();
   }
 
   #selectButton($container, $button) {
