@@ -3,6 +3,7 @@ import {
   $availableShips,
   $directionBtnContainer,
   $myBoardPlacement,
+  $startBattleBtn,
 } from "../domSelector";
 import shipsData from "../../gameData/shipsData";
 import getShipInfoById from "../../gameData/getShipById";
@@ -21,6 +22,7 @@ export default class ShipPlacementController {
     this.shipPlacementRenderer = new ShipPlacementRenderer(
       this.appState.getPlayer1().getGameBoard(),
     );
+    $startBattleBtn.disabled = true;
   }
   initEvents() {
     $availableShips.addEventListener("click", (e) =>
@@ -136,7 +138,14 @@ export default class ShipPlacementController {
       );
       $shipCard.classList.add("placed");
       this.selectedShip = null;
+      if (this.areAllShipsPlaced()) {
+        $startBattleBtn.disabled = false;
+      }
     }
+  }
+
+  areAllShipsPlaced() {
+    return this.placedShips.size === shipsData.length;
   }
 
   #selectButton($container, $button) {

@@ -3,11 +3,11 @@ import ShipPlacementRenderer from "../ShipPlacementRenderer/ShipPlacementRendere
 import getShipInfoById from "../../gameData/getShipById";
 import "@testing-library/jest-dom";
 
-//corregir mock
 let mockAvailableShips;
 let mockDirectionBtnContainer;
 let mockMyBoardPlacement;
 let mockShipPlacementRenderer;
+let mockStartBattleBtn;
 
 jest.mock("../../gameData/getShipById", () => jest.fn());
 
@@ -27,6 +27,10 @@ jest.mock("../domSelector", () => ({
 
   get $myBoardPlacement() {
     return mockMyBoardPlacement;
+  },
+
+  get $startBattleBtn() {
+    return mockStartBattleBtn;
   },
 }));
 
@@ -60,6 +64,9 @@ describe("ShipPlacementController", () => {
     mockMyBoardPlacement.appendChild(cell);
 
     shipCard = mockAvailableShips.querySelector('[data-id="1"]');
+
+    mockStartBattleBtn = document.createElement("button");
+    mockStartBattleBtn.disabled = true;
 
     playerBoard = {
       canPlaceShip: jest.fn(),
@@ -551,5 +558,106 @@ describe("ShipPlacementController", () => {
     test("does not render the board", () => {
       expect(mockShipPlacementRenderer.renderBoard).not.toHaveBeenCalled();
     });
+  });
+
+  //areAllShipPlaced
+  test("returns false when no ships have been placed", () => {
+    shipPlacementController.placedShips = new Set();
+
+    expect(shipPlacementController.areAllShipsPlaced()).toBe(false);
+  });
+
+  test("returns false when only some ships have been placed", () => {
+    shipPlacementController.placedShips = new Set(["1", "2"]);
+
+    expect(shipPlacementController.areAllShipsPlaced()).toBe(false);
+  });
+
+  test("returns true when all ships have been placed", () => {
+    shipPlacementController.placedShips = new Set(["1", "2", "3", "4", "5"]);
+
+    expect(shipPlacementController.areAllShipsPlaced()).toBe(true);
+  });
+
+  test("returns true when all ships are placed regardless of placement order", () => {
+    shipPlacementController.placedShips = new Set(["1", "2", "3", "4", "5"]);
+
+    expect(shipPlacementController.areAllShipsPlaced()).toBe(true);
+  });
+
+  test("does not modify placedShips", () => {
+    shipPlacementController.placedShips = new Set(["1", "2"]);
+
+    const placedShipsBefore = new Set(shipPlacementController.placedShips);
+
+    shipPlacementController.areAllShipsPlaced();
+
+    expect(shipPlacementController.placedShips).toEqual(placedShipsBefore);
+  });
+
+  //disable button
+  test("starts with the start battle button disabled", () => {
+    expect(mockStartBattleBtn.disabled).toBe(true);
+  });
+
+  test("keeps the start battle button disabled when ships are still pending", () => {
+    playerBoard.placeShip.mockReturnValue(true);
+
+    jest
+      .spyOn(shipPlacementController, "areAllShipsPlaced")
+      .mockReturnValue(false);
+
+    shipPlacementController.handleCellClick({ target: cell });
+
+    expect(mockStartBattleBtn.disabled).toBe(true);
+  });
+
+  test("enables the start battle button when all ships have been placed", () => {
+    playerBoard.placeShip.mockReturnValue(true);
+
+    jest
+      .spyOn(shipPlacementController, "areAllShipsPlaced")
+      .mockReturnValue(true);
+
+    shipPlacementController.handleCellClick({ target: cell });
+
+    expect(mockStartBattleBtn.disabled).toBe(false);
+  });
+
+  test("checks if all ships are placed after a successful placement", () => {
+    playerBoard.placeShip.mockReturnValue(true);
+
+    const areAllShipsPlaced = jest
+      .spyOn(shipPlacementController, "areAllShipsPlaced")
+      .mockReturnValue(false);
+
+    shipPlacementController.handleCellClick({ target: cell });
+
+    expect(areAllShipsPlaced).toHaveBeenCalled();
+  });
+
+  test("does not check if all ships are placed after an invalid placement", () => {
+    playerBoard.placeShip.mockReturnValue(false);
+
+    const areAllShipsPlaced = jest
+      .spyOn(shipPlacementController, "areAllShipsPlaced")
+      .mockReturnValue(false);
+
+    shipPlacementController.handleCellClick({ target: cell });
+
+    expect(areAllShipsPlaced).not.toHaveBeenCalled();
+    expect(mockStartBattleBtn.disabled).toBe(true);
+  });
+
+  test("keeps the start battle button disabled while ships are still pending", () => {
+    playerBoard.placeShip.mockReturnValue(true);
+
+    jest
+      .spyOn(shipPlacementController, "areAllShipsPlaced")
+      .mockReturnValue(false);
+
+    shipPlacementController.handleCellClick({ target: cell });
+
+    expect(mockStartBattleBtn.disabled).toBe(true);
   });
 });
