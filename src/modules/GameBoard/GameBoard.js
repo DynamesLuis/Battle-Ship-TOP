@@ -25,6 +25,10 @@ export default class GameBoard {
     return new Map(this.occupiedCells);
   }
 
+  getShips() {
+    return this.ships;
+  }
+
   receiveAttack(xCoordinate, yCoordinate) {
     const ship = this.occupiedCells.get(`${xCoordinate}, ${yCoordinate}`);
     let isHit = "miss";
@@ -39,13 +43,13 @@ export default class GameBoard {
     };
   }
 
-  placeShip(xStartCoordinate, yStartCoordinate, direction, length) {
+  placeShip(xStartCoordinate, yStartCoordinate, direction, length, name) {
     const canPlaceShip = this.canPlaceShip(xStartCoordinate, yStartCoordinate, direction, length);
     if (!canPlaceShip) {
       return canPlaceShip;
     }
 
-    const newShip = new Ship(length);
+    const newShip = new Ship(length, name);
     this.ships.push(newShip);
 
     const coordinatesLenght = this.#calculateCoordinatesLenght(
