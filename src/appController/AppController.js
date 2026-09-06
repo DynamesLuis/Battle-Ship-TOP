@@ -1,5 +1,10 @@
 import createCharacter from "../modules/Character/CharacterFactory";
+import Computer from "../modules/Computer/Computer";
 import Player from "../modules/Player/Player";
+import computerShipPlacer from "../modules/Computer/computerShipPlacer";
+import Game from "../modules/Game/Game";
+import UIController from "../ui/UIController/UIController";
+import BoardRender from "../ui/BoardRender/BoardRender";
 
 export default class AppController {
   constructor(appState, screenController) {
@@ -42,5 +47,27 @@ export default class AppController {
     this.appState.setPlayer1(player1);
 
     this.screenController.showShipPlacement();
+  }
+
+  startBattle() {
+    const player1 = this.appState.getPlayer1();
+    const computerCharacter = this.appState.getCharacter2();
+    const player2 = new Computer(
+      computerCharacter.getName(),
+      computerCharacter,
+    );
+    this.appState.setPlayer2(player2);
+    computerShipPlacer(this.appState.getPlayer2().getGameBoard());
+    const game = new Game(player1, this.appState.getPlayer2());
+    this.appState.setGame(game);
+
+    const boardRender = new BoardRender(
+      this.appState.getPlayer1().getGameBoard(),
+      this.appState.getPlayer2().getGameBoard(),
+    );
+    const uiController = new UIController(boardRender, this.appState.getGame());
+    
+    uiController.initEvents();
+    this.screenController.showGame();
   }
 }
