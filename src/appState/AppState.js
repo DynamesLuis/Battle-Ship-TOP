@@ -6,6 +6,7 @@ export default class AppState {
     this.character2 = null;
     this.player1 = null;
     this.player2 = null;
+    this.game = null;
   }
 
   getName() {
@@ -54,5 +55,13 @@ export default class AppState {
 
   setPlayer2(player2) {
     this.player2 = player2;
+  }
+
+  getGame() {
+    return this.game;
+  }
+
+  setGame(game) {
+    this.game = game;
   }
 }
