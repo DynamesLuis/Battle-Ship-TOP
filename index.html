@@ -70,7 +70,56 @@
 
       <button class="nextButton">Next</button>
     </main>
-    <main class="shipPlacement hidden">ship shipPlacement</main>
+
+    <main class="shipPlacement hidden">
+      <header class="placement-header">
+        <h1>Prepare Your Fleet</h1>
+        <p>Place your ships and prepare for battle</p>
+      </header>
+
+      <section class="placement-instructions">
+        <p>
+          Select a ship, choose its direction, then click a cell on the board to
+          place it.
+        </p>
+      </section>
+
+      <section class="placement-content">
+        <!-- Board + Direction -->
+        <div class="board-section">
+          <div class="direction-section">
+            <h2>Direction</h2>
+
+            <div class="direction-Btn-Container">
+              <button
+                type="button"
+                class="direction-btn selected"
+                data-direction="x"
+              >
+                Horizontal
+              </button>
+
+              <button type="button" class="direction-btn" data-direction="y">
+                Vertical
+              </button>
+            </div>
+          </div>
+
+          <div class="player-placement-container">
+            <!-- Board will be rendered here -->
+          </div>
+        </div>
+
+        <!-- Ships -->
+        <section class="ships-section">
+          <h2>Your Fleet</h2>
+
+          <div class="availableShips"></div>
+        </section>
+      </section>
+
+      <button type="button" class="start-battle">Start Battle</button>
+    </main>
     <main class="game hidden">
       <header class="game-header">
         <h1>BATTLESHIP</h1>
