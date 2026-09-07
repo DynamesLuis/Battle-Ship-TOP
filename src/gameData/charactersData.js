@@ -1,3 +1,14 @@
+import anduin from "../assets/characters/anduin.jpeg";
+import jaina from "../assets/characters/jaina.jpeg";
+import varian from "../assets/characters/varian.jpg";
+import tyrande from "../assets/characters/tyrande.jpeg";
+import muradin from "../assets/characters/muradin.jpg";
+import thrall from "../assets/characters/thrall.jpg";
+import sylvanas from "../assets/characters/sylvanas.jpeg";
+import garrosh from "../assets/characters/garrosh.jpeg";
+import voljin from "../assets/characters/voljin.jpg";
+import baine from "../assets/characters/baine.jpg";
+
 const charactersData = {
   alliance: [
     {
@@ -25,7 +36,7 @@ const charactersData = {
           "Today, courage has prevailed.",
         ],
       },
-      img: "Anduin Wrynn.png",
+      img: anduin,
     },
 
     {
@@ -53,7 +64,7 @@ const charactersData = {
           "The sea itself has witnessed our victory.",
         ],
       },
-      img: "Jaina Proudmoore.png",
+      img: jaina,
     },
 
     {
@@ -81,7 +92,7 @@ const charactersData = {
           "We fought as one, and we conquered!",
         ],
       },
-      img: "Varian Wrynn.png",
+      img: varian,
     },
 
     {
@@ -109,7 +120,7 @@ const charactersData = {
           "Our enemies have been defeated.",
         ],
       },
-      img: "Tyrande Whisperwind.png",
+      img: tyrande,
     },
 
     {
@@ -137,7 +148,7 @@ const charactersData = {
           "A fine battle! Someone get me an ale!",
         ],
       },
-      img: "Muradin Bronzebeard.png",
+      img: muradin,
     },
   ],
 
@@ -167,7 +178,7 @@ const charactersData = {
           "The elements have guided us to victory.",
         ],
       },
-      img: "Thrall.png",
+      img: thrall,
     },
 
     {
@@ -195,7 +206,7 @@ const charactersData = {
           "There is nowhere left for you to run.",
         ],
       },
-      img: "Sylvanas Windrunner.png",
+      img: sylvanas,
     },
 
     {
@@ -223,7 +234,7 @@ const charactersData = {
           "This is what true strength looks like!",
         ],
       },
-      img: "Garrosh Hellscream.png",
+      img: garrosh,
     },
 
     {
@@ -251,7 +262,7 @@ const charactersData = {
           "Dis victory belongs to da Horde.",
         ],
       },
-      img: "Vol'jin.png",
+      img: voljin,
     },
 
     {
@@ -279,7 +290,7 @@ const charactersData = {
           "Today, our people stand victorious.",
         ],
       },
-      img: "Baine Bloodhoof.png",
+      img: baine,
     },
   ],
 };
