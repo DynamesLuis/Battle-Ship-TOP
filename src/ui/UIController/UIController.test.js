@@ -58,7 +58,7 @@ describe.skip("UIController", () => {
   let game;
   let boardRenderer;
   let uiController;
-  const delay = 3250;
+  const delay = 4000;
 
   beforeEach(() => {
     jest.useFakeTimers();
