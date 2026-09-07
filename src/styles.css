@@ -7,6 +7,10 @@
   --border: #6b5428;
   --text: #eee5c8;
   --danger: #9b2525;
+
+  --cursor-default: url("./assets/cursors/normalSelect.png");
+  --cursor-pointer: url("./assets/cursors/linkSelect.png");
+  --cursor-attack: url("./assets/cursors/attack.png");
 }
 
 body {
@@ -23,6 +27,7 @@ body {
   );
 
   font-family: Georgia, "Times New Roman", serif;
+  cursor: var(--cursor-default), auto;
 }
 
 /* =========================================
@@ -233,7 +238,7 @@ body {
    ========================================= */
 
 .faction-option {
-  cursor: pointer;
+  cursor: var(--cursor-pointer), pointer;
 }
 
 .faction-option input {
@@ -351,7 +356,7 @@ body {
 
   border: 2px solid var(--gold-dark);
 
-  cursor: pointer;
+  cursor: var(--cursor-pointer), pointer;
 
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
@@ -497,7 +502,7 @@ body {
 
   gap: 0.6rem;
 
-  cursor: pointer;
+  cursor: var(--cursor-pointer), pointer;
 
   background: linear-gradient(145deg, #3a2a20, #1f1712);
 
@@ -648,7 +653,7 @@ body {
 
   border: 2px solid var(--gold-dark);
 
-  cursor: pointer;
+  cursor: var(--cursor-pointer), pointer;
 
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
@@ -690,7 +695,7 @@ body {
 }
 
 /*SHIP PLACEMENT*/
-.ship-placement {
+.shipPlacement {
   min-height: 100vh;
   padding: 2rem;
   background: radial-gradient(circle at top, #1b2733, #0b1117 70%);
@@ -777,7 +782,7 @@ body {
   border: 2px solid var(--gold-dark);
   border-radius: 4px;
 
-  cursor: pointer;
+  cursor: var(--cursor-pointer), pointer;
 
   font-family: inherit;
   font-weight: bold;
@@ -831,7 +836,7 @@ body {
    SHIP PLACEMENT CELLS
    ========================= */
 
-.cell {
+.player-placement-container .cell {
   position: relative;
   background: #182832;
   border: 1px solid #34444d;
@@ -842,22 +847,22 @@ body {
     box-shadow 0.15s ease;
 }
 
-.cell:hover {
-  cursor: pointer;
+.player-placement-container .cell:hover {
+  cursor: var(--cursor-pointer), pointer;
 }
 
 /* =========================
    OCCUPIED
    ========================= */
 
-.cell.occupied {
+.player-placement-container .cell.occupied {
   background: #4a3824;
   border-color: var(--gold-dark);
 
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.6);
 }
 
-.cell.occupied::after {
+.player-placement-container .cell.occupied::after {
   content: "";
   position: absolute;
   inset: 3px;
@@ -869,7 +874,7 @@ body {
    VALID PREVIEW
    ========================= */
 
-.cell.preview-valid {
+.player-placement-container .cell.preview-valid {
   background: rgba(201, 162, 39, 0.35);
   border-color: var(--gold-light);
 
@@ -882,7 +887,7 @@ body {
    INVALID PREVIEW
    ========================= */
 
-.cell.preview-invalid {
+.player-placement-container .cell.preview-invalid {
   background: rgba(143, 43, 35, 0.45);
   border-color: #b9473c;
 
@@ -940,7 +945,7 @@ body {
   border: 2px solid var(--gold-dark);
   border-radius: 4px;
 
-  cursor: pointer;
+  cursor: var(--cursor-pointer), pointer;
 
   transition:
     background 0.2s,
@@ -963,7 +968,22 @@ body {
 
 .ship-card.placed {
   pointer-events: none;
+  background: #1b1713;
+  border-color: #51462d;
+  color: var(--text-muted);
+  opacity: 0.65;
   text-decoration: line-through;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
+}
+
+.ship-card.placed::after {
+  content: "✓";
+  position: absolute;
+  top: 0.3rem;
+  right: 0.4rem;
+  color: var(--gold);
+  font-size: 0.8rem;
+  font-weight: bold;
 }
 
 .ship-name {
@@ -994,7 +1014,7 @@ body {
   font-size: 1rem;
   font-weight: bold;
 
-  cursor: pointer;
+  cursor: var(--cursor-pointer), pointer;
 
   transition:
     background 0.2s,
@@ -1135,7 +1155,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-
+  gap: 10px;
   min-height: 90px;
 
   text-align: center;
@@ -1220,7 +1240,11 @@ body {
   pointer-events: none;
 }
 
-.cell {
+#enemy-board .cell:hover {
+  cursor: var(--cursor-attack), pointer;
+}
+
+.board-wrapper .cell {
   width: 40px;
   height: 40px;
   box-sizing: border-box;
@@ -1235,20 +1259,19 @@ body {
 }
 
 /* Celda que contiene un barco */
-.cell.occupied {
+.board-wrapper .cell.occupied {
   background-color: #3b2b20;
 }
 
 /* Celda atacada */
-.cell.attacked {
+.board-wrapper .cell.attacked {
   position: relative;
   background-color: #355664;
   pointer-events: none;
-  cursor: not-allowed;
 }
 
 /* Ataque sobre un barco */
-.cell.occupied.attacked {
+.board-wrapper .cell.occupied.attacked {
   background-color: #6b2520;
 
   box-shadow:
@@ -1493,7 +1516,7 @@ body {
 
   border: 2px solid var(--gold-dark);
 
-  cursor: pointer;
+  cursor: var(--cursor-pointer), pointer;
 
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
