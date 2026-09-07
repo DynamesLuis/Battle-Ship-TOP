@@ -5,6 +5,7 @@ import computerShipPlacer from "../modules/Computer/computerShipPlacer";
 import Game from "../modules/Game/Game";
 import UIController from "../ui/UIController/UIController";
 import BoardRender from "../ui/BoardRender/BoardRender";
+import ShipPlacementController from "../ui/ShipPlacementController/ShipPlacementController";
 
 export default class AppController {
   constructor(appState, screenController) {
@@ -46,6 +47,11 @@ export default class AppController {
 
     this.appState.setPlayer1(player1);
 
+    const shipPlacementController = new ShipPlacementController(
+      this.appState,
+      this.startBattle.bind(this),
+    );
+    shipPlacementController.init();
     this.screenController.showShipPlacement();
   }
 
@@ -66,7 +72,7 @@ export default class AppController {
       this.appState.getPlayer2().getGameBoard(),
     );
     const uiController = new UIController(boardRender, this.appState.getGame());
-    
+
     uiController.initEvents();
     this.screenController.showGame();
   }
