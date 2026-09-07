@@ -23,6 +23,7 @@ export default class ShipPlacementController {
     this.shipPlacementRenderer = new ShipPlacementRenderer(
       this.appState.getPlayer1().getGameBoard(),
     );
+    this.shipPlacementRenderer.renderBoard();
     $startBattleBtn.disabled = true;
   }
   initEvents() {
@@ -48,6 +49,11 @@ export default class ShipPlacementController {
       const $shipCard = document.createElement("div");
       $shipCard.classList.add("ship-card");
       $shipCard.dataset.id = ship.id;
+
+      $shipCard.innerHTML = `
+        <span class="ship-name">${ship.name}</span>
+        <span class="ship-length">${ship.length}</span>
+      `;
 
       $availableShips.appendChild($shipCard);
     });
@@ -117,7 +123,6 @@ export default class ShipPlacementController {
   handleCellClick(e) {
     const $cell = e.target.closest(".cell");
     if (!$cell || !this.selectedShip || !this.shipDirection) return;
-
     const [xStartCoordinate, yStartCoordinate] = $cell.dataset.coordinate
       .split(", ")
       .map(Number);
