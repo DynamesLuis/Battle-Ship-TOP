@@ -140,6 +140,7 @@ export default class ShipPlacementController {
         `[data-id = "${this.selectedShip}"]`,
       );
       $shipCard.classList.add("placed");
+      $shipCard.classList.remove("selected");
       this.selectedShip = null;
       if (this.areAllShipsPlaced()) {
         $startBattleBtn.disabled = false;
