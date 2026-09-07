@@ -82,27 +82,22 @@ export default class UIController {
 
   displayResults(results, player) {
     const character = player.getCharacter();
+
+    $characterImg.src = character.getImg();
+    $characterName.textContent = `${character.getName()}:`;
+
+    let action;
+
     if (results.winner) {
-      $characterImg.src = character.getImg();
-      $characterName.textContent = character.getName();
-      $battleMessage.textContent = character.getRandomDialogue("win");
-      return;
-    }
-    if (results.attackResult === "miss") {
-      $characterImg.src = character.getImg();
-      $characterName.textContent = character.getName();
-      $battleMessage.textContent = character.getRandomDialogue("miss");
-      return;
+      action = "win";
+    } else if (results.attackResult === "miss") {
+      action = "miss";
     } else if (results.sunkedShip) {
-      $characterImg.src = character.getImg();
-      $characterName.textContent = character.getName();
-      $battleMessage.textContent = character.getRandomDialogue("sunk");
-      return;
+      action = "sunk";
     } else {
-      $characterImg.src = character.getImg();
-      $characterName.textContent = character.getName();
-      $battleMessage.textContent = character.getRandomDialogue("hit");
-      return;
+      action = "hit";
     }
+
+    $battleMessage.textContent = character.getRandomDialogue(action);
   }
 }
