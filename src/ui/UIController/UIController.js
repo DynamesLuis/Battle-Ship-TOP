@@ -17,6 +17,8 @@ export default class UIController {
     this.boardRender = boardRender;
     this.game = game;
     this.isFinished = false;
+    this.isPlayingRound = false;
+    this.delay = 3250;
   }
 
   init() {
@@ -32,16 +34,17 @@ export default class UIController {
   }
 
   async handleEnemyBoardClick(event) {
-    if (this.isFinished) {
+    if (this.isFinished || this.isPlayingRound) {
       return;
     }
-
+    
     const $target = event.target;
-
+    
     if (!$target.classList.contains("cell")) {
       return;
     }
-
+    
+    this.isPlayingRound = true;
     const coordinates = $target.dataset.coordinate;
     const [x, y] = coordinates.split(",").map(Number);
 
@@ -54,15 +57,17 @@ export default class UIController {
     this.displayResults(playerResults, this.game.getPlayer1());
 
     if (computerResults) {
-      await delay(3500);
+      await delay(this.delay);
       this.boardRender.renderMyBoard($myBoardContainer);
       this.displayResults(computerResults, this.game.getPlayer2());
+      this.isPlayingRound = false;
     }
 
     if (winner) {
-      await delay(3500);
+      await delay(this.delay);
       this.finishGame(winner);
     }
+
   }
 
   finishGame(winner) {

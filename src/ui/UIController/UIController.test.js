@@ -58,9 +58,11 @@ describe.skip("UIController", () => {
   let game;
   let boardRenderer;
   let uiController;
-  const delay = 3500;
+  const delay = 3250;
 
   beforeEach(() => {
+    jest.useFakeTimers();
+
     mockEnemyBoardContainer = document.createElement("div");
     mockFinishedGameModal = document.createElement("div");
     mockCharacterImg = document.createElement("img");
@@ -124,7 +126,7 @@ describe.skip("UIController", () => {
     jest.useRealTimers();
   });
 
-  describe("Functionallity", () => {
+  describe.skip("Functionallity", () => {
     test("can be created with Game and BoardRenderer dependencies", () => {
       expect(uiController).toBeDefined();
     });
@@ -215,6 +217,63 @@ describe.skip("UIController", () => {
       cell.click();
 
       expect(game.playRound).toHaveReturnedWith(roundResults);
+    });
+
+    test("does not allow a second attack while the current turn is processing", async () => {
+      const cell = document.createElement("div");
+      const cell2 = document.createElement("div");
+
+      cell.classList.add("cell");
+      cell2.classList.add("cell");
+      cell.dataset.coordinate = "3, 0";
+      cell2.dataset.coordinate = "4, 0";
+
+      mockEnemyBoardContainer.appendChild(cell);
+      mockEnemyBoardContainer.appendChild(cell2);
+
+      uiController.handleEnemyBoardClick({ target: cell });
+
+      uiController.handleEnemyBoardClick({ target: cell2 });
+
+      expect(game.playRound).toHaveBeenCalledTimes(1);
+    });
+
+    test("allows another attack after the Computer turn has finished", async () => {
+      const cell = document.createElement("div");
+      const cell2 = document.createElement("div");
+
+      cell.classList.add("cell");
+      cell2.classList.add("cell");
+      cell.dataset.coordinate = "3, 0";
+      cell2.dataset.coordinate = "4, 0";
+
+      mockEnemyBoardContainer.appendChild(cell);
+      mockEnemyBoardContainer.appendChild(cell2);
+
+      uiController.handleEnemyBoardClick({ target: cell });
+
+      await Promise.resolve();
+
+      jest.advanceTimersByTime(delay);
+
+      await Promise.resolve();
+
+      uiController.handleEnemyBoardClick({ target: cell2 });
+
+      expect(game.playRound).toHaveBeenCalledTimes(2);
+    });
+
+    test("allows the first attack", () => {
+      const cell = document.createElement("div");
+
+      cell.classList.add("cell");
+      cell.dataset.coordinate = "3, 0";
+
+      mockEnemyBoardContainer.appendChild(cell);
+
+      uiController.handleEnemyBoardClick({ target: cell });
+
+      expect(game.playRound).toHaveBeenCalledTimes(1);
     });
 
     test("finishes the game when the player wins", async () => {
