@@ -79,7 +79,7 @@ describe.skip("AppController", () => {
 
     boardRender = {};
     uiController = {
-      initEvents: jest.fn(),
+      init: jest.fn(),
     };
 
     playerBoard = {};
@@ -327,7 +327,7 @@ describe.skip("AppController", () => {
   test("initializes the UIController", () => {
     appController.startBattle();
 
-    expect(uiController.initEvents).toHaveBeenCalled();
+    expect(uiController.init).toHaveBeenCalled();
   });
 
   test("shows the Game Screen", () => {

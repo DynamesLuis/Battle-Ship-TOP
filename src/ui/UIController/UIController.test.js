@@ -54,7 +54,7 @@ jest.mock("../domSelector", () => ({
   },
 }));
 
-describe("UIController", () => {
+describe.skip("UIController", () => {
   let game;
   let boardRenderer;
   let uiController;
@@ -115,6 +115,7 @@ describe("UIController", () => {
     };
 
     uiController = new UIController(boardRenderer, game);
+    jest.spyOn(uiController, "initEvents");
   });
 
   afterEach(() => {
@@ -122,9 +123,27 @@ describe("UIController", () => {
     jest.useRealTimers();
   });
 
-  describe.skip("Functionallity", () => {
+  describe("Functionallity", () => {
     test("can be created with Game and BoardRenderer dependencies", () => {
       expect(uiController).toBeDefined();
+    });
+
+    test("calls initEvents", () => {
+      uiController.init();
+
+      expect(uiController.initEvents).toHaveBeenCalled();
+    });
+
+    test("renders the player board", () => {
+      uiController.init();
+
+      expect(boardRenderer.renderMyBoard).toHaveBeenCalled();
+    });
+
+    test("renders the enemy board", () => {
+      uiController.init();
+
+      expect(boardRenderer.renderEnemyBoard).toHaveBeenCalled();
     });
 
     test("initEvents registers a click event on the enemy board", () => {

@@ -73,7 +73,7 @@ export default class AppController {
     );
     const uiController = new UIController(boardRender, this.appState.getGame());
 
-    uiController.initEvents();
+    uiController.init();
     this.screenController.showGame();
   }
 }

@@ -19,6 +19,12 @@ export default class UIController {
     this.isFinished = false;
   }
 
+  init() {
+    this.initEvents();
+    this.boardRender.renderMyBoard($myBoardContainer);
+    this.boardRender.renderEnemyBoard($enemyBoardContainer);
+  }
+
   initEvents() {
     $enemyBoardContainer.addEventListener("click", (event) =>
       this.handleEnemyBoardClick(event),
