@@ -44,7 +44,12 @@ export default class GameBoard {
   }
 
   placeShip(xStartCoordinate, yStartCoordinate, direction, length, name) {
-    const canPlaceShip = this.canPlaceShip(xStartCoordinate, yStartCoordinate, direction, length);
+    const canPlaceShip = this.canPlaceShip(
+      xStartCoordinate,
+      yStartCoordinate,
+      direction,
+      length,
+    );
     if (!canPlaceShip) {
       return canPlaceShip;
     }
@@ -53,7 +58,7 @@ export default class GameBoard {
     this.ships.push(newShip);
 
     const coordinatesLenght = this.#calculateCoordinatesLenght(
-      newShip,
+      newShip.length,
       xStartCoordinate,
       yStartCoordinate,
       direction,
@@ -67,11 +72,18 @@ export default class GameBoard {
   }
 
   canPlaceShip(xStartCoordinate, yStartCoordinate, direction, length) {
-    const ship = this.occupiedCells.get(
-      `${xStartCoordinate}, ${yStartCoordinate}`,
+    const coordinates = this.#calculateCoordinatesLenght(
+      length,
+      xStartCoordinate,
+      yStartCoordinate,
+      direction,
     );
-    if (ship) {
-      return false;
+    for (const coordinate of coordinates) {
+      const ship = this.occupiedCells.get(coordinate);
+
+      if (ship) {
+        return false;
+      }
     }
 
     if (direction === "x") {
@@ -84,9 +96,7 @@ export default class GameBoard {
       }
     }
 
-
     return true;
-
   }
 
   allShipsSunk() {
@@ -95,13 +105,13 @@ export default class GameBoard {
   }
 
   #calculateCoordinatesLenght(
-    ship,
+    length,
     xStartCoordinate,
     yStartCoordinate,
     direction,
   ) {
     const coordinates = [];
-    for (let index = 0; index < ship.getLength(); index++) {
+    for (let index = 0; index < length; index++) {
       if (direction === "x") {
         coordinates.push(`${xStartCoordinate + index}, ${yStartCoordinate}`);
       } else {
