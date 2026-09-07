@@ -689,6 +689,325 @@ body {
   }
 }
 
+/*SHIP PLACEMENT*/
+.ship-placement {
+  min-height: 100vh;
+  padding: 2rem;
+  background: radial-gradient(circle at top, #1b2733, #0b1117 70%);
+  color: var(--text);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.placement-header {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.placement-header h1 {
+  margin: 0;
+  color: var(--gold-light);
+  font-size: 2.5rem;
+}
+
+.placement-header p {
+  margin-top: 0.5rem;
+  color: var(--text-muted);
+}
+
+.placement-instructions {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.placement-instructions p {
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* =========================
+   MAIN PLACEMENT AREA
+   ========================= */
+
+.placement-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2rem;
+}
+
+/* =========================
+   BOARD SECTION
+   ========================= */
+
+.board-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* =========================
+   DIRECTION
+   ========================= */
+
+.direction-section {
+  text-align: center;
+}
+
+.direction-section h2 {
+  margin: 0 0 0.6rem;
+  color: var(--gold-light);
+  font-size: 1.1rem;
+}
+
+.direction-Btn-Container {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.direction-btn {
+  padding: 0.6rem 1.2rem;
+
+  background: var(--panel);
+  color: var(--text);
+
+  border: 2px solid var(--gold-dark);
+  border-radius: 4px;
+
+  cursor: pointer;
+
+  font-family: inherit;
+  font-weight: bold;
+
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    transform 0.2s;
+}
+
+.direction-btn:hover {
+  border-color: var(--gold);
+  background: var(--panel-light);
+}
+
+.direction-btn.selected {
+  background: var(--gold-dark);
+  border-color: var(--gold-light);
+  color: var(--gold-light);
+
+  box-shadow:
+    0 0 10px rgba(201, 162, 39, 0.35),
+    inset 0 0 8px rgba(0, 0, 0, 0.4);
+}
+
+/* =========================
+   BOARD
+   ========================= */
+
+.player-placement-container {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+
+  width: 500px;
+  height: 500px;
+
+  padding: 1rem;
+
+  background: var(--panel);
+
+  border: 2px solid var(--gold-dark);
+  border-radius: 6px;
+
+  box-shadow:
+    0 0 20px rgba(0, 0, 0, 0.6),
+    inset 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+/* =========================
+   SHIP PLACEMENT CELLS
+   ========================= */
+
+.cell {
+  position: relative;
+  background: #182832;
+  border: 1px solid #34444d;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.cell:hover {
+  cursor: pointer;
+}
+
+/* =========================
+   OCCUPIED
+   ========================= */
+
+.cell.occupied {
+  background: #4a3824;
+  border-color: var(--gold-dark);
+
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.6);
+}
+
+.cell.occupied::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+
+  border: 1px solid rgba(224, 193, 90, 0.35);
+}
+
+/* =========================
+   VALID PREVIEW
+   ========================= */
+
+.cell.preview-valid {
+  background: rgba(201, 162, 39, 0.35);
+  border-color: var(--gold-light);
+
+  box-shadow:
+    inset 0 0 8px rgba(201, 162, 39, 0.35),
+    0 0 5px rgba(201, 162, 39, 0.25);
+}
+
+/* =========================
+   INVALID PREVIEW
+   ========================= */
+
+.cell.preview-invalid {
+  background: rgba(143, 43, 35, 0.45);
+  border-color: #b9473c;
+
+  box-shadow:
+    inset 0 0 8px rgba(143, 43, 35, 0.45),
+    0 0 5px rgba(143, 43, 35, 0.3);
+}
+
+/* =========================
+   SHIPS PANEL
+   ========================= */
+
+.ships-section {
+  width: 220px;
+
+  padding: 1.25rem;
+
+  background: var(--panel);
+
+  border: 2px solid var(--gold-dark);
+  border-radius: 6px;
+
+  box-shadow:
+    0 0 20px rgba(0, 0, 0, 0.6),
+    inset 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+.ships-section h2 {
+  margin: 0 0 1rem;
+
+  text-align: center;
+
+  color: var(--gold-light);
+}
+
+/* Ships are now vertical */
+
+.availableShips {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ship-card {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0.8rem 1rem;
+
+  background: var(--background-light);
+
+  border: 2px solid var(--gold-dark);
+  border-radius: 4px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    transform 0.2s;
+}
+
+.ship-card:hover {
+  background: var(--panel-light);
+  border-color: var(--gold);
+  transform: translateX(-3px);
+}
+
+.ship-card.selected {
+  background: #302719;
+  border-color: var(--gold-light);
+
+  box-shadow: 0 0 10px rgba(201, 162, 39, 0.3);
+}
+
+.ship-card.placed {
+  pointer-events: none;
+  text-decoration: line-through;
+}
+
+.ship-name {
+  font-weight: bold;
+}
+
+.ship-length {
+  color: var(--gold-light);
+  font-weight: bold;
+}
+
+/* =========================
+   START BATTLE
+   ========================= */
+
+.start-battle {
+  margin-top: 2rem;
+
+  padding: 0.8rem 2.5rem;
+
+  background: var(--danger);
+  color: var(--text);
+
+  border: 2px solid var(--gold-dark);
+  border-radius: 4px;
+
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    transform 0.2s;
+}
+
+.start-battle:hover {
+  background: #a9362d;
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
 /* =========================================
    GAME
    ========================================= */

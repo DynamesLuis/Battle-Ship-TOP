@@ -9,6 +9,7 @@ import {
   $shipPlacement,
   $startScreen,
 } from "./ui/domSelector";
+import CharacterSelectionController from "./ui/CharacterSelectionController/CharacterSelectionController";
 
 const appState = new AppState();
 const screenController = new ScreenController(
@@ -21,6 +22,11 @@ const appController = new AppController(appState, screenController);
 const startScreenController = new StartScreenController(
   appController.startGame.bind(appController),
 );
+const characterSelectionController = new CharacterSelectionController(
+  appController.startPlaceShips.bind(appController),
+  appState,
+);
 
 startScreenController.initEvents();
+appController.setCharacterSelectionController(characterSelectionController);
 appController.startApp();
