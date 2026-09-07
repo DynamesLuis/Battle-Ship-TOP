@@ -58,6 +58,7 @@ describe.skip("UIController", () => {
   let game;
   let boardRenderer;
   let uiController;
+  const delay = 3500;
 
   beforeEach(() => {
     mockEnemyBoardContainer = document.createElement("div");
@@ -247,7 +248,7 @@ describe.skip("UIController", () => {
       cell.click();
       expect(finishGame).not.toHaveBeenCalled();
 
-      await jest.advanceTimersByTimeAsync(2000);
+      await jest.advanceTimersByTimeAsync(delay);
 
       expect(finishGame).toHaveBeenCalledWith(winner);
 
@@ -323,8 +324,8 @@ describe.skip("UIController", () => {
       cell.click();
 
       expect(finishGame).not.toHaveBeenCalled();
-      //await 2000 to show computer results and 2000 to finishGame
-      await jest.advanceTimersByTimeAsync(4000);
+      //await 3000 to show computer results and 3000 to finishGame
+      await jest.advanceTimersByTimeAsync(delay * 2);
 
       expect(finishGame).toHaveBeenCalledWith(winner);
 

@@ -54,13 +54,13 @@ export default class UIController {
     this.displayResults(playerResults, this.game.getPlayer1());
 
     if (computerResults) {
-      await delay(2000);
+      await delay(3500);
       this.boardRender.renderMyBoard($myBoardContainer);
       this.displayResults(computerResults, this.game.getPlayer2());
     }
 
     if (winner) {
-      await delay(2000);
+      await delay(3500);
       this.finishGame(winner);
     }
   }
