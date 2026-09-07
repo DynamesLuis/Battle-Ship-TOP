@@ -19,11 +19,11 @@ const $playerCharacters = document.querySelector("#player-characters");
 const $enemyCharacters = document.querySelector("#enemy-characters");
 const $nextBtn = document.querySelector(".nextButton");
 const $factionInputs = document.querySelectorAll('[name="faction"]');
-const $availableShips = document.querySelectorAll(".availableShips");
-const $directionBtnContainer = document.querySelectorAll(
+const $availableShips = document.querySelector(".availableShips");
+const $directionBtnContainer = document.querySelector(
   ".direction-Btn-Container",
 );
-const $myBoardPlacement = document.querySelectorAll(
+const $myBoardPlacement = document.querySelector(
   ".player-placement-container",
 );
 const $startBattleBtn = document.querySelector(".start-battle");
