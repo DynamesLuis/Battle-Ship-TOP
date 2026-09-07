@@ -31,7 +31,9 @@ export default class ShipPlacementRenderer {
       const $cell = $myBoardPlacement.querySelector(
         `[data-coordinate="${coordinate[0]}, ${coordinate[1]}"]`,
       );
-      $cell.classList.add(className);
+      if ($cell) {
+        $cell.classList.add(className);
+      }
     }
   }
 

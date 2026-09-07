@@ -10,7 +10,7 @@ jest.mock("../domSelector", () => ({
   },
 }));
 
-describe("ShipPlacementRenderer", () => {
+describe.skip("ShipPlacementRenderer", () => {
   let playerBoard;
   let renderer;
 

@@ -95,7 +95,7 @@ export default class ShipPlacementController {
     const [xStartCoordinate, yStartCoordinate] = $cell.dataset.coordinate
       .split(", ")
       .map(Number);
-
+      
     const shipData = getShipInfoById(this.selectedShip);
     const playerBoard = this.appState.getPlayer1().getGameBoard();
 
