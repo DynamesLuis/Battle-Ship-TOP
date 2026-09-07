@@ -33,12 +33,9 @@ export default class ShipPlacementController {
     $directionBtnContainer.addEventListener("click", (e) => {
       this.handleDirectionSelection(e);
     });
-    $myBoardPlacement.addEventListener("mouseenter", (e) => {
+    $myBoardPlacement.addEventListener("mouseover", (e) => {
       this.handleCellMouseEnter(e);
     });
-    $myBoardPlacement.addEventListener("mouseleave", () =>
-      this.handleCellMouseLeave(),
-    );
     $myBoardPlacement.addEventListener("click", (e) => this.handleCellClick(e));
     $startBattleBtn.addEventListener("click", () =>
       this.handleStartBattleClick(),
@@ -90,6 +87,7 @@ export default class ShipPlacementController {
   }
 
   handleCellMouseEnter(e) {
+    this.shipPlacementRenderer.clearPreview();
     const $cell = e.target.closest(".cell");
     if (!$cell) return;
     if (!this.selectedShip) return;
@@ -114,10 +112,6 @@ export default class ShipPlacementController {
       shipData.length,
     );
     this.shipPlacementRenderer.renderPreview(coordinates, isValid);
-  }
-
-  handleCellMouseLeave() {
-    this.shipPlacementRenderer.clearPreview();
   }
 
   handleCellClick(e) {

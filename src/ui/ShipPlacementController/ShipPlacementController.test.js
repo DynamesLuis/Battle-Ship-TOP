@@ -34,7 +34,7 @@ jest.mock("../domSelector", () => ({
   },
 }));
 
-describe.skip("ShipPlacementController", () => {
+describe("ShipPlacementController", () => {
   let shipPlacementController;
   let appState;
   let playerBoard;
@@ -482,7 +482,9 @@ describe.skip("ShipPlacementController", () => {
   });
 
   test("clears the preview when leaving a cell", () => {
-    shipPlacementController.handleCellMouseLeave();
+    shipPlacementController.handleCellMouseEnter({
+      target: cell,
+    });
 
     expect(mockShipPlacementRenderer.clearPreview).toHaveBeenCalled();
   });
