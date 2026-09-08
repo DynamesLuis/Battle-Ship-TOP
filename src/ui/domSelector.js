@@ -23,10 +23,9 @@ const $availableShips = document.querySelector(".availableShips");
 const $directionBtnContainer = document.querySelector(
   ".direction-Btn-Container",
 );
-const $myBoardPlacement = document.querySelector(
-  ".player-placement-container",
-);
+const $myBoardPlacement = document.querySelector(".player-placement-container");
 const $startBattleBtn = document.querySelector(".start-battle");
+const $battleReport = document.querySelector(".battle-content");
 
 export {
   $enemyBoardContainer,
@@ -52,4 +51,5 @@ export {
   $directionBtnContainer,
   $myBoardPlacement,
   $startBattleBtn,
+  $battleReport,
 };

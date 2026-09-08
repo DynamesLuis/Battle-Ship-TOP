@@ -1120,6 +1120,17 @@ body {
   align-items: center;
 
   gap: 1.5rem;
+  opacity: 1;
+  transform: translateY(0);
+
+  transition:
+    opacity 250ms ease,
+    transform 250ms ease;
+}
+
+.battle-content.fade-out {
+  opacity: 0;
+  transform: translateY(8px);
 }
 
 .character-portrait {
@@ -1168,6 +1179,18 @@ body {
 
   font-size: 1.15rem;
   line-height: 1.5;
+}
+
+.battle-content .message.typing::after {
+  content: "▋";
+  margin-left: 2px;
+  animation: blink 0.8s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
 }
 
 /* =========================================

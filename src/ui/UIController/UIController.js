@@ -8,9 +8,11 @@ import {
   $characterDialogueGameOver,
   $characterImgGameOver,
   $playerNameGameOver,
+  $battleReport,
 } from "../domSelector";
 
 import delay from "../../helpers/delay";
+import typeWriter from "../../helpers/typeWriter";
 
 export default class UIController {
   constructor(boardRender, game, player) {
@@ -56,12 +58,12 @@ export default class UIController {
     );
 
     this.boardRender.renderEnemyBoard($enemyBoardContainer);
-    this.displayResults(playerResults, this.game.getPlayer1());
+    await this.displayResults(playerResults, this.game.getPlayer1());
 
     if (computerResults) {
       await delay(this.delay);
       this.boardRender.renderMyBoard($myBoardContainer);
-      this.displayResults(computerResults, this.game.getPlayer2());
+      await this.displayResults(computerResults, this.game.getPlayer2());
       this.isPlayingRound = false;
     }
 
@@ -93,8 +95,12 @@ export default class UIController {
     $playerNameGameOver.textContent = winner.getName();
   }
 
-  displayResults(results, player) {
+  async displayResults(results, player) {
     const character = player.getCharacter();
+
+    $battleReport.classList.add("fade-out");
+
+    await delay(250);
 
     $characterImg.src = character.getImg();
     $characterName.textContent = `${character.getName()}:`;
@@ -111,6 +117,8 @@ export default class UIController {
       action = "hit";
     }
 
-    $battleMessage.textContent = character.getRandomDialogue(action);
+    const dialogue = character.getRandomDialogue(action);
+    $battleReport.classList.remove("fade-out");
+    await typeWriter($battleMessage, dialogue);
   }
 }
