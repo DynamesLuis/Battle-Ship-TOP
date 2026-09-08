@@ -72,6 +72,9 @@ describe.skip("UIController", () => {
     mockPlayerNameGameOver = document.createElement("strong");
     mockCharacterImgGameOver = document.createElement("img");
 
+    mockBattleMessage.textContent =
+      "Your turn! Make your attack. Wait for the enemy to attack before attacking again.";
+
     character1 = {
       getName: jest.fn().mockReturnValue("Player 1"),
       getImg: jest.fn().mockReturnValue("player1.png"),
@@ -117,7 +120,7 @@ describe.skip("UIController", () => {
       renderEnemyBoard: jest.fn(),
     };
 
-    uiController = new UIController(boardRenderer, game);
+    uiController = new UIController(boardRenderer, game, player1);
     jest.spyOn(uiController, "initEvents");
   });
 
@@ -389,6 +392,32 @@ describe.skip("UIController", () => {
       expect(finishGame).toHaveBeenCalledWith(winner);
 
       jest.useRealTimers();
+    });
+
+    test("gets the character from the player", () => {
+      uiController.init();
+
+      expect(player1.getCharacter).toHaveBeenCalled();
+    });
+
+    test("displays the initial character name", () => {
+      uiController.init();
+
+      expect(mockCharacterName.textContent).toBe("Player 1:");
+    });
+
+    test("displays the initial character image", () => {
+      uiController.init();
+
+      expect(mockCharacterImg.src).toContain("player1.png");
+    });
+
+    test("displays the initial battle instruction", () => {
+      uiController.init();
+
+      expect(mockBattleMessage.textContent).toBe(
+        `Your turn! Make your attack. Wait for the enemy to attack before attacking again.`,
+      );
     });
   });
 

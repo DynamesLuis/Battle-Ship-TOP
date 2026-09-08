@@ -13,9 +13,10 @@ import {
 import delay from "../../helpers/delay";
 
 export default class UIController {
-  constructor(boardRender, game) {
+  constructor(boardRender, game, player) {
     this.boardRender = boardRender;
     this.game = game;
+    this.player = player;
     this.isFinished = false;
     this.isPlayingRound = false;
     this.delay = 4000;
@@ -25,6 +26,7 @@ export default class UIController {
     this.initEvents();
     this.boardRender.renderMyBoard($myBoardContainer);
     this.boardRender.renderEnemyBoard($enemyBoardContainer);
+    this.renderInstuction();
   }
 
   initEvents() {
@@ -37,13 +39,13 @@ export default class UIController {
     if (this.isFinished || this.isPlayingRound) {
       return;
     }
-    
+
     const $target = event.target;
-    
+
     if (!$target.classList.contains("cell")) {
       return;
     }
-    
+
     this.isPlayingRound = true;
     const coordinates = $target.dataset.coordinate;
     const [x, y] = coordinates.split(",").map(Number);
@@ -67,7 +69,13 @@ export default class UIController {
       await delay(this.delay);
       this.finishGame(winner);
     }
+  }
 
+  renderInstuction() {
+    const character = this.player.getCharacter();
+
+    $characterImg.src = character.getImg();
+    $characterName.textContent = `${character.getName()}:`;
   }
 
   finishGame(winner) {

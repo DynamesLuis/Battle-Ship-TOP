@@ -71,7 +71,11 @@ export default class AppController {
       this.appState.getPlayer1().getGameBoard(),
       this.appState.getPlayer2().getGameBoard(),
     );
-    const uiController = new UIController(boardRender, this.appState.getGame());
+    const uiController = new UIController(
+      boardRender,
+      this.appState.getGame(),
+      this.appState.getPlayer1(),
+    );
 
     uiController.init();
     this.screenController.showGame();
