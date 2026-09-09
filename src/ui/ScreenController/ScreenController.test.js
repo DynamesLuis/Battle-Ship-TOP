@@ -1,7 +1,7 @@
 import ScreenController from "./ScreenController";
 import "@testing-library/jest-dom";
 
-describe.skip("ScreenController", () => {
+describe("ScreenController", () => {
   let screenController;
   let mockStartScreen;
   let mockCharacterSelection;
@@ -31,12 +31,23 @@ describe.skip("ScreenController", () => {
     expect(screenController).toBeDefined();
   });
 
-  test("hides the current screen", () => {
+  test("hides the current screen when changing screens", async () => {
+    jest.useFakeTimers();
+
     screenController.showStartScreen();
 
-    screenController.hideScreen();
+    const changeScreenPromise = screenController.changeScreen(
+      mockCharacterSelection,
+    );
+
+    await jest.advanceTimersByTimeAsync(300);
 
     expect(mockStartScreen).toHaveClass("hidden");
+
+    await jest.advanceTimersByTimeAsync(400);
+    await changeScreenPromise;
+
+    jest.useRealTimers();
   });
 
   test("shows the start screen", () => {
@@ -71,13 +82,29 @@ describe.skip("ScreenController", () => {
     expect(screenController.currentScreen).toBe(mockGame);
   });
 
-  test("hides the current screen before showing another screen", () => {
+  test("hides the current screen before showing another screen", async () => {
+    jest.useFakeTimers();
+
     screenController.showStartScreen();
 
-    screenController.showCharacterSelection();
+    const transition = screenController.showCharacterSelection();
 
-    expect(mockStartScreen.classList.contains("hidden")).toBe(true);
+    expect(mockStartScreen).toHaveClass("screen-exit");
+    expect(mockStartScreen).not.toHaveClass("hidden");
 
-    expect(mockCharacterSelection.classList.contains("hidden")).toBe(false);
+    await jest.advanceTimersByTimeAsync(300);
+
+    expect(mockStartScreen).toHaveClass("hidden");
+    expect(mockStartScreen).not.toHaveClass("screen-exit");
+
+    expect(mockCharacterSelection).not.toHaveClass("hidden");
+    expect(mockCharacterSelection).toHaveClass("screen-enter");
+
+    await jest.advanceTimersByTimeAsync(400);
+    await transition;
+
+    expect(mockCharacterSelection).not.toHaveClass("screen-enter");
+
+    jest.useRealTimers();
   });
 });
