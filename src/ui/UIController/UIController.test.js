@@ -1,5 +1,6 @@
 import GameBoard from "../../modules/GameBoard/GameBoard";
 import UIController from "./UIController";
+import typeWriter from "../../helpers/typeWriter";
 import "@testing-library/jest-dom";
 
 let mockEnemyBoardContainer;
@@ -11,10 +12,16 @@ let mockBattleMessage;
 let mockCharacterImgGameOver;
 let mockCharacterDialogueGameOver;
 let mockPlayerNameGameOver;
+let mockBattleReport;
 let character1;
 let character2;
 let player1;
 let player2;
+
+jest.mock("../../helpers/typeWriter", () => ({
+  __esModule: true,
+  default: jest.fn().mockResolvedValue(),
+}));
 
 jest.mock("../domSelector", () => ({
   get $enemyBoardContainer() {
@@ -52,16 +59,21 @@ jest.mock("../domSelector", () => ({
   get $playerNameGameOver() {
     return mockPlayerNameGameOver;
   },
+
+  get $battleReport() {
+    return mockBattleReport;
+  },
 }));
 
 describe.skip("UIController", () => {
   let game;
   let boardRenderer;
   let uiController;
-  const delay = 4000;
+  const delay = 3100;
 
   beforeEach(() => {
     jest.useFakeTimers();
+    typeWriter.mockResolvedValue();
 
     mockEnemyBoardContainer = document.createElement("div");
     mockFinishedGameModal = document.createElement("div");
@@ -71,6 +83,7 @@ describe.skip("UIController", () => {
     mockCharacterDialogueGameOver = document.createElement("p");
     mockPlayerNameGameOver = document.createElement("strong");
     mockCharacterImgGameOver = document.createElement("img");
+    mockBattleReport = document.createElement("div");
 
     mockBattleMessage.textContent =
       "Your turn! Make your attack. Wait for the enemy to attack before attacking again.";
@@ -247,6 +260,7 @@ describe.skip("UIController", () => {
 
       cell.classList.add("cell");
       cell2.classList.add("cell");
+
       cell.dataset.coordinate = "3, 0";
       cell2.dataset.coordinate = "4, 0";
 
@@ -255,12 +269,28 @@ describe.skip("UIController", () => {
 
       uiController.handleEnemyBoardClick({ target: cell });
 
+      // Finish Player displayResults()
+      jest.advanceTimersByTime(250);
+
+      await Promise.resolve();
+      await Promise.resolve();
       await Promise.resolve();
 
+      // Finish delay between Player and Computer
       jest.advanceTimersByTime(delay);
 
       await Promise.resolve();
+      await Promise.resolve();
+      await Promise.resolve();
 
+      // Finish Computer displayResults()
+      jest.advanceTimersByTime(250);
+
+      await Promise.resolve();
+      await Promise.resolve();
+      await Promise.resolve();
+
+      // The round should now be finished
       uiController.handleEnemyBoardClick({ target: cell2 });
 
       expect(game.playRound).toHaveBeenCalledTimes(2);
@@ -296,24 +326,21 @@ describe.skip("UIController", () => {
       };
 
       game.playRound.mockReturnValue(roundResults);
-
       const finishGame = jest.spyOn(uiController, "finishGame");
-
       const cell = document.createElement("div");
       cell.classList.add("cell");
       cell.dataset.coordinate = "3, 0";
-
       mockEnemyBoardContainer.appendChild(cell);
-
       uiController.initEvents();
-
       cell.click();
       expect(finishGame).not.toHaveBeenCalled();
+      // Finish displayResults()
+      await jest.advanceTimersByTimeAsync(250);
 
+      expect(finishGame).not.toHaveBeenCalled();
+      // Finish the delay before finishGame()
       await jest.advanceTimersByTimeAsync(delay);
-
       expect(finishGame).toHaveBeenCalledWith(winner);
-
       jest.useRealTimers();
     });
 
@@ -354,6 +381,7 @@ describe.skip("UIController", () => {
       jest.useFakeTimers();
 
       const winner = player2;
+
       const playerResults = {
         attackResult: "miss",
         sunkedShip: false,
@@ -386,8 +414,24 @@ describe.skip("UIController", () => {
       cell.click();
 
       expect(finishGame).not.toHaveBeenCalled();
-      //await 3000 to show computer results and 3000 to finishGame
-      await jest.advanceTimersByTimeAsync(delay * 2);
+
+      // Finish player's displayResults()
+      await jest.advanceTimersByTimeAsync(250);
+
+      expect(finishGame).not.toHaveBeenCalled();
+
+      // Delay between player and computer turns
+      await jest.advanceTimersByTimeAsync(delay);
+
+      expect(finishGame).not.toHaveBeenCalled();
+
+      // Finish computer's displayResults()
+      await jest.advanceTimersByTimeAsync(250);
+
+      expect(finishGame).not.toHaveBeenCalled();
+
+      // Delay before finishing the game
+      await jest.advanceTimersByTimeAsync(delay);
 
       expect(finishGame).toHaveBeenCalledWith(winner);
 
@@ -424,6 +468,7 @@ describe.skip("UIController", () => {
   describe.skip("Board renders", () => {
     test("renders both boards after a complete round", async () => {
       jest.useFakeTimers();
+
       game.playRound.mockReturnValue({
         playerResults: {
           attackResult: "hit",
@@ -437,6 +482,7 @@ describe.skip("UIController", () => {
       });
 
       const cell = document.createElement("div");
+
       cell.classList.add("cell");
       cell.dataset.coordinate = "3, 0";
 
@@ -446,9 +492,17 @@ describe.skip("UIController", () => {
 
       cell.click();
 
+      // The enemy board is rendered immediately after the player attack.
       expect(boardRenderer.renderEnemyBoard).toHaveBeenCalled();
-      await jest.advanceTimersByTimeAsync(2000);
+
+      // Finish player's displayResults()
+      await jest.advanceTimersByTimeAsync(250);
+
+      // The computer turn starts after this delay.
+      await jest.advanceTimersByTimeAsync(delay);
+
       expect(boardRenderer.renderMyBoard).toHaveBeenCalled();
+
       jest.useRealTimers();
     });
 
@@ -479,7 +533,9 @@ describe.skip("UIController", () => {
   });
 
   describe.skip("display Results", () => {
-    test("displays the player hit result with the character dialogue", () => {
+    test("displays the player hit result with the character dialogue", async () => {
+      jest.useFakeTimers();
+
       const character = {
         getName: jest.fn().mockReturnValue("Captain"),
         getImg: jest.fn().mockReturnValue("captain.png"),
@@ -490,8 +546,6 @@ describe.skip("UIController", () => {
         getCharacter: jest.fn().mockReturnValue(character),
       };
 
-      uiController.game.player1 = player;
-
       const results = {
         attackResult: "hit",
         sunkedShip: false,
@@ -501,16 +555,25 @@ describe.skip("UIController", () => {
 
       expect(player.getCharacter).toHaveBeenCalled();
 
+      expect(mockCharacterImg.src).not.toContain("captain.png");
+      expect(mockCharacterName.textContent).toBe("");
+      expect(mockBattleMessage.textContent).toBe(
+        "Your turn! Make your attack. Wait for the enemy to attack before attacking again.",
+      );
+
+      await jest.advanceTimersByTimeAsync(250);
+
       expect(character.getRandomDialogue).toHaveBeenCalledWith("hit");
-
       expect(mockCharacterImg.src).toContain("captain.png");
+      expect(mockCharacterName.textContent).toBe("Captain:");
+      expect(typeWriter).toHaveBeenCalledWith(mockBattleMessage, "Nice shot!");
 
-      expect(mockCharacterName.textContent).toBe("Captain");
-
-      expect(mockBattleMessage.textContent).toBe("Nice shot!");
+      jest.useRealTimers();
     });
 
-    test("gets a miss dialogue for a player miss", () => {
+    test("gets a miss dialogue for a player miss", async () => {
+      jest.useFakeTimers();
+
       const character = {
         getName: jest.fn().mockReturnValue("Captain"),
         getImg: jest.fn().mockReturnValue("captain.png"),
@@ -521,8 +584,6 @@ describe.skip("UIController", () => {
         getCharacter: jest.fn().mockReturnValue(character),
       };
 
-      uiController.game.player1 = player;
-
       const results = {
         attackResult: "miss",
         sunkedShip: false,
@@ -530,10 +591,20 @@ describe.skip("UIController", () => {
 
       uiController.displayResults(results, player);
 
+      expect(character.getRandomDialogue).not.toHaveBeenCalled();
+
+      await jest.advanceTimersByTimeAsync(250);
+
       expect(character.getRandomDialogue).toHaveBeenCalledWith("miss");
+
+      expect(typeWriter).toHaveBeenCalledWith(mockBattleMessage, "You missed!");
+
+      jest.useRealTimers();
     });
 
-    test("gets a sunk dialogue when the player sinks a ship", () => {
+    test("gets a sunk dialogue when the player sinks a ship", async () => {
+      jest.useFakeTimers();
+
       const character = {
         getName: jest.fn().mockReturnValue("Captain"),
         getImg: jest.fn().mockReturnValue("captain.png"),
@@ -544,8 +615,6 @@ describe.skip("UIController", () => {
         getCharacter: jest.fn().mockReturnValue(character),
       };
 
-      uiController.game.player1 = player;
-
       const results = {
         attackResult: "hit",
         sunkedShip: true,
@@ -553,10 +622,23 @@ describe.skip("UIController", () => {
 
       uiController.displayResults(results, player);
 
+      expect(character.getRandomDialogue).not.toHaveBeenCalled();
+
+      await jest.advanceTimersByTimeAsync(250);
+
       expect(character.getRandomDialogue).toHaveBeenCalledWith("sunk");
+
+      expect(typeWriter).toHaveBeenCalledWith(
+        mockBattleMessage,
+        "You sank my ship!",
+      );
+
+      jest.useRealTimers();
     });
 
-    test("gets a win dialogue when the player wins", () => {
+    test("gets a win dialogue when the player wins", async () => {
+      jest.useFakeTimers();
+
       const character = {
         getName: jest.fn().mockReturnValue("Captain"),
         getImg: jest.fn().mockReturnValue("captain.png"),
@@ -567,8 +649,6 @@ describe.skip("UIController", () => {
         getCharacter: jest.fn().mockReturnValue(character),
       };
 
-      uiController.game.player1 = player;
-
       const results = {
         attackResult: "hit",
         sunkedShip: true,
@@ -577,12 +657,20 @@ describe.skip("UIController", () => {
 
       uiController.displayResults(results, player);
 
+      expect(character.getRandomDialogue).not.toHaveBeenCalled();
+
+      await jest.advanceTimersByTimeAsync(250);
+
       expect(character.getRandomDialogue).toHaveBeenCalledWith("win");
 
-      expect(mockBattleMessage.textContent).toBe("We won!");
+      expect(typeWriter).toHaveBeenCalledWith(mockBattleMessage, "We won!");
+
+      jest.useRealTimers();
     });
 
-    test("displays the computer result with the computer character dialogue", () => {
+    test("displays the computer result with the computer character dialogue", async () => {
+      jest.useFakeTimers();
+
       const character = {
         getName: jest.fn().mockReturnValue("Computer"),
         getImg: jest.fn().mockReturnValue("computer.png"),
@@ -601,17 +689,23 @@ describe.skip("UIController", () => {
       uiController.displayResults(results, computer);
 
       expect(computer.getCharacter).toHaveBeenCalled();
+      expect(character.getRandomDialogue).not.toHaveBeenCalled();
+
+      await jest.advanceTimersByTimeAsync(250);
 
       expect(character.getRandomDialogue).toHaveBeenCalledWith("miss");
 
       expect(mockCharacterImg.src).toContain("computer.png");
+      expect(mockCharacterName.textContent).toBe("Computer:");
 
-      expect(mockCharacterName.textContent).toBe("Computer");
+      expect(typeWriter).toHaveBeenCalledWith(mockBattleMessage, "You missed!");
 
-      expect(mockBattleMessage.textContent).toBe("You missed!");
+      jest.useRealTimers();
     });
 
-    test("displays the computer win dialogue when computer wins", () => {
+    test("displays the computer win dialogue when computer wins", async () => {
+      jest.useFakeTimers();
+
       const character = {
         getName: jest.fn().mockReturnValue("Computer"),
         getImg: jest.fn().mockReturnValue("computer.png"),
@@ -630,9 +724,18 @@ describe.skip("UIController", () => {
 
       uiController.displayResults(results, computer);
 
+      expect(character.getRandomDialogue).not.toHaveBeenCalled();
+
+      await jest.advanceTimersByTimeAsync(250);
+
       expect(character.getRandomDialogue).toHaveBeenCalledWith("win");
 
-      expect(mockBattleMessage.textContent).toBe("I won!");
+      expect(mockCharacterImg.src).toContain("computer.png");
+      expect(mockCharacterName.textContent).toBe("Computer:");
+
+      expect(typeWriter).toHaveBeenCalledWith(mockBattleMessage, "I won!");
+
+      jest.useRealTimers();
     });
   });
 
@@ -659,6 +762,7 @@ describe.skip("UIController", () => {
       const displayResults = jest.spyOn(uiController, "displayResults");
 
       const cell = document.createElement("div");
+
       cell.classList.add("cell");
       cell.dataset.coordinate = "3, 0";
 
@@ -668,10 +772,20 @@ describe.skip("UIController", () => {
 
       cell.click();
 
+      // Player results are displayed immediately.
+      expect(displayResults).toHaveBeenCalledTimes(1);
       expect(displayResults).toHaveBeenNthCalledWith(1, playerResults, player1);
 
-      await jest.advanceTimersByTimeAsync(2000);
+      // Finish the player's displayResults() transition.
+      await jest.advanceTimersByTimeAsync(250);
 
+      // The computer results should not be displayed before the turn delay.
+      expect(displayResults).toHaveBeenCalledTimes(1);
+
+      // Finish the delay between turns.
+      await jest.advanceTimersByTimeAsync(delay);
+
+      expect(displayResults).toHaveBeenCalledTimes(2);
       expect(displayResults).toHaveBeenNthCalledWith(
         2,
         computerResults,
@@ -681,7 +795,9 @@ describe.skip("UIController", () => {
       jest.useRealTimers();
     });
 
-    test("only displays player results when computerResults is null", () => {
+    test("only displays player results when computerResults is null", async () => {
+      jest.useFakeTimers();
+
       const playerResults = {
         attackResult: "hit",
         sunkedShip: true,
@@ -696,6 +812,7 @@ describe.skip("UIController", () => {
       const displayResults = jest.spyOn(uiController, "displayResults");
 
       const cell = document.createElement("div");
+
       cell.classList.add("cell");
       cell.dataset.coordinate = "3, 0";
 
@@ -706,58 +823,13 @@ describe.skip("UIController", () => {
       cell.click();
 
       expect(displayResults).toHaveBeenCalledTimes(1);
-
       expect(displayResults).toHaveBeenCalledWith(playerResults, player1);
-    });
 
-    test("displays computer results after a delay", async () => {
-      jest.useFakeTimers();
+      // Finish the player's displayResults() transition.
+      await jest.advanceTimersByTimeAsync(250);
 
-      const playerResults = {
-        attackResult: "hit",
-        sunkedShip: false,
-      };
-
-      const computerResults = {
-        attackResult: "miss",
-        sunkedShip: false,
-      };
-
-      game.playRound.mockReturnValue({
-        playerResults,
-        computerResults,
-        winner: null,
-      });
-
-      const displayResults = jest.spyOn(uiController, "displayResults");
-
-      const cell = document.createElement("div");
-      cell.classList.add("cell");
-      cell.dataset.coordinate = "3, 0";
-
-      mockEnemyBoardContainer.appendChild(cell);
-
-      uiController.initEvents();
-
-      cell.click();
-
+      // No computer results should be displayed.
       expect(displayResults).toHaveBeenCalledTimes(1);
-
-      expect(displayResults).toHaveBeenNthCalledWith(1, playerResults, player1);
-
-      await jest.advanceTimersByTimeAsync(1999);
-
-      expect(displayResults).toHaveBeenCalledTimes(1);
-
-      await jest.advanceTimersByTimeAsync(1);
-
-      expect(displayResults).toHaveBeenCalledTimes(2);
-
-      expect(displayResults).toHaveBeenNthCalledWith(
-        2,
-        computerResults,
-        player2,
-      );
 
       jest.useRealTimers();
     });
@@ -821,6 +893,7 @@ describe.skip("UIController", () => {
       const finishGame = jest.spyOn(uiController, "finishGame");
 
       const cell = document.createElement("div");
+
       cell.classList.add("cell");
       cell.dataset.coordinate = "3, 0";
 
@@ -832,7 +905,13 @@ describe.skip("UIController", () => {
 
       expect(finishGame).not.toHaveBeenCalled();
 
-      await jest.advanceTimersByTimeAsync(1999);
+      // Finish player's displayResults() transition.
+      await jest.advanceTimersByTimeAsync(250);
+
+      expect(finishGame).not.toHaveBeenCalled();
+
+      // Finish the delay before ending the game.
+      await jest.advanceTimersByTimeAsync(delay - 1);
 
       expect(finishGame).not.toHaveBeenCalled();
 

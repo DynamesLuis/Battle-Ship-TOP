@@ -21,7 +21,7 @@ export default class UIController {
     this.player = player;
     this.isFinished = false;
     this.isPlayingRound = false;
-    this.delay = 4000;
+    this.delay = 3100;
   }
 
   init() {
