@@ -1,3 +1,5 @@
+import delay from "../../helpers/delay";
+
 export default class ScreenController {
   constructor(startScreen, characterSelection, shipPlacement, game) {
     this.currentScreen = null;
@@ -5,32 +7,48 @@ export default class ScreenController {
     this.characterSelection = characterSelection;
     this.shipPlacement = shipPlacement;
     this.game = game;
+    this.isTransition = false;
   }
 
   showStartScreen() {
-    this.hideScreen();
     this.currentScreen = this.startScreen;
     this.startScreen.classList.remove("hidden");
   }
-  showCharacterSelection() {
-    this.hideScreen();
-    this.currentScreen = this.characterSelection;
-    this.characterSelection.classList.remove("hidden");
-  }
-  showShipPlacement() {
-    this.hideScreen();
-    this.currentScreen = this.shipPlacement;
-    this.shipPlacement.classList.remove("hidden");
-  }
-  showGame() {
-    this.hideScreen();
-    this.currentScreen = this.game;
-    this.game.classList.remove("hidden");
+
+  async showCharacterSelection() {
+    await this.changeScreen(this.characterSelection);
   }
 
-  hideScreen() {
+  async showShipPlacement() {
+    await this.changeScreen(this.shipPlacement);
+  }
+
+  async showGame() {
+    await this.changeScreen(this.game);
+  }
+
+  async changeScreen(newScreen) {
+    if (this.currentScreen === newScreen || this.isTransition) return;
+
+    this.isTransition = true;
+
     if (this.currentScreen) {
+      this.currentScreen.classList.add("screen-exit");
+
+      await delay(300);
+
       this.currentScreen.classList.add("hidden");
+      this.currentScreen.classList.remove("screen-exit");
     }
+
+    this.currentScreen = newScreen;
+
+    newScreen.classList.remove("hidden");
+    newScreen.classList.add("screen-enter");
+
+    await delay(400);
+
+    newScreen.classList.remove("screen-enter");
+    this.isTransition = false;
   }
 }
