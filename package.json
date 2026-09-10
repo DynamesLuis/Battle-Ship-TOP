@@ -10,7 +10,8 @@
     "preview": "vite preview"
   },
   "jest": {
-    "testEnvironment": "jsdom"
+    "testEnvironment": "jsdom", 
+    "moduleNameMapper": { "\\.(jpg|jpeg|png|gif|webp)$": "<rootDir>/test/fileMock.js" }
   },
   "keywords": [],
   "author": "",
