@@ -1,16 +1,28 @@
 import GameBoard from "./GameBoard";
 
-describe.skip("GameBoard", () => {
+describe("GameBoard", () => {
   let gameBoard;
 
   beforeEach(() => {
-     gameBoard = new GameBoard();
+    gameBoard = new GameBoard();
   });
 
   test("a new board has no sunk ships", () => {
     const board = new GameBoard();
 
     expect(board.allShipsSunk()).toBe(false);
+  });
+
+  test("does not attack the same cell twice", () => {
+    const gameBoard = new GameBoard();
+    gameBoard.placeShip(2, 6, "x", 3, "Destroyer");
+    const ship = gameBoard.getOccupiedCells().get("2, 6");
+    const hitSpy = jest.spyOn(ship, "hit");
+    const firstResult = gameBoard.receiveAttack(2, 6);
+    const secondResult = gameBoard.receiveAttack(2, 6);
+    expect(firstResult).toEqual({ attackResult: "hit", sunkedShip: false });
+    expect(hitSpy).toHaveBeenCalledTimes(1);
+    expect(secondResult).toBeUndefined();
   });
 
   test("attacking an empty cell does not sink ships", () => {

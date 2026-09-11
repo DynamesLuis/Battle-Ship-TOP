@@ -30,6 +30,9 @@ export default class GameBoard {
   }
 
   receiveAttack(xCoordinate, yCoordinate) {
+    if (this.attackedCells.has(`${xCoordinate}, ${yCoordinate}`)) {
+      return;
+    }
     const ship = this.occupiedCells.get(`${xCoordinate}, ${yCoordinate}`);
     let isHit = "miss";
     if (ship) {
