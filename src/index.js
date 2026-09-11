@@ -10,13 +10,16 @@ import {
   $startScreen,
 } from "./ui/domSelector";
 import CharacterSelectionController from "./ui/CharacterSelectionController/CharacterSelectionController";
+import AudioController from "./AudioController/AudioController";
 
 const appState = new AppState();
+const audioController = new AudioController();
 const screenController = new ScreenController(
   $startScreen,
   $characterSelection,
   $shipPlacement,
   $game,
+  audioController,
 );
 const appController = new AppController(appState, screenController);
 const startScreenController = new StartScreenController(

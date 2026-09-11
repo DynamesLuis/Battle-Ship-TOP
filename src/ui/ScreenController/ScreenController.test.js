@@ -27,84 +27,168 @@ describe.skip("ScreenController", () => {
     );
   });
 
-  test("can be created", () => {
-    expect(screenController).toBeDefined();
+  describe.skip("Show screens", () => {
+    test("can be created", () => {
+      expect(screenController).toBeDefined();
+    });
+
+    test("hides the current screen when changing screens", async () => {
+      jest.useFakeTimers();
+
+      screenController.showStartScreen();
+
+      const changeScreenPromise = screenController.changeScreen(
+        mockCharacterSelection,
+      );
+
+      await jest.advanceTimersByTimeAsync(300);
+
+      expect(mockStartScreen).toHaveClass("hidden");
+
+      await jest.advanceTimersByTimeAsync(400);
+      await changeScreenPromise;
+
+      jest.useRealTimers();
+    });
+
+    test("shows the start screen", () => {
+      screenController.showStartScreen();
+
+      expect(mockStartScreen.classList.contains("hidden")).toBe(false);
+
+      expect(screenController.currentScreen).toBe(mockStartScreen);
+    });
+
+    test("shows the character selection screen", () => {
+      screenController.showCharacterSelection();
+
+      expect(mockCharacterSelection.classList.contains("hidden")).toBe(false);
+
+      expect(screenController.currentScreen).toBe(mockCharacterSelection);
+    });
+
+    test("shows the ship placement screen", () => {
+      screenController.showShipPlacement();
+
+      expect(mockShipPlacement.classList.contains("hidden")).toBe(false);
+
+      expect(screenController.currentScreen).toBe(mockShipPlacement);
+    });
+
+    test("shows the game screen", () => {
+      screenController.showGame();
+
+      expect(mockGame.classList.contains("hidden")).toBe(false);
+
+      expect(screenController.currentScreen).toBe(mockGame);
+    });
+
+    test("hides the current screen before showing another screen", async () => {
+      jest.useFakeTimers();
+
+      screenController.showStartScreen();
+
+      const transition = screenController.showCharacterSelection();
+
+      expect(mockStartScreen).toHaveClass("screen-exit");
+      expect(mockStartScreen).not.toHaveClass("hidden");
+
+      await jest.advanceTimersByTimeAsync(300);
+
+      expect(mockStartScreen).toHaveClass("hidden");
+      expect(mockStartScreen).not.toHaveClass("screen-exit");
+
+      expect(mockCharacterSelection).not.toHaveClass("hidden");
+      expect(mockCharacterSelection).toHaveClass("screen-enter");
+
+      await jest.advanceTimersByTimeAsync(400);
+      await transition;
+
+      expect(mockCharacterSelection).not.toHaveClass("screen-enter");
+
+      jest.useRealTimers();
+    });
   });
 
-  test("hides the current screen when changing screens", async () => {
-    jest.useFakeTimers();
+  describe.skip("Audio", () => {
+    test("showStartScreen plays menu music", () => {
+      const audioController = {
+        playMenuMusic: jest.fn(),
+      };
 
-    screenController.showStartScreen();
+      const startScreen = document.createElement("div");
 
-    const changeScreenPromise = screenController.changeScreen(
-      mockCharacterSelection,
-    );
+      const screenController = new ScreenController(
+        startScreen,
+        {},
+        {},
+        {},
+        audioController,
+      );
 
-    await jest.advanceTimersByTimeAsync(300);
+      screenController.showStartScreen();
 
-    expect(mockStartScreen).toHaveClass("hidden");
+      expect(audioController.playMenuMusic).toHaveBeenCalledTimes(1);
+    });
 
-    await jest.advanceTimersByTimeAsync(400);
-    await changeScreenPromise;
+    test("showCharacterSelection plays menu music", async () => {
+      const audioController = {
+        playMenuMusic: jest.fn(),
+      };
 
-    jest.useRealTimers();
-  });
+      const screenController = new ScreenController(
+        {},
+        {},
+        {},
+        {},
+        audioController,
+      );
 
-  test("shows the start screen", () => {
-    screenController.showStartScreen();
+      screenController.changeScreen = jest.fn();
 
-    expect(mockStartScreen.classList.contains("hidden")).toBe(false);
+      await screenController.showCharacterSelection();
 
-    expect(screenController.currentScreen).toBe(mockStartScreen);
-  });
+      expect(audioController.playMenuMusic).toHaveBeenCalledTimes(1);
+    });
 
-  test("shows the character selection screen", () => {
-    screenController.showCharacterSelection();
+    test("showShipPlacement plays menu music", async () => {
+      const audioController = {
+        playMenuMusic: jest.fn(),
+      };
 
-    expect(mockCharacterSelection.classList.contains("hidden")).toBe(false);
+      const screenController = new ScreenController(
+        {},
+        {},
+        {},
+        {},
+        audioController,
+      );
 
-    expect(screenController.currentScreen).toBe(mockCharacterSelection);
-  });
+      screenController.changeScreen = jest.fn();
 
-  test("shows the ship placement screen", () => {
-    screenController.showShipPlacement();
+      await screenController.showShipPlacement();
 
-    expect(mockShipPlacement.classList.contains("hidden")).toBe(false);
+      expect(audioController.playMenuMusic).toHaveBeenCalledTimes(1);
+    });
 
-    expect(screenController.currentScreen).toBe(mockShipPlacement);
-  });
+    test("showGame plays battle music", async () => {
+      const audioController = {
+        playBattleMusic: jest.fn(),
+      };
 
-  test("shows the game screen", () => {
-    screenController.showGame();
+      const screenController = new ScreenController(
+        {},
+        {},
+        {},
+        {},
+        audioController,
+      );
 
-    expect(mockGame.classList.contains("hidden")).toBe(false);
+      screenController.changeScreen = jest.fn();
 
-    expect(screenController.currentScreen).toBe(mockGame);
-  });
+      await screenController.showGame();
 
-  test("hides the current screen before showing another screen", async () => {
-    jest.useFakeTimers();
-
-    screenController.showStartScreen();
-
-    const transition = screenController.showCharacterSelection();
-
-    expect(mockStartScreen).toHaveClass("screen-exit");
-    expect(mockStartScreen).not.toHaveClass("hidden");
-
-    await jest.advanceTimersByTimeAsync(300);
-
-    expect(mockStartScreen).toHaveClass("hidden");
-    expect(mockStartScreen).not.toHaveClass("screen-exit");
-
-    expect(mockCharacterSelection).not.toHaveClass("hidden");
-    expect(mockCharacterSelection).toHaveClass("screen-enter");
-
-    await jest.advanceTimersByTimeAsync(400);
-    await transition;
-
-    expect(mockCharacterSelection).not.toHaveClass("screen-enter");
-
-    jest.useRealTimers();
+      expect(audioController.playBattleMusic).toHaveBeenCalledTimes(1);
+    });
   });
 });
