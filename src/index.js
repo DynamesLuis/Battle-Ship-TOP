@@ -21,7 +21,7 @@ const screenController = new ScreenController(
   $game,
   audioController,
 );
-const appController = new AppController(appState, screenController);
+const appController = new AppController(appState, screenController, audioController);
 const startScreenController = new StartScreenController(
   appController.startGame.bind(appController),
 );

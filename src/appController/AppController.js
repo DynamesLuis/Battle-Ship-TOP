@@ -9,9 +9,10 @@ import ShipPlacementController from "../ui/ShipPlacementController/ShipPlacement
 import AudioController from "../AudioController/AudioController";
 
 export default class AppController {
-  constructor(appState, screenController) {
+  constructor(appState, screenController, audioController) {
     this.appState = appState;
     this.screenController = screenController;
+    this.audioController = audioController;
   }
 
   setCharacterSelectionController(characterSelectionController) {
@@ -76,7 +77,7 @@ export default class AppController {
       boardRender,
       this.appState.getGame(),
       this.appState.getPlayer1(),
-      new AudioController(),
+      this.audioController,
     );
 
     uiController.init();

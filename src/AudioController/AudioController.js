@@ -70,7 +70,7 @@ export default class AudioController {
     if (this.currentMusic) {
       this.currentMusic.loop = false;
       this.currentMusic.pause();
-      this.currentMusic.currentTime = 0;
+      this.currentMusic.currentTime = 0;     
     }
   }
 
