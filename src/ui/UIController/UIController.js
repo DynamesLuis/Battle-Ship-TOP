@@ -131,6 +131,8 @@ export default class UIController {
       case "sunk":
         this.audioController.playSunk();
         break;
+      case "win":
+        this.audioController.playSunk();
       default:
         break;
     }
