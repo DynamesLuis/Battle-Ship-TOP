@@ -1,9 +1,9 @@
 import AudioController from "./AudioController";
-import miss from "../assets/audios/miss.mp3";
-import hit from "../assets/audios/hit.mp3";
-import canon from "../assets/audios/canon.mp3";
-import sunk from "../assets/audios/sunk.mp3";
-import victory from "../assets/audios/victory.mp3";
+import miss from "../assets/audios/effects/miss.mp3";
+import hit from "../assets/audios/effects/hit.mp3";
+import canon from "../assets/audios/effects/canon.mp3";
+import sunk from "../assets/audios/effects/sunk.mp3";
+import victory from "../assets/audios/effects/victory.mp3";
 import delay from "../helpers/delay";
 
 jest.mock("../helpers/delay", () => jest.fn(() => Promise.resolve()));

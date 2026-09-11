@@ -1,12 +1,12 @@
-import miss from "../assets/audios/miss.mp3";
-import hit from "../assets/audios/hit.mp3";
-import canon from "../assets/audios/canon.mp3";
-import sunk from "../assets/audios/sunk.mp3";
-import victory from "../assets/audios/victory.mp3";
-import menu1 from "../assets/audios/backgroundmusicmaster-fantasy-craft-loop-431346.mp3";
-import menu2 from "../assets/audios/blendertimer-medieval-kingdoms-598387.mp3";
-import battle1 from "../assets/audios/hitslab-battle-fighting-warrior-drums-372078.mp3";
-import battle2 from "../assets/audios/thefealdoproject-the-battle-of-coalitions-115596.mp3";
+import miss from "../assets/audios/effects/miss.mp3";
+import hit from "../assets/audios/effects/hit.mp3";
+import canon from "../assets/audios/effects/canon.mp3";
+import sunk from "../assets/audios/effects/sunk.mp3";
+import victory from "../assets/audios/effects/victory.mp3";
+import menu1 from "../assets/audios/music/backgroundmusicmaster-fantasy-craft-loop-431346.mp3";
+import menu2 from "../assets/audios/music/blendertimer-medieval-kingdoms-598387.mp3";
+import battle1 from "../assets/audios/music/hitslab-battle-fighting-warrior-drums-372078.mp3";
+import battle2 from "../assets/audios/music/thefealdoproject-the-battle-of-coalitions-115596.mp3";
 import delay from "../helpers/delay";
 
 export default class AudioController {
