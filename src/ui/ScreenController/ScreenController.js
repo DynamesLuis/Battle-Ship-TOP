@@ -15,12 +15,26 @@ export default class ScreenController {
     this.game = game;
     this.audioController = audioController;
     this.isTransition = false;
+    this.isAudioEnabled = false;
   }
 
   showStartScreen() {
     this.currentScreen = this.startScreen;
     this.startScreen.classList.remove("hidden");
-    this.audioController.playMenuMusic();
+    this.enableAudioAfterInteraction();
+  }
+
+  enableAudioAfterInteraction() {
+    if (!this.isAudioEnabled) {
+      document.addEventListener(
+        "pointerdown",
+        () => {
+          this.isAudioEnabled = true;
+          this.audioController.playMenuMusic();
+        },
+        { once: true },
+      );
+    }
   }
 
   async showCharacterSelection() {
@@ -36,7 +50,7 @@ export default class ScreenController {
   async showGame() {
     await this.changeScreen(this.game);
     this.audioController.playBattleMusic();
-  } 
+  }
 
   async changeScreen(newScreen) {
     if (this.currentScreen === newScreen || this.isTransition) return;

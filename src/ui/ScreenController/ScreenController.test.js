@@ -110,14 +110,10 @@ describe.skip("ScreenController", () => {
     });
   });
 
-  describe.skip("Audio", () => {
-    test("showStartScreen plays menu music", () => {
-      const audioController = {
-        playMenuMusic: jest.fn(),
-      };
-
+  describe("Audio", () => {
+    test("enables audio after the first user interaction", () => {
+      const audioController = { playMenuMusic: jest.fn() };
       const startScreen = document.createElement("div");
-
       const screenController = new ScreenController(
         startScreen,
         {},
@@ -125,9 +121,25 @@ describe.skip("ScreenController", () => {
         {},
         audioController,
       );
-
       screenController.showStartScreen();
-
+      expect(screenController.isAudioEnabled).toBe(false);
+      document.dispatchEvent(new Event("pointerdown"));
+      expect(audioController.playMenuMusic).toHaveBeenCalledTimes(1);
+      expect(screenController.isAudioEnabled).toBe(true);
+    });
+    test("does not enable audio again after it has already been enabled", () => {
+      const audioController = { playMenuMusic: jest.fn() };
+      const startScreen = document.createElement("div");
+      const screenController = new ScreenController(
+        startScreen,
+        {},
+        {},
+        {},
+        audioController,
+      );
+      screenController.showStartScreen();
+      document.dispatchEvent(new Event("pointerdown"));
+      document.dispatchEvent(new Event("pointerdown"));
       expect(audioController.playMenuMusic).toHaveBeenCalledTimes(1);
     });
 
