@@ -83,6 +83,7 @@ export default class UIController {
   }
 
   finishGame(winner) {
+    this.audioController.stopMusic();
     this.audioController.playVictory();
     this.isFinished = true;
     $enemyBoardContainer.classList.add("desactivated");

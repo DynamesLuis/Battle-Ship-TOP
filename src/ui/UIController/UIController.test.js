@@ -926,7 +926,7 @@ describe.skip("UIController", () => {
     });
   });
 
-  describe.skip("UIController - Audio", () => {
+  describe("UIController - Audio", () => {
     test("plays the shot sound before playing a valid attack", async () => {
       const audioController = {
         playShot: jest.fn(),
@@ -1077,12 +1077,47 @@ describe.skip("UIController", () => {
       expect(audioController.playSunk).not.toHaveBeenCalled();
     });
     test("plays the victory sound when the game is finished", () => {
-      const audioController = { playVictory: jest.fn() };
+      const audioController = { playVictory: jest.fn(), stopMusic: jest.fn() };
       const player = {};
       const uiController = new UIController({}, {}, player, audioController);
       const winner = player1;
       uiController.finishGame(winner);
       expect(audioController.playVictory).toHaveBeenCalledTimes(1);
+    });
+    test("stops the music when the game is finished", () => {
+      const audioController = {
+        stopMusic: jest.fn(),
+        playVictory: jest.fn(),
+      };
+
+      const player = {};
+
+      const uiController = new UIController({}, {}, player, audioController);
+
+      const winner = player1;
+
+      uiController.finishGame(winner);
+
+      expect(audioController.stopMusic).toHaveBeenCalledTimes(1);
+    });
+
+    test("stops the music before playing the victory sound", () => {
+      const audioController = {
+        stopMusic: jest.fn(),
+        playVictory: jest.fn(),
+      };
+
+      const player = {};
+
+      const uiController = new UIController({}, {}, player, audioController);
+
+      const winner = player1;
+
+      uiController.finishGame(winner);
+
+      expect(
+        audioController.stopMusic.mock.invocationCallOrder[0],
+      ).toBeLessThan(audioController.playVictory.mock.invocationCallOrder[0]);
     });
   });
 });
