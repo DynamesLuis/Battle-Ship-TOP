@@ -15,10 +15,11 @@ import delay from "../../helpers/delay";
 import typeWriter from "../../helpers/typeWriter";
 
 export default class UIController {
-  constructor(boardRender, game, player) {
+  constructor(boardRender, game, player, audioController) {
     this.boardRender = boardRender;
     this.game = game;
     this.player = player;
+    this.audioController = audioController;
     this.isFinished = false;
     this.isPlayingRound = false;
     this.delay = 3100;
@@ -51,7 +52,7 @@ export default class UIController {
     this.isPlayingRound = true;
     const coordinates = $target.dataset.coordinate;
     const [x, y] = coordinates.split(",").map(Number);
-
+    this.audioController.playShot();
     const { playerResults, computerResults, winner } = this.game.playRound(
       x,
       y,
@@ -62,6 +63,7 @@ export default class UIController {
 
     if (computerResults) {
       await delay(this.delay);
+      this.audioController.playShot();
       this.boardRender.renderMyBoard($myBoardContainer);
       await this.displayResults(computerResults, this.game.getPlayer2());
       this.isPlayingRound = false;
@@ -81,6 +83,7 @@ export default class UIController {
   }
 
   finishGame(winner) {
+    this.audioController.playVictory();
     this.isFinished = true;
     $enemyBoardContainer.classList.add("desactivated");
     this.displayModal(winner);
@@ -115,6 +118,20 @@ export default class UIController {
       action = "sunk";
     } else {
       action = "hit";
+    }
+
+    switch (action) {
+      case "miss":
+        this.audioController.playMiss();
+        break;
+      case "hit":
+        this.audioController.playHit();
+        break;
+      case "sunk":
+        this.audioController.playSunk();
+        break;
+      default:
+        break;
     }
 
     const dialogue = character.getRandomDialogue(action);

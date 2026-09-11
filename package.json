@@ -11,7 +11,7 @@
   },
   "jest": {
     "testEnvironment": "jsdom", 
-    "moduleNameMapper": { "\\.(jpg|jpeg|png|gif|webp)$": "<rootDir>/test/fileMock.js" }
+    "moduleNameMapper": { "\\.(jpg|jpeg|png|gif|webpf|mp3|wav|ogg)$": "<rootDir>/test/fileMock.js" }
   },
   "keywords": [],
   "author": "",

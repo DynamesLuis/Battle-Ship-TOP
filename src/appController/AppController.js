@@ -6,6 +6,7 @@ import Game from "../modules/Game/Game";
 import UIController from "../ui/UIController/UIController";
 import BoardRender from "../ui/BoardRender/BoardRender";
 import ShipPlacementController from "../ui/ShipPlacementController/ShipPlacementController";
+import AudioController from "../AudioController/AudioController";
 
 export default class AppController {
   constructor(appState, screenController) {
@@ -75,6 +76,7 @@ export default class AppController {
       boardRender,
       this.appState.getGame(),
       this.appState.getPlayer1(),
+      new AudioController(),
     );
 
     uiController.init();

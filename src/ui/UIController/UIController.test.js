@@ -1,6 +1,7 @@
 import GameBoard from "../../modules/GameBoard/GameBoard";
 import UIController from "./UIController";
 import typeWriter from "../../helpers/typeWriter";
+import delay from "../../helpers/delay";
 import "@testing-library/jest-dom";
 
 let mockEnemyBoardContainer;
@@ -17,6 +18,8 @@ let character1;
 let character2;
 let player1;
 let player2;
+
+jest.mock("../../helpers/delay", () => jest.fn(() => Promise.resolve()));
 
 jest.mock("../../helpers/typeWriter", () => ({
   __esModule: true,
@@ -920,6 +923,166 @@ describe.skip("UIController", () => {
       expect(finishGame).toHaveBeenCalledWith(winner);
 
       jest.useRealTimers();
+    });
+  });
+
+  describe.skip("UIController - Audio", () => {
+    test("plays the shot sound before playing a valid attack", async () => {
+      const audioController = {
+        playShot: jest.fn(),
+        playHit: jest.fn(),
+        playMiss: jest.fn(),
+        playSunk: jest.fn(),
+      };
+      const player = {};
+      const game = {
+        playRound: jest.fn(() => ({
+          playerResults: { attackResult: "miss", sunkedShip: false },
+          computerResults: null,
+          winner: null,
+        })),
+        getPlayer1: jest.fn().mockReturnValue(player1),
+      };
+      const boardRender = { renderEnemyBoard: jest.fn() };
+      const uiController = new UIController(
+        boardRender,
+        game,
+        player,
+        audioController,
+      );
+      const $cell = document.createElement("div");
+      $cell.classList.add("cell");
+      $cell.dataset.coordinate = "3, 4";
+      const event = { target: $cell };
+      await uiController.handleEnemyBoardClick(event);
+      expect(audioController.playShot).toHaveBeenCalledTimes(1);
+      expect(game.playRound).toHaveBeenCalledTimes(1);
+    });
+    test("does not play the shot sound for an invalid click", async () => {
+      const audioController = { playShot: jest.fn() };
+      const player = {};
+      const game = { playRound: jest.fn() };
+      const boardRender = { renderEnemyBoard: jest.fn() };
+      const uiController = new UIController(
+        boardRender,
+        game,
+        player,
+        audioController,
+      );
+      const $target = document.createElement("div");
+      const event = { target: $target };
+      await uiController.handleEnemyBoardClick(event);
+      expect(audioController.playShot).not.toHaveBeenCalled();
+      expect(game.playRound).not.toHaveBeenCalled();
+    });
+    test("plays the hit sound when the result is a hit", async () => {
+      const audioController = { playHit: jest.fn() };
+      const player = {
+        getCharacter: jest.fn(() => ({
+          getImg: jest.fn(),
+          getName: jest.fn(() => "Character"),
+          getRandomDialogue: jest.fn(() => "Hit!"),
+        })),
+      };
+      const uiController = new UIController({}, {}, player, audioController);
+      const results = { attackResult: "hit", sunkedShip: false };
+      await uiController.displayResults(results, player);
+      expect(audioController.playHit).toHaveBeenCalledTimes(1);
+    });
+    test("plays the miss sound when the result is a miss", async () => {
+      const audioController = { playMiss: jest.fn() };
+      const player = {
+        getCharacter: jest.fn(() => ({
+          getImg: jest.fn(),
+          getName: jest.fn(() => "Character"),
+          getRandomDialogue: jest.fn(() => "Miss!"),
+        })),
+      };
+      const uiController = new UIController({}, {}, player, audioController);
+      const results = { attackResult: "miss", sunkedShip: false };
+      await uiController.displayResults(results, player);
+      expect(audioController.playMiss).toHaveBeenCalledTimes(1);
+    });
+    test("plays the sunk sound when the result is a sunk ship", async () => {
+      const audioController = { playSunk: jest.fn() };
+      const player = {
+        getCharacter: jest.fn(() => ({
+          getImg: jest.fn(),
+          getName: jest.fn(() => "Character"),
+          getRandomDialogue: jest.fn(() => "Sunk!"),
+        })),
+      };
+      const uiController = new UIController({}, {}, player, audioController);
+      const results = { attackResult: "hit", sunkedShip: true };
+      await uiController.displayResults(results, player);
+      expect(audioController.playSunk).toHaveBeenCalledTimes(1);
+    });
+    test("plays the result sound after the shot sound", async () => {
+      const callOrder = [];
+      const audioController = {
+        playShot: jest.fn(() => {
+          callOrder.push("shot");
+        }),
+        playHit: jest.fn(() => {
+          callOrder.push("hit");
+        }),
+      };
+      const player = {
+        getCharacter: jest.fn(() => ({
+          getImg: jest.fn(),
+          getName: jest.fn(() => "Character"),
+          getRandomDialogue: jest.fn(() => "Hit!"),
+        })),
+      };
+      const game = {
+        playRound: jest.fn(() => ({
+          playerResults: { attackResult: "hit", sunkedShip: false },
+          computerResults: null,
+          winner: null,
+        })),
+        getPlayer1: jest.fn(() => player),
+      };
+      const boardRender = { renderEnemyBoard: jest.fn() };
+      const uiController = new UIController(
+        boardRender,
+        game,
+        player,
+        audioController,
+      );
+      const $cell = document.createElement("div");
+      $cell.classList.add("cell");
+      $cell.dataset.coordinate = "3, 4";
+      const event = { target: $cell };
+      await uiController.handleEnemyBoardClick(event);
+      expect(callOrder).toEqual(["shot", "hit"]);
+    });
+    test("plays the corresponding sound for the computer result", async () => {
+      const audioController = {
+        playHit: jest.fn(),
+        playMiss: jest.fn(),
+        playSunk: jest.fn(),
+      };
+      const player = {
+        getCharacter: jest.fn(() => ({
+          getImg: jest.fn(),
+          getName: jest.fn(() => "Character"),
+          getRandomDialogue: jest.fn(() => "Hit!"),
+        })),
+      };
+      const uiController = new UIController({}, {}, player, audioController);
+      const computerResults = { attackResult: "hit", sunkedShip: false };
+      await uiController.displayResults(computerResults, player);
+      expect(audioController.playHit).toHaveBeenCalledTimes(1);
+      expect(audioController.playMiss).not.toHaveBeenCalled();
+      expect(audioController.playSunk).not.toHaveBeenCalled();
+    });
+    test("plays the victory sound when the game is finished", () => {
+      const audioController = { playVictory: jest.fn() };
+      const player = {};
+      const uiController = new UIController({}, {}, player, audioController);
+      const winner = player1;
+      uiController.finishGame(winner);
+      expect(audioController.playVictory).toHaveBeenCalledTimes(1);
     });
   });
 });
