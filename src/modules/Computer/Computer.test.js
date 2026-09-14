@@ -60,7 +60,7 @@ describe.skip("Computer functionality", () => {
     const enemyBoard = {
       getAttackedCells: jest.fn(() => attackedCells),
       receiveAttack: jest.fn((x, y) => {
-        attackedCells.add(`${x},${y}`);
+        attackedCells.add(`${x}, ${y}`);
 
         return {
           attackResult: "miss",
@@ -673,5 +673,64 @@ describe.skip("Computer", () => {
     const computer = new Computer("Computer", character);
 
     expect(computer.getCharacter()).toBe(character);
+  });
+});
+
+describe.skip("Computer - Random attacks", () => {
+  let computer;
+
+  beforeEach(() => {
+    computer = new Computer("Computer", {});
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  test("random attack targets an available coordinate", () => {
+    const attackedCells = new Set(["2,6"]);
+
+    const enemyBoard = {
+      getAttackedCells: jest.fn(() => attackedCells),
+      receiveAttack: jest.fn(() => ({
+        attackResult: "miss",
+        sunkedShip: false,
+      })),
+    };
+
+    jest
+      .spyOn(Math, "random")
+      .mockReturnValueOnce(0.7) // x = 7
+      .mockReturnValueOnce(0.4); // y = 4
+
+    computer.attack(enemyBoard);
+
+    expect(enemyBoard.receiveAttack).toHaveBeenCalledWith(7, 4);
+  });
+
+  test("random attack does not target an already attacked coordinate", () => {
+    const attackedCells = new Set(["2, 6", "5, 3"]);
+
+    const enemyBoard = {
+      getAttackedCells: jest.fn(() => attackedCells),
+      receiveAttack: jest.fn(() => ({
+        attackResult: "miss",
+        sunkedShip: false,
+      })),
+    };
+
+    jest
+      .spyOn(Math, "random")
+      .mockReturnValueOnce(0.26) // x = 2
+      .mockReturnValueOnce(0.61) // y = 6 -> "2,6", already attacked
+      .mockReturnValueOnce(0.51) // x = 5
+      .mockReturnValueOnce(0.31) // y = 3 -> "5,3", already attacked
+      .mockReturnValueOnce(0.71) // x = 7
+      .mockReturnValueOnce(0.41); // y = 4 -> "7,4", available
+
+    computer.attack(enemyBoard);
+
+    expect(enemyBoard.receiveAttack).toHaveBeenCalledTimes(1);
+    expect(enemyBoard.receiveAttack).toHaveBeenCalledWith(7, 4);
   });
 });

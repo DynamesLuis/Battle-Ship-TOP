@@ -171,7 +171,7 @@ export default class Computer extends Player {
     do {
       x = Math.floor(Math.random() * 10);
       y = Math.floor(Math.random() * 10);
-    } while (attackedCells.has(`${x},${y}`));
+    } while (attackedCells.has(`${x}, ${y}`));
 
     return [x, y];
   }
