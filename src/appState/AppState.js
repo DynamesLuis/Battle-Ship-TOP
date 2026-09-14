@@ -64,4 +64,14 @@ export default class AppState {
   setGame(game) {
     this.game = game;
   }
+
+  reset() {
+    this.name = null;
+    this.playerFaction = null;
+    this.character1 = null;
+    this.character2 = null;
+    this.player1 = null;
+    this.player2 = null;
+    this.game = null;
+  }
 }
