@@ -1160,8 +1160,8 @@ body {
 .battle-content {
   display: flex;
   align-items: center;
-
-  gap: 1.5rem;
+  justify-content: center;
+  gap: 1.75rem;
   opacity: 1;
   transform: translateY(0);
 
@@ -1202,6 +1202,14 @@ body {
   object-fit: cover;
 }
 
+.battle-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  min-height: 90px;
+}
+
 .battle-message {
   flex: 1;
 
@@ -1209,7 +1217,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  min-height: 90px;
+  min-height: 50px;
 
   text-align: center;
 }
@@ -1233,6 +1241,29 @@ body {
   50% {
     opacity: 0;
   }
+}
+
+.attack-result {
+  margin-top: 0.75rem;
+
+  font-size: 0.8rem;
+  font-weight: bold;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+
+  text-align: center;
+}
+
+.attack-result.hit {
+  color: var(--gold-light);
+}
+
+.attack-result.miss {
+  color: var(--text-muted);
+}
+
+.attack-result.sunk {
+  color: #b9473c;
 }
 
 /* =========================================
