@@ -10,6 +10,7 @@ import {
   $playerNameGameOver,
   $battleReport,
   $attackResult,
+  $characterNameGameOver,
 } from "../domSelector";
 
 import delay from "../../helpers/delay";
@@ -94,9 +95,10 @@ export default class UIController {
 
   displayModal(winner) {
     $characterImgGameOver.src = winner.getCharacter().getImg();
-    $characterDialogueGameOver.textContent = winner
+    $characterDialogueGameOver.textContent = `"${winner
       .getCharacter()
-      .getRandomDialogue("win");
+      .getRandomDialogue("win")}"`;
+    $characterNameGameOver.textContent = winner.getCharacter().getName();
     $playerNameGameOver.textContent = winner.getName();
   }
 

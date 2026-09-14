@@ -7,7 +7,8 @@ const $battleMessage = document.querySelector(".message");
 const $characterImgGameOver = document.querySelector(
   ".game-over-character img",
 );
-const $characterDialogueGameOver = document.querySelector(".game-over-quote p");
+const $characterDialogueGameOver = document.querySelector(".game-over-quote .game-over-character-quote");
+const $characterNameGameOver = document.querySelector(".game-over-quote .game-over-character-name");
 const $playerNameGameOver = document.querySelector(".game-over-winner strong");
 const $startScreen = document.querySelector(".startScreen");
 const $characterSelection = document.querySelector(".characterSelection");
@@ -37,6 +38,7 @@ export {
   $battleMessage,
   $characterImgGameOver,
   $characterDialogueGameOver,
+  $characterNameGameOver,
   $playerNameGameOver,
   $startScreen,
   $characterSelection,

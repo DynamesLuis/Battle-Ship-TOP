@@ -15,6 +15,7 @@ let mockCharacterDialogueGameOver;
 let mockPlayerNameGameOver;
 let mockBattleReport;
 let mockAttackResult;
+let mockCharacterNameGameOver;
 let character1;
 let character2;
 let player1;
@@ -28,6 +29,10 @@ jest.mock("../../helpers/typeWriter", () => ({
 }));
 
 jest.mock("../domSelector", () => ({
+  get $characterNameGameOver() {
+    return mockCharacterNameGameOver;
+  },
+
   get $enemyBoardContainer() {
     return mockEnemyBoardContainer;
   },
@@ -89,6 +94,8 @@ describe.skip("UIController", () => {
       playHit: jest.fn(),
       playMiss: jest.fn(),
       playSunk: jest.fn(),
+      stopMusic: jest.fn(),
+      playVictory: jest.fn(),
     };
 
     mockEnemyBoardContainer = document.createElement("div");
@@ -98,6 +105,7 @@ describe.skip("UIController", () => {
     mockBattleMessage = document.createElement("p");
     mockAttackResult = document.createElement("p");
     mockCharacterDialogueGameOver = document.createElement("p");
+    mockCharacterNameGameOver = document.createElement("p");
     mockPlayerNameGameOver = document.createElement("strong");
     mockCharacterImgGameOver = document.createElement("img");
     mockBattleReport = document.createElement("div");
@@ -150,7 +158,12 @@ describe.skip("UIController", () => {
       renderEnemyBoard: jest.fn(),
     };
 
-    uiController = new UIController(boardRenderer, game, player1, audioController);
+    uiController = new UIController(
+      boardRenderer,
+      game,
+      player1,
+      audioController,
+    );
     jest.spyOn(uiController, "initEvents");
   });
 
@@ -326,41 +339,6 @@ describe.skip("UIController", () => {
       expect(game.playRound).toHaveBeenCalledTimes(1);
     });
 
-    test("finishes the game when the player wins", async () => {
-      jest.useFakeTimers();
-
-      const winner = player1;
-
-      const playerResults = {
-        attackResult: "hit",
-        sunkedShip: true,
-      };
-
-      const roundResults = {
-        playerResults,
-        computerResults: null,
-        winner,
-      };
-
-      game.playRound.mockReturnValue(roundResults);
-      const finishGame = jest.spyOn(uiController, "finishGame");
-      const cell = document.createElement("div");
-      cell.classList.add("cell");
-      cell.dataset.coordinate = "3, 0";
-      mockEnemyBoardContainer.appendChild(cell);
-      uiController.initEvents();
-      cell.click();
-      expect(finishGame).not.toHaveBeenCalled();
-      // Finish displayResults()
-      await jest.advanceTimersByTimeAsync(250);
-
-      expect(finishGame).not.toHaveBeenCalled();
-      // Finish the delay before finishGame()
-      await jest.advanceTimersByTimeAsync(delay);
-      expect(finishGame).toHaveBeenCalledWith(winner);
-      jest.useRealTimers();
-    });
-
     test("does not finish the game when there is no winner", () => {
       const roundResults = {
         playerResults: {
@@ -392,67 +370,6 @@ describe.skip("UIController", () => {
       cell.click();
 
       expect(finishGame).not.toHaveBeenCalled();
-    });
-
-    test("finishes the game when the computer wins", async () => {
-      jest.useFakeTimers();
-
-      const winner = player2;
-
-      const playerResults = {
-        attackResult: "miss",
-        sunkedShip: false,
-      };
-
-      const computerResults = {
-        attackResult: "hit",
-        sunkedShip: true,
-      };
-
-      const roundResults = {
-        playerResults,
-        computerResults,
-        winner,
-      };
-
-      game.playRound.mockReturnValue(roundResults);
-
-      const finishGame = jest.spyOn(uiController, "finishGame");
-
-      const cell = document.createElement("div");
-
-      cell.classList.add("cell");
-      cell.dataset.coordinate = "3, 0";
-
-      mockEnemyBoardContainer.appendChild(cell);
-
-      uiController.initEvents();
-
-      cell.click();
-
-      expect(finishGame).not.toHaveBeenCalled();
-
-      // Finish player's displayResults()
-      await jest.advanceTimersByTimeAsync(250);
-
-      expect(finishGame).not.toHaveBeenCalled();
-
-      // Delay between player and computer turns
-      await jest.advanceTimersByTimeAsync(delay);
-
-      expect(finishGame).not.toHaveBeenCalled();
-
-      // Finish computer's displayResults()
-      await jest.advanceTimersByTimeAsync(250);
-
-      expect(finishGame).not.toHaveBeenCalled();
-
-      // Delay before finishing the game
-      await jest.advanceTimersByTimeAsync(delay);
-
-      expect(finishGame).toHaveBeenCalledWith(winner);
-
-      jest.useRealTimers();
     });
 
     test("gets the character from the player", () => {
@@ -530,7 +447,7 @@ describe.skip("UIController", () => {
           sunkedShip: true,
         },
         computerResults: null,
-        winner: {},
+        winner: null,
       });
 
       const cell = document.createElement("div");
@@ -756,7 +673,6 @@ describe.skip("UIController", () => {
     });
 
     test("displays HIT when the attack hits a ship", async () => {
-
       const character = {
         getName: jest.fn().mockReturnValue("Captain"),
         getImg: jest.fn().mockReturnValue("captain.png"),
@@ -809,61 +725,6 @@ describe.skip("UIController", () => {
   });
 
   describe.skip("display results with delay", () => {
-    test("displays player results first and computer results after", async () => {
-      jest.useFakeTimers();
-
-      const playerResults = {
-        attackResult: "hit",
-        sunkedShip: false,
-      };
-
-      const computerResults = {
-        attackResult: "miss",
-        sunkedShip: false,
-      };
-
-      game.playRound.mockReturnValue({
-        playerResults,
-        computerResults,
-        winner: null,
-      });
-
-      const displayResults = jest.spyOn(uiController, "displayResults");
-
-      const cell = document.createElement("div");
-
-      cell.classList.add("cell");
-      cell.dataset.coordinate = "3, 0";
-
-      mockEnemyBoardContainer.appendChild(cell);
-
-      uiController.initEvents();
-
-      cell.click();
-
-      // Player results are displayed immediately.
-      expect(displayResults).toHaveBeenCalledTimes(1);
-      expect(displayResults).toHaveBeenNthCalledWith(1, playerResults, player1);
-
-      // Finish the player's displayResults() transition.
-      await jest.advanceTimersByTimeAsync(250);
-
-      // The computer results should not be displayed before the turn delay.
-      expect(displayResults).toHaveBeenCalledTimes(1);
-
-      // Finish the delay between turns.
-      await jest.advanceTimersByTimeAsync(delay);
-
-      expect(displayResults).toHaveBeenCalledTimes(2);
-      expect(displayResults).toHaveBeenNthCalledWith(
-        2,
-        computerResults,
-        player2,
-      );
-
-      jest.useRealTimers();
-    });
-
     test("only displays player results when computerResults is null", async () => {
       jest.useFakeTimers();
 
@@ -904,7 +765,7 @@ describe.skip("UIController", () => {
     });
   });
 
-  describe.skip("display game over modal with delay", () => {
+  describe("display game over modal with delay", () => {
     test("calls displayModal with the winner", () => {
       const winner = player1;
 
@@ -942,53 +803,15 @@ describe.skip("UIController", () => {
 
       expect(mockPlayerNameGameOver.textContent).toBe("Player 1");
 
-      expect(mockCharacterDialogueGameOver.textContent).toBe("Nice shot!");
+      expect(mockCharacterDialogueGameOver.textContent).toBe(`"Nice shot!"`);
     });
 
-    test("finishes the game after a delay when there is a winner", async () => {
-      jest.useFakeTimers();
-
+    test("displays the winner character name in the finished game modal", () => {
       const winner = player1;
 
-      game.playRound.mockReturnValue({
-        playerResults: {
-          attackResult: "hit",
-          sunkedShip: true,
-        },
-        computerResults: null,
-        winner,
-      });
+      uiController.displayModal(winner);
 
-      const finishGame = jest.spyOn(uiController, "finishGame");
-
-      const cell = document.createElement("div");
-
-      cell.classList.add("cell");
-      cell.dataset.coordinate = "3, 0";
-
-      mockEnemyBoardContainer.appendChild(cell);
-
-      uiController.initEvents();
-
-      cell.click();
-
-      expect(finishGame).not.toHaveBeenCalled();
-
-      // Finish player's displayResults() transition.
-      await jest.advanceTimersByTimeAsync(250);
-
-      expect(finishGame).not.toHaveBeenCalled();
-
-      // Finish the delay before ending the game.
-      await jest.advanceTimersByTimeAsync(delay - 1);
-
-      expect(finishGame).not.toHaveBeenCalled();
-
-      await jest.advanceTimersByTimeAsync(1);
-
-      expect(finishGame).toHaveBeenCalledWith(winner);
-
-      jest.useRealTimers();
+      expect(mockCharacterNameGameOver.textContent).toBe(character1.getName());
     });
   });
 
@@ -1179,5 +1002,303 @@ describe.skip("UIController", () => {
         audioController.stopMusic.mock.invocationCallOrder[0],
       ).toBeLessThan(audioController.playVictory.mock.invocationCallOrder[0]);
     });
+  });
+});
+
+describe.skip("special delays", () => {
+  let game;
+  let uiController;
+  let boardRenderer;
+  let audioController;
+  const delayTurn = 3100;
+
+  beforeEach(() => {
+    delay.mockImplementation(
+      (ms) =>
+        new Promise((resolve) => {
+          setTimeout(resolve, ms);
+        }),
+    );
+
+    audioController = {
+      playShot: jest.fn(),
+      playHit: jest.fn(),
+      playMiss: jest.fn(),
+      playSunk: jest.fn(),
+      stopMusic: jest.fn(),
+      playVictory: jest.fn(),
+    };
+
+    mockEnemyBoardContainer = document.createElement("div");
+    mockFinishedGameModal = document.createElement("div");
+    mockCharacterImg = document.createElement("img");
+    mockCharacterName = document.createElement("p");
+    mockBattleMessage = document.createElement("p");
+    mockAttackResult = document.createElement("p");
+    mockCharacterDialogueGameOver = document.createElement("p");
+    mockCharacterNameGameOver = document.createElement("p");
+    mockPlayerNameGameOver = document.createElement("strong");
+    mockCharacterImgGameOver = document.createElement("img");
+    mockBattleReport = document.createElement("div");
+
+    mockBattleMessage.textContent =
+      "Your turn! Make your attack. Wait for the enemy to attack before attacking again.";
+
+    character1 = {
+      getName: jest.fn().mockReturnValue("Player 1"),
+      getImg: jest.fn().mockReturnValue("player1.png"),
+      getRandomDialogue: jest.fn().mockReturnValue("Nice shot!"),
+    };
+
+    character2 = {
+      getName: jest.fn().mockReturnValue("Player 2"),
+      getImg: jest.fn().mockReturnValue("player2.png"),
+      getRandomDialogue: jest.fn().mockReturnValue("You missed!"),
+    };
+
+    player1 = {
+      getName: jest.fn().mockReturnValue("Player 1"),
+      getCharacter: jest.fn().mockReturnValue(character1),
+    };
+
+    player2 = {
+      getName: jest.fn().mockReturnValue("Player 2"),
+      getCharacter: jest.fn().mockReturnValue(character2),
+    };
+
+    game = {
+      playRound: jest.fn().mockReturnValue({
+        playerResults: {
+          attackResult: "hit",
+          sunkedShip: false,
+        },
+        computerResults: {
+          attackResult: "miss",
+          sunkedShip: false,
+        },
+        winner: null,
+      }),
+      getPlayer1: jest.fn().mockReturnValue(player1),
+      getPlayer2: jest.fn().mockReturnValue(player2),
+    };
+
+    boardRenderer = {
+      myBoard: new GameBoard(),
+      enemyBoard: new GameBoard(),
+      renderMyBoard: jest.fn(),
+      renderEnemyBoard: jest.fn(),
+    };
+
+    uiController = new UIController(
+      boardRenderer,
+      game,
+      player1,
+      audioController,
+    );
+  });
+
+  afterEach(() => {
+    delay.mockImplementation(() => Promise.resolve());
+    jest.useRealTimers();
+  });
+
+  test("finishes the game after a delay when there is a winner", async () => {
+    jest.useFakeTimers();
+    delay.mockImplementation(
+      (ms) =>
+        new Promise((resolve) => {
+          setTimeout(resolve, ms);
+        }),
+    );
+    const winner = player1;
+    game.playRound.mockReturnValue({
+      playerResults: { attackResult: "hit", sunkedShip: true },
+      computerResults: null,
+      winner,
+    });
+    const finishGame = jest.spyOn(uiController, "finishGame");
+    const cell = document.createElement("div");
+    cell.classList.add("cell");
+    cell.dataset.coordinate = "3, 0";
+    mockEnemyBoardContainer.appendChild(cell);
+    uiController.initEvents();
+    cell.click();
+    expect(finishGame).not.toHaveBeenCalled();
+    await jest.advanceTimersByTimeAsync(250);
+    expect(finishGame).not.toHaveBeenCalled();
+    await jest.advanceTimersByTimeAsync(uiController.delay - 1);
+    expect(finishGame).not.toHaveBeenCalled();
+    await jest.advanceTimersByTimeAsync(1);
+    expect(finishGame).toHaveBeenCalledWith(winner);
+    jest.useRealTimers();
+  });
+
+  test("displays player results first and computer results after", async () => {
+    jest.useFakeTimers();
+
+    delay.mockImplementation(
+      (ms) =>
+        new Promise((resolve) => {
+          setTimeout(resolve, ms);
+        }),
+    );
+
+    const playerResults = {
+      attackResult: "hit",
+      sunkedShip: false,
+    };
+
+    const computerResults = {
+      attackResult: "miss",
+      sunkedShip: false,
+    };
+
+    game.playRound.mockReturnValue({
+      playerResults,
+      computerResults,
+      winner: null,
+    });
+
+    const displayResults = jest
+      .spyOn(uiController, "displayResults")
+      .mockResolvedValue();
+
+    const cell = document.createElement("div");
+
+    cell.classList.add("cell");
+    cell.dataset.coordinate = "3, 0";
+
+    mockEnemyBoardContainer.appendChild(cell);
+
+    uiController.initEvents();
+
+    cell.click();
+
+    // Player results are displayed immediately.
+    expect(displayResults).toHaveBeenCalledTimes(1);
+    expect(displayResults).toHaveBeenNthCalledWith(1, playerResults, player1);
+
+    // The computer results should not be displayed before the turn delay.
+    expect(displayResults).toHaveBeenCalledTimes(1);
+
+    // Finish the delay between turns.
+    await jest.advanceTimersByTimeAsync(delayTurn);
+
+    expect(displayResults).toHaveBeenCalledTimes(2);
+    expect(displayResults).toHaveBeenNthCalledWith(2, computerResults, player2);
+
+    jest.useRealTimers();
+  });
+
+  test("finishes the game when the player wins", async () => {
+    jest.useFakeTimers();
+
+    delay.mockImplementation(
+      (ms) =>
+        new Promise((resolve) => {
+          setTimeout(resolve, ms);
+        }),
+    );
+
+    const winner = player1;
+
+    const playerResults = {
+      attackResult: "hit",
+      sunkedShip: true,
+    };
+
+    const roundResults = {
+      playerResults,
+      computerResults: null,
+      winner,
+    };
+
+    game.playRound.mockReturnValue(roundResults);
+
+    const finishGame = jest.spyOn(uiController, "finishGame");
+
+    jest.spyOn(uiController, "displayResults").mockResolvedValue();
+
+    const cell = document.createElement("div");
+
+    cell.classList.add("cell");
+    cell.dataset.coordinate = "3, 0";
+
+    mockEnemyBoardContainer.appendChild(cell);
+
+    uiController.initEvents();
+
+    cell.click();
+
+    expect(finishGame).not.toHaveBeenCalled();
+
+    // The game should not finish before the delay.
+    await jest.advanceTimersByTimeAsync(uiController.delay - 1);
+
+    expect(finishGame).not.toHaveBeenCalled();
+
+    // Finish the delay before ending the game.
+    await jest.advanceTimersByTimeAsync(1);
+
+    expect(finishGame).toHaveBeenCalledWith(winner);
+
+    jest.useRealTimers();
+  });
+
+  test("finishes the game when the computer wins", async () => {
+    jest.useFakeTimers();
+
+    delay.mockImplementation(
+      (ms) =>
+        new Promise((resolve) => {
+          setTimeout(resolve, ms);
+        }),
+    );
+
+    const winner = player2;
+
+    const playerResults = {
+      attackResult: "miss",
+      sunkedShip: false,
+    };
+
+    const computerResults = {
+      attackResult: "hit",
+      sunkedShip: true,
+    };
+
+    const roundResults = {
+      playerResults,
+      computerResults,
+      winner,
+    };
+
+    game.playRound.mockReturnValue(roundResults);
+
+    const finishGame = jest.spyOn(uiController, "finishGame");
+
+    jest.spyOn(uiController, "displayResults").mockResolvedValue();
+
+    const cell = document.createElement("div");
+    cell.classList.add("cell");
+    cell.dataset.coordinate = "3, 0";
+    mockEnemyBoardContainer.appendChild(cell);
+
+    uiController.initEvents();
+    cell.click();
+
+    expect(finishGame).not.toHaveBeenCalled();
+
+    // Delay between player and computer turns
+    await jest.advanceTimersByTimeAsync(uiController.delay);
+
+    expect(finishGame).not.toHaveBeenCalled();
+
+    // Delay before finishing the game
+    await jest.advanceTimersByTimeAsync(uiController.delay);
+
+    expect(finishGame).toHaveBeenCalledWith(winner);
+
+    jest.useRealTimers();
   });
 });
