@@ -68,10 +68,13 @@ describe.skip("AppController", () => {
   let boardRender;
   let uiController;
   let shipPlacementController;
+  let audioController;
 
   beforeEach(() => {
     jest.clearAllMocks();
     Player.mockReset();
+
+    audioController = {};
 
     shipPlacementController = {
       init: jest.fn(),
@@ -111,6 +114,7 @@ describe.skip("AppController", () => {
       getPlayer2: jest.fn().mockReturnValue(computerPlayer),
       setGame: jest.fn(),
       getGame: jest.fn().mockReturnValue(game),
+      reset: jest.fn(),
     };
 
     screenController = {
@@ -130,7 +134,7 @@ describe.skip("AppController", () => {
     UIController.mockReturnValue(uiController);
     ShipPlacementController.mockReturnValue(shipPlacementController);
 
-    appController = new AppController(appState, screenController);
+    appController = new AppController(appState, screenController, audioController);
     appController.setCharacterSelectionController(characterSelectionController);
   });
 
@@ -321,7 +325,7 @@ describe.skip("AppController", () => {
   test("creates a UIController with the Game and BoardRenderer", () => {
     appController.startBattle();
 
-    expect(UIController).toHaveBeenCalledWith(game, boardRender);
+    expect(UIController).toHaveBeenCalledWith(boardRender, game, player, audioController);
   });
 
   test("initializes the UIController", () => {
@@ -334,5 +338,33 @@ describe.skip("AppController", () => {
     appController.startBattle();
 
     expect(screenController.showGame).toHaveBeenCalled();
+  });
+
+  //restart game
+  test("resets the application state", () => {
+    appState.reset = jest.fn();
+    appController.restartGame();
+    expect(appState.reset).toHaveBeenCalledTimes(1);
+  });
+
+  test("shows the start screen", () => {
+    appState.reset = jest.fn();
+    screenController.showStartScreen = jest.fn();
+    appController.restartGame();
+    expect(screenController.showStartScreen).toHaveBeenCalledTimes(1);
+  });
+
+  test("resets the application state before showing the start screen", () => {
+    const calls = [];
+    appState.reset = jest.fn(() => {
+      calls.push("reset");
+    });
+
+    screenController.showStartScreen = jest.fn(() => {
+      calls.push("showStartScreen");
+    });
+
+    appController.restartGame();
+    expect(calls).toEqual(["reset", "showStartScreen"]);
   });
 });

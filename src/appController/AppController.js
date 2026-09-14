@@ -83,4 +83,9 @@ export default class AppController {
     uiController.init();
     this.screenController.showGame();
   }
+
+  restartGame() {
+    this.appState.reset();
+    this.screenController.showStartScreen();
+  }
 }
