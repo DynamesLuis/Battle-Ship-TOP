@@ -9,6 +9,7 @@ import {
   $characterImgGameOver,
   $playerNameGameOver,
   $battleReport,
+  $attackResult,
 } from "../domSelector";
 
 import delay from "../../helpers/delay";
@@ -119,6 +120,15 @@ export default class UIController {
       action = "sunk";
     } else {
       action = "hit";
+    }
+
+    $attackResult.classList.remove("hit", "miss", "sunk");
+    if (results.winner) {
+      $attackResult.textContent = "hit";
+      $attackResult.classList.add("hit");
+    } else {
+      $attackResult.textContent = action;
+      $attackResult.classList.add(action);
     }
 
     switch (action) {
