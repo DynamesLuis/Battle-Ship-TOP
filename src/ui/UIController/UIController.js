@@ -126,8 +126,8 @@ export default class UIController {
 
     $attackResult.classList.remove("hit", "miss", "sunk");
     if (results.winner) {
-      $attackResult.textContent = "hit";
-      $attackResult.classList.add("hit");
+      $attackResult.textContent = "sunk";
+      $attackResult.classList.add("sunk");
     } else {
       $attackResult.textContent = action;
       $attackResult.classList.add(action);

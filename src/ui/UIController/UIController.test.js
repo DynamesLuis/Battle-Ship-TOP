@@ -172,7 +172,7 @@ describe.skip("UIController", () => {
     jest.useRealTimers();
   });
 
-  describe.skip("Functionallity", () => {
+  describe("Functionallity", () => {
     test("can be created with Game and BoardRenderer dependencies", () => {
       expect(uiController).toBeDefined();
     });
@@ -399,7 +399,7 @@ describe.skip("UIController", () => {
     });
   });
 
-  describe.skip("Board renders", () => {
+  describe("Board renders", () => {
     test("renders both boards after a complete round", async () => {
       jest.useFakeTimers();
 
@@ -466,7 +466,7 @@ describe.skip("UIController", () => {
     });
   });
 
-  describe.skip("display Results", () => {
+  describe("display Results", () => {
     test("displays the player hit result with the character dialogue", async () => {
       jest.useFakeTimers();
 
@@ -724,7 +724,7 @@ describe.skip("UIController", () => {
     });
   });
 
-  describe.skip("display results with delay", () => {
+  describe("display results with delay", () => {
     test("only displays player results when computerResults is null", async () => {
       jest.useFakeTimers();
 
@@ -815,7 +815,7 @@ describe.skip("UIController", () => {
     });
   });
 
-  describe.skip("UIController - Audio", () => {
+  describe("UIController - Audio", () => {
     test("plays the shot sound before playing a valid attack", async () => {
       const player = {};
       const game = {
