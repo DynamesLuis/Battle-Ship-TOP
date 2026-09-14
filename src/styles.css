@@ -1542,20 +1542,25 @@ body {
 
   display: flex;
   align-items: center;
+  gap: 5px;
 
   min-height: 90px;
 
   text-align: left;
 }
 
-.game-over-quote p {
+.game-over-character-name {
+  color: var(--gold-light);
+  font-size: 0.85rem;
+  font-weight: bold;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.game-over-quote .game-over-character-quote {
   margin: 0;
-
   color: var(--text);
-
-  font-size: 1.05rem;
-  line-height: 1.5;
-
+  font-size: 1.1rem;
   font-style: italic;
 }
 
