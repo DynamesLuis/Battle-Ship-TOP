@@ -1161,7 +1161,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.75rem;
+  gap: 1rem;
   opacity: 1;
   transform: translateY(0);
 
@@ -1203,17 +1203,17 @@ body {
 }
 
 .battle-info {
+  width: 500px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-
   min-height: 90px;
 }
 
 .battle-message {
   display: flex;
   align-items: baseline;
-  justify-content: center;
   gap: 10px;
   min-height: 50px;
   text-align: center;
@@ -1237,6 +1237,7 @@ body {
   color: var(--text);
   font-size: 1.15rem;
   line-height: 1.5;
+  height: 3.45rem;
 }
 
 .battle-content .message.typing::after {
