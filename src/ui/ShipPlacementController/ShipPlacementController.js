@@ -95,7 +95,7 @@ export default class ShipPlacementController {
     const [xStartCoordinate, yStartCoordinate] = $cell.dataset.coordinate
       .split(", ")
       .map(Number);
-      
+
     const shipData = getShipInfoById(this.selectedShip);
     const playerBoard = this.appState.getPlayer1().getGameBoard();
 
@@ -154,6 +154,14 @@ export default class ShipPlacementController {
 
   handleStartBattleClick() {
     this.onStartBattle();
+    this.reset();
+  }
+
+  reset() {
+    this.shipDirection = "x";
+    this.selectedShip = null;
+    this.shipPlacementRenderer = null;
+    this.placedShips = new Set();
   }
 
   #selectButton($container, $button) {

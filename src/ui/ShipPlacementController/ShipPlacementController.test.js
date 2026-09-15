@@ -733,4 +733,42 @@ describe.skip("ShipPlacementController", () => {
 
     expect(onStartBattle).toHaveBeenCalledTimes(1);
   });
+
+  //reset
+  test("resets the ship placement state", () => {
+    shipPlacementController.shipDirection = "y";
+    shipPlacementController.selectedShip = "3";
+    shipPlacementController.shipPlacementRenderer = mockShipPlacementRenderer;
+    shipPlacementController.placedShips = new Set(["1", "2"]);
+    shipPlacementController.reset();
+    expect(shipPlacementController.shipDirection).toBe("x");
+    expect(shipPlacementController.selectedShip).toBeNull();
+    expect(shipPlacementController.shipPlacementRenderer).toBeNull();
+    expect(shipPlacementController.placedShips).toEqual(new Set());
+  });
+
+  test("starts the battle", () => {
+    shipPlacementController.handleStartBattleClick();
+    expect(onStartBattle).toHaveBeenCalledTimes(1);
+  });
+
+  test("resets the placement state after starting the battle", () => {
+    shipPlacementController.shipDirection = "y";
+    shipPlacementController.selectedShip = "3";
+    shipPlacementController.shipPlacementRenderer = mockShipPlacementRenderer;
+    shipPlacementController.placedShips = new Set(["1", "2"]);
+    shipPlacementController.handleStartBattleClick();
+    expect(shipPlacementController.shipDirection).toBe("x");
+    expect(shipPlacementController.selectedShip).toBeNull();
+    expect(shipPlacementController.shipPlacementRenderer).toBeNull();
+    expect(shipPlacementController.placedShips).toEqual(new Set());
+  });
+
+  test("starts the battle before resetting the placement state", () => {
+    const calls = [];
+    onStartBattle.mockImplementation(() => calls.push("startBattle"));
+    shipPlacementController.reset = jest.fn(() => calls.push("reset"));
+    shipPlacementController.handleStartBattleClick();
+    expect(calls).toEqual(["startBattle", "reset"]);
+  });
 });
