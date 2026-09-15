@@ -11,13 +11,14 @@ import {
   $battleReport,
   $attackResult,
   $characterNameGameOver,
+  $playAgainBtn,
 } from "../domSelector";
 
 import delay from "../../helpers/delay";
 import typeWriter from "../../helpers/typeWriter";
 
 export default class UIController {
-  constructor(boardRender, game, player, audioController) {
+  constructor(boardRender, game, player, audioController, onRestartGame) {
     this.boardRender = boardRender;
     this.game = game;
     this.player = player;
@@ -25,6 +26,7 @@ export default class UIController {
     this.isFinished = false;
     this.isPlayingRound = false;
     this.delay = 3100;
+    this.onRestartGame = onRestartGame;
   }
 
   init() {
@@ -38,6 +40,7 @@ export default class UIController {
     $enemyBoardContainer.addEventListener("click", (event) =>
       this.handleEnemyBoardClick(event),
     );
+    $playAgainBtn.addEventListener("click", () => this.onRestartGame());
   }
 
   async handleEnemyBoardClick(event) {

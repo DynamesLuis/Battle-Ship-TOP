@@ -78,6 +78,7 @@ export default class AppController {
       this.appState.getGame(),
       this.appState.getPlayer1(),
       this.audioController,
+      this.restartGame.bind(this),
     );
 
     uiController.init();

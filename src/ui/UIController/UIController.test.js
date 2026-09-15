@@ -16,10 +16,12 @@ let mockPlayerNameGameOver;
 let mockBattleReport;
 let mockAttackResult;
 let mockCharacterNameGameOver;
+let mockPlayAgainBtn;
 let character1;
 let character2;
 let player1;
 let player2;
+let onRestartGame;
 
 jest.mock("../../helpers/delay", () => jest.fn(() => Promise.resolve()));
 
@@ -29,6 +31,10 @@ jest.mock("../../helpers/typeWriter", () => ({
 }));
 
 jest.mock("../domSelector", () => ({
+  get $playAgainBtn() {
+    return mockPlayAgainBtn;
+  },
+
   get $characterNameGameOver() {
     return mockCharacterNameGameOver;
   },
@@ -78,7 +84,7 @@ jest.mock("../domSelector", () => ({
   },
 }));
 
-describe.skip("UIController", () => {
+describe("UIController", () => {
   let game;
   let boardRenderer;
   let uiController;
@@ -88,6 +94,8 @@ describe.skip("UIController", () => {
   beforeEach(() => {
     jest.useFakeTimers();
     typeWriter.mockResolvedValue();
+
+    onRestartGame = jest.fn();
 
     audioController = {
       playShot: jest.fn(),
@@ -109,6 +117,7 @@ describe.skip("UIController", () => {
     mockPlayerNameGameOver = document.createElement("strong");
     mockCharacterImgGameOver = document.createElement("img");
     mockBattleReport = document.createElement("div");
+    mockPlayAgainBtn = document.createElement("button");
 
     mockBattleMessage.textContent =
       "Your turn! Make your attack. Wait for the enemy to attack before attacking again.";
@@ -1001,6 +1010,71 @@ describe.skip("UIController", () => {
       expect(
         audioController.stopMusic.mock.invocationCallOrder[0],
       ).toBeLessThan(audioController.playVictory.mock.invocationCallOrder[0]);
+    });
+  });
+
+  describe("Restart Game button", () => {
+    test("registers an event listener for the Restart Game button", () => {
+      const onRestartGame = jest.fn();
+
+      const addEventListenerSpy = jest.spyOn(
+        mockPlayAgainBtn,
+        "addEventListener",
+      );
+
+      const uiController = new UIController(
+        boardRenderer,
+        game,
+        player1,
+        audioController,
+        onRestartGame,
+      );
+
+      uiController.init()
+
+
+
+      expect(addEventListenerSpy).toHaveBeenCalledWith(
+        "click",
+        expect.any(Function),
+      );
+    });
+
+    test("executes the restart callback when the button is clicked", () => {
+      const onRestartGame = jest.fn();
+
+      const uiController = new UIController(
+        boardRenderer,
+        game,
+        player1,
+        audioController,
+        onRestartGame,
+      );
+
+      uiController.init()
+
+      mockPlayAgainBtn.click();
+
+      expect(onRestartGame).toHaveBeenCalledTimes(1);
+    });
+
+    test("executes the restart callback only once per click", () => {
+      const onRestartGame = jest.fn();
+
+      const uiController = new UIController(
+        boardRenderer,
+        game,
+        player1,
+        audioController,
+        onRestartGame,
+      );
+
+      uiController.init()
+
+      mockPlayAgainBtn.click();
+      mockPlayAgainBtn.click();
+
+      expect(onRestartGame).toHaveBeenCalledTimes(2);
     });
   });
 });
