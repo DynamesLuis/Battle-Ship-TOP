@@ -7,6 +7,7 @@ export default class CharacterSelectionController {
     this.enemySelection = null;
     this.onNext = onNext;
     this.appState = appState;
+    this.eventsInitialized = false;
   }
 
   init() {
@@ -15,6 +16,7 @@ export default class CharacterSelectionController {
   }
 
   initEvents() {
+    if (this.eventsInitialized) return;
     $enemyCharacters.addEventListener("click", (e) =>
       this.handleEnemyCharacterClick(e),
     );
@@ -22,6 +24,7 @@ export default class CharacterSelectionController {
       this.handlePlayerCharacterClick(e),
     );
     $nextBtn.addEventListener("click", () => this.handleNextClick());
+    this.eventsInitialized = true;
   }
 
   handleEnemyCharacterClick(e) {
@@ -61,6 +64,9 @@ export default class CharacterSelectionController {
   }
 
   renderCharacterSelection() {
+    $playerCharacters.innerHTML = "";
+    $enemyCharacters.innerHTML = "";
+
     const playerFaction = this.appState.getPlayerFaction();
     const enemyFaction = playerFaction === "horde" ? "alliance" : "horde";
     const playerCharacters = getCharactersByFaction(playerFaction);

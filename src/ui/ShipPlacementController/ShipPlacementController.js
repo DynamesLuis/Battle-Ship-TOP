@@ -16,6 +16,7 @@ export default class ShipPlacementController {
     this.shipPlacementRenderer = null;
     this.placedShips = new Set();
     this.onStartBattle = onStartBattle;
+    this.eventsInitialized = false;
   }
   init() {
     this.initEvents();
@@ -25,8 +26,13 @@ export default class ShipPlacementController {
     );
     this.shipPlacementRenderer.renderBoard();
     $startBattleBtn.disabled = true;
+
+    console.log("INIT occupied:", [
+      ...this.appState.getPlayer1().getGameBoard().getOccupiedCells().entries(),
+    ]);
   }
   initEvents() {
+    if (this.eventsInitialized) return;
     $availableShips.addEventListener("click", (e) =>
       this.handleShipSelection(e),
     );
@@ -40,8 +46,10 @@ export default class ShipPlacementController {
     $startBattleBtn.addEventListener("click", () =>
       this.handleStartBattleClick(),
     );
+    this.eventsInitialized = true;
   }
   renderShips() {
+    $availableShips.innerHTML = "";
     shipsData.forEach((ship) => {
       const $shipCard = document.createElement("div");
       $shipCard.classList.add("ship-card");
@@ -115,6 +123,11 @@ export default class ShipPlacementController {
   }
 
   handleCellClick(e) {
+    const playerBoard = this.appState.getPlayer1().getGameBoard();
+
+    console.log("BEFORE PLACE occupied:", [
+      ...playerBoard.getOccupiedCells().entries(),
+    ]);
     const $cell = e.target.closest(".cell");
     if (!$cell || !this.selectedShip || !this.shipDirection) return;
     const [xStartCoordinate, yStartCoordinate] = $cell.dataset.coordinate
@@ -132,6 +145,10 @@ export default class ShipPlacementController {
         this.shipDirection,
         shipData.length,
       );
+
+    console.log("AFTER PLACE occupied:", [
+      ...playerBoard.getOccupiedCells().entries(),
+    ]);
 
     if (isPlaced) {
       this.placedShips.add(this.selectedShip);
@@ -160,7 +177,6 @@ export default class ShipPlacementController {
   reset() {
     this.shipDirection = "x";
     this.selectedShip = null;
-    this.shipPlacementRenderer = null;
     this.placedShips = new Set();
   }
 

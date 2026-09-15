@@ -13,6 +13,7 @@ export default class AppController {
     this.appState = appState;
     this.screenController = screenController;
     this.audioController = audioController;
+    this.shipPlacementController = null;
   }
 
   setCharacterSelectionController(characterSelectionController) {
@@ -49,11 +50,13 @@ export default class AppController {
 
     this.appState.setPlayer1(player1);
 
-    const shipPlacementController = new ShipPlacementController(
-      this.appState,
-      this.startBattle.bind(this),
-    );
-    shipPlacementController.init();
+    if (!this.shipPlacementController) {
+      this.shipPlacementController = new ShipPlacementController(
+        this.appState,
+        this.startBattle.bind(this),
+      );
+    }
+    this.shipPlacementController.init();
     this.screenController.showShipPlacement();
   }
 

@@ -3,10 +3,13 @@ import { $factionInputs, $playerNameInput, $startAppBtn } from "../domSelector";
 export default class StartScreenController {
   constructor(onStart) {
     this.onStart = onStart;
+    this.eventsInitialized = false;
   }
 
   initEvents() {
+    if (this.eventsInitialized) return;
     $startAppBtn.addEventListener("click", () => this.handleStartClick());
+    this.eventsInitialized = true;
   }
 
   handleStartClick() {

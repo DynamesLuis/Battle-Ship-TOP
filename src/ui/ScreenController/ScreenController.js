@@ -1,4 +1,9 @@
 import delay from "../../helpers/delay";
+import {
+  $factionInputs,
+  $finishedGameModal,
+  $playerNameInput,
+} from "../domSelector";
 
 export default class ScreenController {
   constructor(
@@ -21,8 +26,11 @@ export default class ScreenController {
   showStartScreen() {
     if (this.currentScreen === this.game) {
       this.game.classList.add("hidden");
-      const $modal = this.game.querySelector(".game-over-modal");
-      $modal.classList.add("hidden");
+      $finishedGameModal.classList.add("hidden");
+      $playerNameInput.value = "";
+      $factionInputs.forEach(($factionInput) => {
+        $factionInput.checked = false;
+      });
     }
     this.currentScreen = this.startScreen;
     this.startScreen.classList.remove("hidden");
