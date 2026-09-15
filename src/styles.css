@@ -1211,22 +1211,30 @@ body {
 }
 
 .battle-message {
-  flex: 1;
-
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: center;
   gap: 10px;
   min-height: 50px;
-
   text-align: center;
 }
 
 .battle-message p {
   margin: 0;
+}
 
+.battle-message .character {
+  color: var(--gold-light);
+  font-size: 0.85rem;
+  font-weight: bold;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.battle-message .message {
   color: var(--text);
-
   font-size: 1.15rem;
   line-height: 1.5;
 }
