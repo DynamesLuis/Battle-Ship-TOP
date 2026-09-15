@@ -19,6 +19,11 @@ export default class ScreenController {
   }
 
   showStartScreen() {
+    if (this.currentScreen === this.game) {
+      this.game.classList.add("hidden");
+      const $modal = this.game.querySelector(".game-over-modal");
+      $modal.classList.add("hidden");
+    }
     this.currentScreen = this.startScreen;
     this.startScreen.classList.remove("hidden");
     this.enableAudioAfterInteraction();
