@@ -34,13 +34,13 @@ describe.skip("CharacterSelectionController", () => {
     mockPlayerCharacters = document.createElement("div");
     mockEnemyCharacters = document.createElement("div");
     mockPlayerCharacters.innerHTML = `
-      <div class="character" data-id="1"></div>
-      <div class="character" data-id="2"></div>
+      <div class="character-card" data-id="1"></div>
+      <div class="character-card" data-id="2"></div>
     `;
 
     mockEnemyCharacters.innerHTML = `
-      <div class="character" data-id="6"></div>
-      <div class="character" data-id="7"></div>
+      <div class="character-card" data-id="6"></div>
+      <div class="character-card" data-id="7"></div>
     `;
     mockNextBtn = document.createElement("button");
 
@@ -287,6 +287,8 @@ describe.skip("CharacterSelectionController", () => {
       img: "anduin.png",
       dialogues: {},
     };
+    mockPlayerCharacters.innerHTML = "";
+    mockEnemyCharacters.innerHTML = "";
 
     appState.getPlayerFaction.mockReturnValue("alliance");
 
@@ -374,33 +376,42 @@ describe.skip("CharacterSelectionController", () => {
   });
 
   //selected card
-  test("adds selected class to the clicked card", () => {
+
+  test("adds selected class to the clicked player card", () => {
     const card = document.createElement("div");
+
     card.classList.add("character-card");
+    card.dataset.id = "1";
 
     mockPlayerCharacters.appendChild(card);
 
-    characterSelectionController.selectCard(mockPlayerCharacters, card);
+    characterSelectionController.handlePlayerCharacterClick({
+      target: card,
+    });
 
     expect(card).toHaveClass("selected");
   });
 
-  test("removes selected class from other cards", () => {
+  test("removes selected class from other player cards", () => {
     const selectedCard = document.createElement("div");
     selectedCard.classList.add("character-card", "selected");
+    selectedCard.dataset.id = "1";
 
     const otherCard = document.createElement("div");
     otherCard.classList.add("character-card");
+    otherCard.dataset.id = "2";
 
     mockPlayerCharacters.append(selectedCard, otherCard);
 
-    characterSelectionController.selectCard(mockPlayerCharacters, otherCard);
+    characterSelectionController.handlePlayerCharacterClick({
+      target: otherCard,
+    });
 
     expect(selectedCard).not.toHaveClass("selected");
     expect(otherCard).toHaveClass("selected");
   });
 
-  test("keeps only the passed card selected", () => {
+  test("keeps only the clicked player card selected", () => {
     const card1 = document.createElement("div");
     const card2 = document.createElement("div");
     const card3 = document.createElement("div");
@@ -409,12 +420,58 @@ describe.skip("CharacterSelectionController", () => {
     card2.classList.add("character-card", "selected");
     card3.classList.add("character-card");
 
+    card1.dataset.id = "1";
+    card2.dataset.id = "2";
+    card3.dataset.id = "3";
+
     mockPlayerCharacters.append(card1, card2, card3);
 
-    characterSelectionController.selectCard(mockPlayerCharacters, card3);
+    characterSelectionController.handlePlayerCharacterClick({
+      target: card3,
+    });
 
     expect(card1).not.toHaveClass("selected");
     expect(card2).not.toHaveClass("selected");
     expect(card3).toHaveClass("selected");
+  });
+
+  //reset
+  test("clears the character selections", () => {
+    characterSelectionController.playerSelection = "1";
+    characterSelectionController.enemySelection = "6";
+
+    characterSelectionController.reset();
+
+    expect(characterSelectionController.playerSelection).toBeNull();
+    expect(characterSelectionController.enemySelection).toBeNull();
+  });
+  test("resets the selections after a valid selection", () => {
+    characterSelectionController.playerSelection = "1";
+    characterSelectionController.enemySelection = "6";
+
+    characterSelectionController.handleNextClick();
+
+    expect(characterSelectionController.playerSelection).toBeNull();
+    expect(characterSelectionController.enemySelection).toBeNull();
+  });
+  test("does not reset the selections when a character is missing", () => {
+    characterSelectionController.playerSelection = "1";
+    characterSelectionController.enemySelection = null;
+
+    characterSelectionController.handleNextClick();
+
+    expect(characterSelectionController.playerSelection).toBe("1");
+    expect(characterSelectionController.enemySelection).toBeNull();
+  });
+  test("passes both selections to onNext before resetting", () => {
+    characterSelectionController.playerSelection = "1";
+    characterSelectionController.enemySelection = "6";
+
+    characterSelectionController.handleNextClick();
+
+    expect(onNext).toHaveBeenCalledWith("1", "6");
+
+    expect(characterSelectionController.playerSelection).toBeNull();
+    expect(characterSelectionController.enemySelection).toBeNull();
   });
 });

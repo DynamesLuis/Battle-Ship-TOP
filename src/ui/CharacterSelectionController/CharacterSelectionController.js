@@ -51,7 +51,13 @@ export default class CharacterSelectionController {
   handleNextClick() {
     if (this.enemySelection && this.playerSelection) {
       this.onNext(this.playerSelection, this.enemySelection);
+      this.reset();
     }
+  }
+
+  reset() {
+    this.playerSelection = null;
+    this.enemySelection = null;
   }
 
   renderCharacterSelection() {
