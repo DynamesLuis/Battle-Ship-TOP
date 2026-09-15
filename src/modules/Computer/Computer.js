@@ -66,29 +66,58 @@ export default class Computer extends Player {
   }
 
   #getContinuousCoordinate(enemyBoard) {
-    let coordinates;
-    const coordinate1 = this.hitsByObjective.values().next().value;
-    const coordinate2 = [...this.hitsByObjective].at(-1);
+    let resultsCoordinates;
+    const coordinates = [...this.hitsByObjective];
+    let coordinate1 = coordinates[0];
+    let coordinate2 = coordinates[0];
+
+    for (const coordinate of coordinates) {
+      const [x, y] = coordinate.split(", ").map(Number);
+      const [x1, y1] = coordinate1.split(", ").map(Number);
+      const [x2, y2] = coordinate2.split(", ").map(Number);
+
+      if (this.attackDirection === "x") {
+        if (x < x1) {
+          coordinate1 = coordinate;
+        }
+
+        if (x > x2) {
+          coordinate2 = coordinate;
+        }
+      } else {
+        if (y < y1) {
+          coordinate1 = coordinate;
+        }
+
+        if (y > y2) {
+          coordinate2 = coordinate;
+        }
+      }
+    }
+
     const [x, y] = coordinate1.split(", ").map(Number);
     const [x2, y2] = coordinate2.split(", ").map(Number);
     if (this.attackDirection === "x") {
       const mayor = Math.max(x, x2);
       const menor = Math.min(x, x2);
-      coordinates = [
+      resultsCoordinates = [
         [mayor + 1, y],
         [menor - 1, y],
       ];
     } else {
       const mayor = Math.max(y, y2);
       const menor = Math.min(y, y2);
-      coordinates = [
+      resultsCoordinates = [
         [x, mayor + 1],
         [x, menor - 1],
       ];
     }
 
-    coordinates = this.#getValidCoordinates(coordinates, enemyBoard);
-    const coordinate = this.#getOneCoordinate(coordinates);
+    resultsCoordinates = this.#getValidCoordinates(
+      resultsCoordinates,
+      enemyBoard,
+    );
+    const coordinate = this.#getOneCoordinate(resultsCoordinates);
     return coordinate;
   }
 
