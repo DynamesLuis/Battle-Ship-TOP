@@ -26,10 +26,6 @@ export default class ShipPlacementController {
     );
     this.shipPlacementRenderer.renderBoard();
     $startBattleBtn.disabled = true;
-
-    console.log("INIT occupied:", [
-      ...this.appState.getPlayer1().getGameBoard().getOccupiedCells().entries(),
-    ]);
   }
   initEvents() {
     if (this.eventsInitialized) return;
@@ -124,10 +120,6 @@ export default class ShipPlacementController {
 
   handleCellClick(e) {
     const playerBoard = this.appState.getPlayer1().getGameBoard();
-
-    console.log("BEFORE PLACE occupied:", [
-      ...playerBoard.getOccupiedCells().entries(),
-    ]);
     const $cell = e.target.closest(".cell");
     if (!$cell || !this.selectedShip || !this.shipDirection) return;
     const [xStartCoordinate, yStartCoordinate] = $cell.dataset.coordinate
@@ -145,10 +137,6 @@ export default class ShipPlacementController {
         this.shipDirection,
         shipData.length,
       );
-
-    console.log("AFTER PLACE occupied:", [
-      ...playerBoard.getOccupiedCells().entries(),
-    ]);
 
     if (isPlaced) {
       this.placedShips.add(this.selectedShip);

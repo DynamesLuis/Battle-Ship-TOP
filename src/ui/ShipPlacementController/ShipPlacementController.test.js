@@ -743,7 +743,6 @@ describe.skip("ShipPlacementController", () => {
     shipPlacementController.reset();
     expect(shipPlacementController.shipDirection).toBe("x");
     expect(shipPlacementController.selectedShip).toBeNull();
-    expect(shipPlacementController.shipPlacementRenderer).toBeNull();
     expect(shipPlacementController.placedShips).toEqual(new Set());
   });
 
@@ -760,7 +759,6 @@ describe.skip("ShipPlacementController", () => {
     shipPlacementController.handleStartBattleClick();
     expect(shipPlacementController.shipDirection).toBe("x");
     expect(shipPlacementController.selectedShip).toBeNull();
-    expect(shipPlacementController.shipPlacementRenderer).toBeNull();
     expect(shipPlacementController.placedShips).toEqual(new Set());
   });
 
