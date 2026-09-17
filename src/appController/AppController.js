@@ -14,6 +14,7 @@ export default class AppController {
     this.screenController = screenController;
     this.audioController = audioController;
     this.shipPlacementController = null;
+    this.uiController = null;
   }
 
   setCharacterSelectionController(characterSelectionController) {
@@ -76,7 +77,12 @@ export default class AppController {
       this.appState.getPlayer1().getGameBoard(),
       this.appState.getPlayer2().getGameBoard(),
     );
-    const uiController = new UIController(
+
+    if (this.uiController) {
+      this.uiController.destroy();
+    }
+
+    this.uiController = new UIController(
       boardRender,
       this.appState.getGame(),
       this.appState.getPlayer1(),
@@ -84,7 +90,7 @@ export default class AppController {
       this.restartGame.bind(this),
     );
 
-    uiController.init();
+    this.uiController.init();
     this.screenController.showGame();
   }
 

@@ -31,16 +31,40 @@ export default class UIController {
 
   init() {
     this.initEvents();
+    this.resetUI();
     this.boardRender.renderMyBoard($myBoardContainer);
     this.boardRender.renderEnemyBoard($enemyBoardContainer);
     this.renderInstuction();
   }
 
   initEvents() {
-    $enemyBoardContainer.addEventListener("click", (event) =>
-      this.handleEnemyBoardClick(event),
+    this.handleEnemyBoardClickListener = (event) =>
+      this.handleEnemyBoardClick(event);
+
+    this.restartGameListener = () => this.onRestartGame();
+
+    $enemyBoardContainer.addEventListener(
+      "click",
+      this.handleEnemyBoardClickListener,
     );
-    $playAgainBtn.addEventListener("click", () => this.onRestartGame());
+
+    $playAgainBtn.addEventListener("click", this.restartGameListener);
+  }
+
+  resetUI() {
+    $enemyBoardContainer.classList.remove("desactivated");
+    $attackResult.textContent = "";
+    $battleMessage.textContent = `Your turn! Make your attack. Wait for the enemy to attack before
+                attacking again.`;
+  }
+
+  destroy() {
+    $enemyBoardContainer.removeEventListener(
+      "click",
+      this.handleEnemyBoardClickListener,
+    );
+
+    $playAgainBtn.removeEventListener("click", this.restartGameListener);
   }
 
   async handleEnemyBoardClick(event) {
