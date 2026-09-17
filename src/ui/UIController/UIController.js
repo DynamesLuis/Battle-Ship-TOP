@@ -95,7 +95,9 @@ export default class UIController {
       this.audioController.playShot();
       this.boardRender.renderMyBoard($myBoardContainer);
       await this.displayResults(computerResults, this.game.getPlayer2());
-      this.isPlayingRound = false;
+      if (!winner) {
+        this.isPlayingRound = false;
+      }
     }
 
     if (winner) {
@@ -176,6 +178,9 @@ export default class UIController {
         break;
     }
 
+    if (action === "win") {
+      action = "hit";
+    }
     const dialogue = character.getRandomDialogue(action);
     $battleReport.classList.remove("fade-out");
     await typeWriter($battleMessage, dialogue);
