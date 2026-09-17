@@ -1215,6 +1215,7 @@ body {
   font-size: 1.15rem;
   line-height: 1.5;
   height: 3.45rem;
+  text-align: start;
 }
 
 .battle-content .message.typing::after {
