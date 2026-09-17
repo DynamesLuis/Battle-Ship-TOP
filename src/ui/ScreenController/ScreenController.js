@@ -31,6 +31,7 @@ export default class ScreenController {
       $factionInputs.forEach(($factionInput) => {
         $factionInput.checked = false;
       });
+      this.audioController.playMenuMusic();
     }
     this.currentScreen = this.startScreen;
     this.startScreen.classList.remove("hidden");
