@@ -39,7 +39,7 @@ export default class AppController {
     );
     const enemyCharacter = createCharacter(
       enemyCharacterSelection,
-      this.appState.getPlayerFaction() === "horde" ? "alliance" : "horde",
+      this.appState.getPlayerFaction() === "ashes" ? "valedorn" : "ashes",
     );
     this.appState.setCharacter1(playerCharacter);
     this.appState.setCharacter2(enemyCharacter);

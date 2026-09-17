@@ -68,7 +68,7 @@ export default class CharacterSelectionController {
     $enemyCharacters.innerHTML = "";
 
     const playerFaction = this.appState.getPlayerFaction();
-    const enemyFaction = playerFaction === "horde" ? "alliance" : "horde";
+    const enemyFaction = playerFaction === "ashes" ? "valedorn" : "ashes";
     const playerCharacters = getCharactersByFaction(playerFaction);
     const enemyCharacters = getCharactersByFaction(enemyFaction);
     playerCharacters.forEach((character) => {

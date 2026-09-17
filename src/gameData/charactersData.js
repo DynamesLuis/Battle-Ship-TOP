@@ -1,450 +1,499 @@
-import anduin from "../assets/characters/anduin.jpeg";
-import jaina from "../assets/characters/jaina.jpeg";
-import varian from "../assets/characters/varian.jpg";
-import tyrande from "../assets/characters/tyrande.jpeg";
-import muradin from "../assets/characters/muradin.jpg";
-import genn from "../assets/characters/genn.jpg";
-import thrall from "../assets/characters/thrall.jpg";
-import sylvanas from "../assets/characters/sylvanas.jpeg";
-import garrosh from "../assets/characters/garrosh.jpeg";
-import voljin from "../assets/characters/voljin.jpg";
-import baine from "../assets/characters/baine.jpg";
-import lorthemar from "../assets/characters/lordthemar.jpg";
+import aldren from "../assets/characters/aldren.jpeg";
+import brannic from "../assets/characters/brannic.jpeg";
+import drogath from "../assets/characters/drogath.jpeg";
+import elian from "../assets/characters/elian.jpeg";
+import grik from "../assets/characters/grik.jpeg";
+import korga from "../assets/characters/korga.jpeg";
+import lyra from "../assets/characters/lyra.jpeg";
+import maela from "../assets/characters/maela.jpeg";
+import seraphine from "../assets/characters/seraphine.jpeg";
+import tessa from "../assets/characters/tessa.jpeg";
+import torren from "../assets/characters/torren.jpeg";
+import veyra from "../assets/characters/veyra.jpeg";
+
 
 const charactersData = {
-  alliance: [
+  valedorn: [
     {
       id: "1",
-      name: "Anduin Wrynn",
+      name: "Aldren Veyr",
       dialogues: {
         hit: [
-          "Our courage has struck true.",
-          "Every victory brings us closer to peace.",
-          "The Light guides our aim.",
-          "Our resolve grows stronger.",
-          "That strike may turn the battle in our favor.",
+          "Our strike has found its mark.",
+          "Hold your ground. We have them where we want them.",
+          "Valedorn stands firm.",
+          "A disciplined strike is a decisive one.",
+          "Their defenses are beginning to crumble.",
         ],
+
         miss: [
-          "Even the Light cannot reveal every path.",
-          "We must remain patient.",
-          "That shot was not meant to be.",
-          "We cannot lose hope.",
-          "The battle is not decided yet.",
+          "A miscalculation. We adjust and continue.",
+          "The sea has denied us this time.",
+          "Do not let one failure shake your resolve.",
+          "Patience. The battle is far from over.",
+          "We learn from every mistake.",
         ],
+
         sunk: [
-          "Another threat has been silenced.",
-          "We have broken their strongest defense.",
-          "May this victory prevent greater bloodshed.",
-          "Their fleet has suffered a great loss.",
-          "One more obstacle stands defeated.",
+          "Their vessel has been sent beneath the waves.",
+          "Another enemy ship has fallen.",
+          "One more threat removed from our path.",
+          "Their defenses have been broken.",
+          "Valedorn's fleet advances.",
         ],
+
         win: [
-          "The Alliance stands victorious.",
-          "Let us use this victory to protect our people.",
-          "Today, courage has prevailed.",
-          "The Light has guided us through this battle.",
-          "Together, we have overcome them.",
+          "Valedorn stands victorious.",
+          "We endured, and we prevailed.",
+          "Our strength lies in standing together.",
+          "The sea belongs to those who refuse to yield.",
+          "Let this victory remind us what unity can achieve.",
         ],
       },
-      img: anduin,
+
+      img: aldren,
     },
 
     {
       id: "2",
-      name: "Jaina Proudmoore",
+      name: "Lyra Thalen",
       dialogues: {
         hit: [
-          "A precise strike. Just as planned.",
-          "Your defenses are beginning to melt.",
-          "Arcane power never misses twice.",
-          "A flawless strike.",
-          "I've seen enough. I know how to break their formation.",
+          "Got you! I knew you were hiding there.",
+          "The wind never lies. I just had to listen.",
+          "A clean shot. Not bad, right?",
+          "I knew that spot looked suspicious.",
+          "Looks like the hunt is going well.",
         ],
+
         miss: [
-          "Interesting... I may have miscalculated.",
-          "The tides of battle are unpredictable.",
-          "That spell fell short.",
-          "I'll need to adjust my calculations.",
-          "One mistake is enough to teach us something.",
+          "Huh. Guess the wind fooled me.",
+          "That was embarrassing.",
+          "Fine, fine. I'll try again.",
+          "The sea is playing tricks on me.",
+          "One miss doesn't end the hunt.",
         ],
+
         sunk: [
-          "Your ship has nowhere left to hide.",
-          "Another vessel joins the depths.",
-          "Consider that a lesson in positioning.",
-          "Another ship claimed by the sea.",
-          "Their fleet is running out of options.",
+          "There goes another one! What a beautiful shot.",
+          "Down she goes! I hope you weren't attached to that ship.",
+          "Another vessel lost to the hunt.",
+          "Found it, struck it, sank it. Simple.",
+          "The sea just claimed another prize.",
         ],
+
         win: [
-          "The Alliance has prevailed.",
-          "Knowledge and strategy win battles.",
-          "The sea itself has witnessed our victory.",
-          "A victory worthy of the Alliance.",
-          "Once again, preparation has made the difference.",
+          "Ha! I told you I'd find you.",
+          "Now that's what I call a successful hunt.",
+          "Looks like I win. You can admit I'm good.",
+          "The hunt is over, and I got my prize.",
+          "That was fun! We should do this again sometime.",
         ],
       },
-      img: jaina,
+
+      img: lyra,
     },
 
     {
       id: "3",
-      name: "Varian Wrynn",
+      name: "Brannic-7",
       dialogues: {
         hit: [
-          "That's how an attack should land!",
-          "Your defenses won't hold forever.",
-          "Strike hard. Strike without hesitation.",
-          "Keep the pressure on!",
-          "That's the strike I was waiting for!",
+          "Target located. Hypothesis confirmed.",
+          "Impact registered. Excellent.",
+          "The probability model was correct.",
+          "Their position has been successfully identified.",
+          "One variable has been eliminated.",
         ],
+
         miss: [
-          "Damn. We missed.",
-          "No matter. Prepare the next attack.",
-          "One mistake won't decide this battle.",
-          "We won't falter over one miss.",
-          "Aim again and hit harder!",
+          "Unexpected result.",
+          "The probability calculation requires revision.",
+          "Interesting. My model was incorrect.",
+          "The target was not where predicted.",
+          "I will update my calculations.",
         ],
+
         sunk: [
-          "Another enemy ship falls!",
-          "Break their lines!",
-          "Their fleet is weakening!",
-          "Another ship bites the dust!",
-          "Their formation is falling apart!",
+          "Target destroyed. Efficiency: acceptable.",
+          "Their vessel has been removed from the equation.",
+          "Structural integrity: zero.",
+          "Another vessel eliminated. Proceeding.",
+          "The experiment continues to produce favorable results.",
         ],
+
         win: [
-          "The Alliance stands triumphant!",
-          "Victory belongs to those who refuse to surrender.",
-          "We fought as one, and we conquered!",
-          "We came to fight, and we conquered!",
-          "Let the enemy remember this day!",
+          "Result confirmed: Valedorn victory.",
+          "All enemy vessels have been eliminated.",
+          "The calculations have produced the expected outcome.",
+          "Victory achieved. Fascinating.",
+          "Conclusion: my strategy was effective.",
         ],
       },
-      img: varian,
+
+      img: brannic,
     },
 
     {
       id: "4",
-      name: "Tyrande Whisperwind",
+      name: "Seraphine Vale",
       dialogues: {
         hit: [
-          "Elune has revealed their position.",
-          "Our aim strikes with the fury of the night.",
-          "The darkness cannot protect them.",
-          "Their weakness has been revealed.",
-          "Press the attack. Do not give them time to recover.",
+          "As expected. Their position was obvious.",
+          "A precise strike requires precise thinking.",
+          "Their defenses were rather predictable.",
+          "The tides of magic favor us today.",
+          "Another successful calculation.",
         ],
+
         miss: [
-          "The night conceals their movements.",
-          "Patience. We will find them.",
-          "The stars have not yet revealed their path.",
-          "The shadows still hide them.",
-          "We must remain vigilant.",
+          "That should have worked.",
+          "Curious. I clearly underestimated them.",
+          "A minor inconvenience. Nothing more.",
+          "The sea has disrupted my calculations.",
+          "Very well. I shall reconsider my approach.",
         ],
+
         sunk: [
-          "Their vessel returns to the depths.",
-          "The moon watches as another enemy falls.",
-          "Their defenses have been broken.",
-          "Another vessel is swallowed by darkness.",
-          "One more ship has been cast into the depths.",
+          "Their vessel has succumbed to our assault.",
+          "One less obstacle in our path.",
+          "Their defenses were no match for us.",
+          "Another ship consigned to the depths.",
+          "The tide is turning exactly as I predicted.",
         ],
+
         win: [
-          "The Alliance has earned this victory.",
-          "Elune has guided us through the darkness.",
-          "Our enemies have been defeated.",
-          "The night has witnessed our triumph.",
-          "We will not allow this victory to be forgotten.",
+          "Victory. As I expected.",
+          "Valedorn has prevailed through discipline and knowledge.",
+          "Another battle solved through superior strategy.",
+          "The outcome was never truly in doubt.",
+          "A satisfying conclusion to an otherwise predictable battle.",
         ],
       },
-      img: tyrande,
+
+      img: seraphine,
     },
 
     {
       id: "5",
-      name: "Muradin Bronzebeard",
+      name: "Torren Oakshield",
       dialogues: {
         hit: [
-          "Ha! That one hit 'em good!",
-          "Now that's a proper shot!",
-          "Keep firing! We've got 'em!",
-          "Ha! Right where it hurts!",
-          "Now we're giving 'em a real fight!",
+          "The forest teaches us to wait for the right moment.",
+          "Our roots run deep. We will not be moved.",
+          "A strong strike, but remember to remain patient.",
+          "Nature rewards those who know when to act.",
+          "The tide has shifted in our favor.",
         ],
+
         miss: [
-          "Bah! Too far to the left!",
-          "That shot was rubbish!",
-          "We'll get 'em next time!",
-          "Blast it! We nearly had 'em!",
-          "A wee bit more to the right next time!",
+          "Even the strongest hunter misses sometimes.",
+          "Be patient. The right moment will come.",
+          "The sea has hidden them well.",
+          "Do not rush. Let the battle reveal itself.",
+          "A missed strike is still a lesson.",
         ],
+
         sunk: [
-          "Down she goes!",
-          "That's another ship at the bottom!",
-          "Ha! Their fleet's taking a beating!",
-          "Another one sent to Davy Jones!",
-          "Ha! That's how you sink a ship!",
+          "Another vessel returns to the depths.",
+          "The sea has reclaimed what was taken from it.",
+          "Their ship has fallen. We move forward.",
+          "One more threat has been washed away.",
+          "The tide carries our enemies into darkness.",
         ],
+
         win: [
-          "Now THAT'S a victory!",
-          "The Alliance stands tall!",
-          "A fine battle! Someone get me an ale!",
-          "We smashed 'em good!",
-          "Now that's a battle worth celebrating!",
+          "Peace may be our goal, but we will defend it.",
+          "The roots of Valedorn hold strong.",
+          "We stood together, and the storm has passed.",
+          "The forest endures. So do we.",
+          "May this victory bring us closer to peace.",
         ],
       },
-      img: muradin,
+
+      img: torren,
     },
 
     {
       id: "6",
-      name: "Genn Greymane",
+      name: "Elian Marr",
       dialogues: {
         hit: [
-          "Aye! That's the way to strike!",
-          "They won't escape us now.",
-          "Their defenses are beginning to crumble.",
-          "Keep your eyes on the enemy!",
-          "We have them right where we want them.",
+          "Ha! Right where I wanted you.",
+          "Now that's a captain's shot!",
+          "Looks like the sea is on our side today.",
+          "I knew there was a ship hiding there.",
+          "One good shot can change the whole battle.",
         ],
+
         miss: [
-          "Damn! We missed our mark.",
-          "The sea hides them well.",
-          "No matter. We'll hunt them down.",
-          "We'll find them soon enough.",
-          "One miss won't stop the hunt.",
+          "Well... that wasn't my finest shot.",
+          "The sea owes me one after that.",
+          "All right, I may have guessed wrong.",
+          "Nothing to worry about. I've survived worse.",
+          "Let's call that a warning shot.",
         ],
+
         sunk: [
-          "Another ship sinks beneath the waves.",
-          "Their fleet grows weaker by the minute.",
-          "Ha! Let them try to run now.",
-          "Another enemy vessel has been claimed.",
-          "Their defenses are falling apart.",
+          "Down she goes! Beautiful!",
+          "Another ship for the bottom of the sea.",
+          "Now that's how you sink a ship!",
+          "Cheers to that one! ...Preferably from a safe distance.",
+          "Their fleet is starting to look rather empty.",
         ],
+
         win: [
-          "The Alliance stands victorious!",
-          "We have driven them from the seas.",
-          "They never stood a chance against us.",
-          "The Alliance has earned another victory.",
-          "Let them remember the strength of Gilneas.",
+          "Now that's a voyage worth telling stories about!",
+          "Valedorn wins, and I intend to celebrate.",
+          "A fine battle, a finer victory.",
+          "The sea tested us, and we passed.",
+          "Someone remind me to write this one down.",
         ],
       },
-      img: genn,
+
+      img: elian,
     },
   ],
 
-  horde: [
+  ashes: [
     {
       id: "7",
-      name: "Thrall",
+      name: "Korga Rompehuesos",
       dialogues: {
         hit: [
-          "The elements have answered our call.",
-          "Our strike has found its mark.",
-          "The Horde advances.",
-          "The elements strengthen our resolve.",
-          "Press forward. We have the advantage.",
+          "HA! I knew you were hiding there!",
+          "Found you. Now face the consequences.",
+          "The Pacto does not fear your defenses.",
+          "Strike hard. Strike without hesitation.",
+          "Your ship has nowhere left to run.",
         ],
+
         miss: [
-          "The elements are silent.",
-          "We must listen and adapt.",
-          "That attack was not meant to be.",
-          "We must not let frustration guide us.",
-          "The battle demands patience.",
+          "Grrr. You cannot hide forever.",
+          "The sea saved you this time.",
+          "Enough games. I'll find you.",
+          "A miss. Nothing more.",
+          "Run while you still can.",
         ],
+
         sunk: [
-          "Their vessel has been claimed by the sea.",
-          "Another enemy ship has fallen.",
-          "The Horde breaks through their defenses.",
-          "Another threat has been swept away.",
-          "The tide of battle turns in our favor.",
+          "BREAK! CRUSH! SINK!",
+          "Another ship dragged into the depths!",
+          "Your fleet is falling apart!",
+          "That's one less enemy standing in our way.",
+          "The Pacto grows stronger with every ship we sink.",
         ],
+
         win: [
-          "The Horde stands victorious.",
-          "Our strength comes from standing together.",
-          "The elements have guided us to victory.",
-          "The Horde has proven its strength.",
-          "Together, we have overcome our enemies.",
+          "We survived. We always do.",
+          "The Pacto stands when others fall.",
+          "You wanted to break us. You failed.",
+          "We have endured worse than this.",
+          "Today, the sea belongs to us!",
         ],
       },
-      img: thrall,
+
+      img: korga,
     },
 
     {
       id: "8",
-      name: "Sylvanas Windrunner",
+      name: "Veyra Noctis",
       dialogues: {
         hit: [
-          "I knew exactly where to strike.",
-          "Your defenses mean nothing.",
-          "Another arrow finds its mark.",
-          "You cannot hide from death.",
-          "You left yourself exposed.",
+          "There you are. I wondered how long you'd hide.",
+          "The shadows revealed your position.",
+          "You cannot hide from the darkness.",
+          "Interesting. Your movements were quite predictable.",
+          "The night has found you.",
         ],
+
         miss: [
-          "You were fortunate this time.",
-          "The shadows concealed your ship.",
-          "Do not mistake this miss for mercy.",
-          "Enjoy your fleeting fortune.",
-          "You will not escape me forever.",
+          "How curious. The shadows deceived me.",
+          "You were closer than I thought.",
+          "The darkness keeps its secrets.",
+          "A temporary inconvenience.",
+          "Very well. Let us try again.",
         ],
+
         sunk: [
-          "Your ship has joined the dead.",
-          "Another vessel sinks into darkness.",
-          "Your fleet is slowly becoming a memory.",
-          "Another soul belongs to the darkness.",
-          "Your fleet is dying piece by piece.",
+          "Another vessel disappears into the darkness.",
+          "The sea has swallowed your defenses.",
+          "One more shadow joins the depths.",
+          "Your ship has reached its final destination.",
+          "The darkness grows stronger.",
         ],
+
         win: [
-          "The Horde claims victory.",
-          "Your fleet has been silenced.",
-          "There is nowhere left for you to run.",
-          "Your defeat was inevitable.",
-          "The living have fallen silent.",
+          "The shadows have spoken. We have won.",
+          "You cannot defeat those who refuse to disappear.",
+          "The Pacto survives another battle.",
+          "In the end, the darkness always finds its prey.",
+          "Perhaps now you understand why we endure.",
         ],
       },
-      img: sylvanas,
+
+      img: veyra,
     },
 
     {
       id: "9",
-      name: "Garrosh Hellscream",
+      name: "Grik",
       dialogues: {
         hit: [
-          "Crush them!",
-          "Their defenses are breaking!",
-          "That's the strength of the Horde!",
-          "WRECK THEM!",
-          "They are no match for our might!",
+          "HA! I HIT SOMETHING!",
+          "Did you see that?! Perfect shot!",
+          "Boom! Well... almost boom.",
+          "I knew that was a good spot!",
+          "Something went down there!",
         ],
+
         miss: [
-          "Pathetic! Fire again!",
-          "Do not waste another shot!",
-          "We will destroy them eventually.",
-          "FOOLS! AIM BETTER!",
-          "Do not make me wait for victory!",
+          "Oops.",
+          "Okay, that one went a little wide.",
+          "I swear I almost hit it!",
+          "Hmm... maybe I need a bigger cannon.",
+          "No worries! I'll just try somewhere else.",
         ],
+
         sunk: [
-          "Another ship destroyed!",
-          "Break their entire fleet!",
-          "They cannot stand against the Horde!",
-          "SEND THEM TO THE DEPTHS!",
-          "Their fleet is ours to destroy!",
+          "BOOM! DOWN IT GOES!",
+          "THAT SHIP IS VERY, VERY SINKY NOW!",
+          "HA! DID YOU SEE THAT?!",
+          "Another ship bites the... water!",
+          "I told you the cannon would work!",
         ],
+
         win: [
-          "THE HORDE HAS WON!",
-          "Their fleet lies broken!",
-          "This is what true strength looks like!",
-          "NO ONE CAN DEFEAT THE HORDE!",
-          "LET THEM REMEMBER THE MIGHT OF THE HORDE!",
+          "WE WON! I KNEW THE EXPLOSIONS WOULD WORK!",
+          "The Pacto wins! Can we celebrate with more explosions?",
+          "VICTORY! Someone give me a bigger cannon!",
+          "Ha! That was fantastic!",
+          "We survived, we won, and nothing exploded on our ship!",
         ],
       },
-      img: garrosh,
+
+      img: grik,
     },
 
     {
       id: "10",
-      name: "Vol'jin",
+      name: "Maela Ashborn",
       dialogues: {
         hit: [
-          "Heh... gotcha.",
-          "Da shot found its mark.",
-          "They won't hide forever.",
-          "Heh... dey never saw dat comin'.",
-          "Da spirits favor us today.",
+          "The spirits have guided our hand.",
+          "Your vessel could not hide forever.",
+          "The sea has revealed your position.",
+          "Our ancestors watch over this battle.",
+          "The balance has shifted.",
         ],
+
         miss: [
-          "Dey slipped away dis time.",
-          "Patience, mon. We ain't finished.",
-          "Da sea be full of hiding places.",
-          "Heh... dey got lucky.",
-          "We take our time, mon.",
+          "The spirits remain silent.",
+          "Perhaps we were not meant to strike there.",
+          "Patience. The answer will reveal itself.",
+          "Even the sea keeps some secrets.",
+          "We must listen before we act again.",
         ],
+
         sunk: [
-          "Down dey go.",
-          "Another ship joins da deep.",
-          "Da enemy fleet be losing ground.",
-          "Da deep be claimin' another one.",
-          "Another ship be lost to da waves.",
+          "Another vessel has returned to the depths.",
+          "May the fallen find peace beneath the waves.",
+          "Their journey has come to an end.",
+          "The sea claims another ship.",
+          "The spirits grow quiet around their fallen vessel.",
         ],
+
         win: [
-          "Da Horde be victorious.",
-          "We stood together and won.",
-          "Dis victory belongs to da Horde.",
-          "Da Horde stands strong today.",
-          "We faced dem together, mon.",
+          "The spirits have guided us to victory.",
+          "We fought together, and we endured.",
+          "The fallen are remembered. The living move forward.",
+          "The Pacto survives another storm.",
+          "May this victory bring peace to those who follow us.",
         ],
       },
-      img: voljin,
+
+      img: maela,
     },
 
     {
       id: "11",
-      name: "Baine Bloodhoof",
+      name: "Drogath",
       dialogues: {
         hit: [
-          "Our strike has found its target.",
-          "Their defenses have been weakened.",
-          "The Earth Mother guides our hand.",
-          "Our patience has paid off.",
-          "We have found their weakness.",
+          "Found you.",
+          "You left a trail.",
+          "I knew you'd be there.",
+          "The hunt continues.",
+          "You're running out of places to hide.",
         ],
+
         miss: [
-          "We must not lose patience.",
-          "The enemy remains hidden.",
-          "We will find them in time.",
-          "Even the strongest must know patience.",
-          "Let us wait for the right moment.",
+          "Nothing.",
+          "The trail went cold.",
+          "I'll find you.",
+          "Not there.",
+          "Patience.",
         ],
+
         sunk: [
-          "Their ship has fallen beneath the waves.",
-          "Another enemy has been defeated.",
-          "Our strength continues to grow.",
-          "Another vessel has returned to the earth.",
-          "Their fleet grows weaker.",
+          "The hunt is one step closer to ending.",
+          "Another ship has fallen.",
+          "The sea took them.",
+          "Their trail ends here.",
+          "One less target.",
         ],
+
         win: [
-          "The Horde has earned its victory.",
-          "Strength means little without unity.",
-          "Today, our people stand victorious.",
-          "The Horde has stood strong together.",
-          "May this victory bring honor to our people.",
+          "The hunt is over.",
+          "We survived.",
+          "Our enemies are gone.",
+          "The Pacto remains.",
+          "The prey became the hunted.",
         ],
       },
-      img: baine,
+
+      img: drogath,
     },
 
     {
       id: "12",
-      name: "Lor'themar Theron",
+      name: "Tessa Copperhand",
       dialogues: {
         hit: [
-          "A precise strike, exactly as intended.",
-          "Their defenses have revealed a weakness.",
-          "Our strategy is proving effective.",
-          "The might of Quel'Thalas strikes true.",
-          "The Sunwell has not forsaken us.",
+          "YES! It actually worked!",
+          "I knew that would hit! Probably.",
+          "Ha! Take that, fancy ship!",
+          "Something went BOOM in the right place!",
+          "See? Engineering!",
         ],
+
         miss: [
-          "A minor setback. Nothing more.",
-          "We will adjust our strategy.",
-          "Their position was better concealed than expected.",
-          "We must remain patient.",
-          "We shall not repeat that mistake.",
+          "Okay... that was not supposed to happen.",
+          "Maybe I calculated that a little wrong.",
+          "Don't worry! I have another idea.",
+          "Hmm. I'll need to adjust a few things.",
+          "Well, at least nothing exploded this time.",
         ],
+
         sunk: [
-          "Another vessel has been sent beneath the waves.",
-          "Their fleet continues to crumble.",
-          "Their defenses have suffered another defeat.",
-          "One more obstacle has been removed.",
-          "The balance of power shifts in our favor.",
+          "YES! THAT SHIP IS GOING DOWN!",
+          "Ha! My calculations were only slightly wrong!",
+          "Another one! This is going incredibly well!",
+          "Boom, splash, victory!",
+          "I told you my invention would work!",
         ],
+
         win: [
-          "The Horde has secured a decisive victory.",
-          "Our strategy has carried us to victory.",
-          "The Horde stands united and victorious.",
-          "The Sunwell shines upon our triumph.",
-          "Quel'Thalas stands strong with the Horde.",
+          "WE WON! AND NOTHING BLEW UP! ...Much.",
+          "The Pacto wins! I definitely planned all of this.",
+          "See? Chaos can be a strategy!",
+          "That was amazing! I have about twelve new ideas.",
+          "Victory! Someone write this down before I forget how I did it.",
         ],
       },
-      img: lorthemar,
+
+      img: tessa,
     },
   ],
 };
