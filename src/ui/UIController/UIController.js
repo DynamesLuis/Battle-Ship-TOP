@@ -179,7 +179,7 @@ export default class UIController {
     }
 
     if (action === "win") {
-      action = "hit";
+      action = "sunk";
     }
     const dialogue = character.getRandomDialogue(action);
     $battleReport.classList.remove("fade-out");
