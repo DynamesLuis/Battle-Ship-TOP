@@ -293,15 +293,21 @@ body {
 
 .faction-card {
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
   justify-content: center;
+
   gap: 10px;
+
   padding: 1rem;
 
-  /* Ya no queremos que el card tenga apariencia de botón */
   border: none;
+
   background: transparent;
+
   box-shadow: none;
 
   transition: transform 200ms ease;
@@ -309,9 +315,14 @@ body {
 
 .faction-image {
   width: 110px;
+
   height: 110px;
-  object-fit: contain;
+
+  object-fit: cover;
+
   display: block;
+
+  clip-path: polygon(10% 0, 90% 0, 100% 10%, 100% 70%, 50% 100%, 0 70%, 0 10%);
 
   transition:
     transform 200ms ease,
@@ -320,24 +331,28 @@ body {
 
 .faction-name {
   color: var(--text);
+
   font-size: 1rem;
+
   font-weight: bold;
+
   letter-spacing: 0.08em;
+
   text-transform: uppercase;
+
+  transition:
+    color 200ms ease,
+    text-shadow 200ms ease;
 }
 
 /* =========================================
    HOVER
    ========================================= */
 
-.faction-option:hover .faction-card {
-  transform: translateY(-2px);
-}
-
 .faction-option:hover .faction-image {
   transform: scale(1.04);
-  filter: drop-shadow(0 0 4px rgba(201, 162, 39, 0.6))
-    drop-shadow(0 0 10px rgba(201, 162, 39, 0.25));
+
+  filter: brightness(1.05);
 }
 
 /* =========================================
@@ -345,9 +360,16 @@ body {
    ========================================= */
 
 .faction-option input:checked + .faction-card .faction-image {
-  transform: scale(1.05);
-  filter: drop-shadow(0 0 5px var(--gold-light))
-    drop-shadow(0 0 12px rgba(201, 162, 39, 0.35));
+  transform: scale(1.08);
+
+  filter: brightness(1.15) drop-shadow(0 0 5px var(--gold-light))
+    drop-shadow(0 0 14px rgba(201, 162, 39, 0.55));
+}
+
+.faction-option input:checked + .faction-card .faction-name {
+  color: var(--gold-light);
+
+  text-shadow: 0 0 6px rgba(201, 162, 39, 0.4);
 }
 
 /* =========================================
