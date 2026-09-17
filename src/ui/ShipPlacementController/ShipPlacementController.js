@@ -21,6 +21,7 @@ export default class ShipPlacementController {
   init() {
     this.initEvents();
     this.renderShips();
+    this.resetUI();
     this.shipPlacementRenderer = new ShipPlacementRenderer(
       this.appState.getPlayer1().getGameBoard(),
     );
@@ -44,6 +45,17 @@ export default class ShipPlacementController {
     );
     this.eventsInitialized = true;
   }
+
+  resetUI() {
+    const $selectedButton = document.querySelector(".direction-btn.selected");
+    const $xButton = document.querySelector(
+      '.direction-btn[data-direction="x"]',
+    );
+
+    $selectedButton?.classList.remove("selected");
+    $xButton?.classList.add("selected");
+  }
+
   renderShips() {
     $availableShips.innerHTML = "";
     shipsData.forEach((ship) => {
