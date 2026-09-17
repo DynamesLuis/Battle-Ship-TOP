@@ -99,7 +99,35 @@ export default class GameBoard {
       }
     }
 
+    for (const coordinate of coordinates) {
+      const adyacentsCoordinates =
+        this.#calculateAdjacentCoordinates(coordinate);
+
+      for (const adyacentsCoordinate of adyacentsCoordinates) {
+        const ship = this.occupiedCells.get(adyacentsCoordinate);
+
+        if (ship) {
+          return false;
+        }
+      }
+    }
+
     return true;
+  }
+
+  #calculateAdjacentCoordinates(coordinate) {
+    let adyacentsCoordinates = [];
+    const [x, y] = coordinate.split(", ").map(Number);
+    adyacentsCoordinates.push(`${x - 1}, ${y}`);
+    adyacentsCoordinates.push(`${x - 1}, ${y - 1}`);
+    adyacentsCoordinates.push(`${x}, ${y - 1}`);
+    adyacentsCoordinates.push(`${x + 1}, ${y - 1}`);
+    adyacentsCoordinates.push(`${x + 1}, ${y}`);
+    adyacentsCoordinates.push(`${x + 1}, ${y + 1}`);
+    adyacentsCoordinates.push(`${x}, ${y + 1}`);
+    adyacentsCoordinates.push(`${x - 1}, ${y + 1}`);
+
+    return adyacentsCoordinates;
   }
 
   allShipsSunk() {

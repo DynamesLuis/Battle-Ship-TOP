@@ -250,5 +250,45 @@ describe.skip("GameBoard", () => {
 
       expect(gameBoard.getOccupiedCells()).toEqual(occupiedCellsBefore);
     });
+
+    test("allows placing a ship separated from another ship", () => {
+      gameBoard.placeShip(0, 0, "x", 2, "Destroyer");
+      const result = gameBoard.canPlaceShip(0, 2, "x", 2);
+      expect(result).toBe(true);
+    });
+    
+    test("rejects a ship placed directly next to another ship horizontally", () => {
+      gameBoard.placeShip(0, 0, "x", 2, "Destroyer");
+      const result = gameBoard.canPlaceShip(2, 0, "x", 2);
+      expect(result).toBe(false);
+    });
+
+    test("rejects a ship placed directly next to another ship vertically", () => {
+      gameBoard.placeShip(0, 0, "y", 2, "Destroyer");
+      const result = gameBoard.canPlaceShip(0, 2, "y", 2);
+      expect(result).toBe(false);
+    });
+
+    test("rejects a ship placed diagonally next to another ship", () => {
+      gameBoard.placeShip(0, 0, "x", 2, "Destroyer");
+      const result = gameBoard.canPlaceShip(2, 1, "x", 2);
+      expect(result).toBe(false);
+    });
+
+    test("rejects a ship when one of its neighboring cells is occupied", () => {
+      gameBoard.placeShip(3, 3, "x", 1, "Destroyer");
+      const result = gameBoard.canPlaceShip(2, 4, "y", 2);
+      expect(result).toBe(false);
+    });
+
+    test("allows placing a ship next to the board edge", () => {
+      const result = gameBoard.canPlaceShip(0, 0, "x", 3);
+      expect(result).toBe(true);
+    });
+
+    test("allows placing a ship on the first position when the board is empty", () => {
+      const result = gameBoard.canPlaceShip(0, 0, "x", 2);
+      expect(result).toBe(true);
+    });
   });
 });
