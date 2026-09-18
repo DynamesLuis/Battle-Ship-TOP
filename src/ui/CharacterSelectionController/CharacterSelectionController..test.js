@@ -169,7 +169,7 @@ describe.skip("CharacterSelectionController", () => {
 
   //renderCharacters
   test("renders player faction characters in player container", () => {
-    const hordeCharacters = [
+    const ashesCharacters = [
       {
         name: "Thrall",
         id: "1",
@@ -184,13 +184,13 @@ describe.skip("CharacterSelectionController", () => {
       },
     ];
 
-    appState.getPlayerFaction.mockReturnValue("horde");
+    appState.getPlayerFaction.mockReturnValue("ashes");
 
-    mockGetCharactersByFaction.mockReturnValue(hordeCharacters);
+    mockGetCharactersByFaction.mockReturnValue(ashesCharacters);
 
     characterSelectionController.renderCharacterSelection();
 
-    expect(mockGetCharactersByFaction).toHaveBeenCalledWith("horde");
+    expect(mockGetCharactersByFaction).toHaveBeenCalledWith("ashes");
 
     expect(mockPlayerCharacters.querySelector('[data-id="1"]')).toBeTruthy();
 
@@ -198,7 +198,7 @@ describe.skip("CharacterSelectionController", () => {
   });
 
   test("renders opposing faction characters in enemy container", () => {
-    const allianceCharacters = [
+    const valedornCharacters = [
       {
         name: "Anduin Wrynn",
         id: "3",
@@ -213,11 +213,11 @@ describe.skip("CharacterSelectionController", () => {
       },
     ];
 
-    appState.getPlayerFaction.mockReturnValue("horde");
+    appState.getPlayerFaction.mockReturnValue("ashes");
 
     mockGetCharactersByFaction.mockImplementation((faction) => {
-      if (faction === "alliance") {
-        return allianceCharacters;
+      if (faction === "valedorn") {
+        return valedornCharacters;
       }
 
       return [];
@@ -225,15 +225,15 @@ describe.skip("CharacterSelectionController", () => {
 
     characterSelectionController.renderCharacterSelection();
 
-    expect(mockGetCharactersByFaction).toHaveBeenCalledWith("alliance");
+    expect(mockGetCharactersByFaction).toHaveBeenCalledWith("valedorn");
 
     expect(mockEnemyCharacters.querySelector('[data-id="3"]')).toBeTruthy();
 
     expect(mockEnemyCharacters.querySelector('[data-id="4"]')).toBeTruthy();
   });
 
-  test("renders Alliance characters for the player when player faction is Alliance", () => {
-    const allianceCharacters = [
+  test("renders valedorn characters for the player when player faction is valedorn", () => {
+    const valedornCharacters = [
       {
         name: "Anduin Wrynn",
         id: "3",
@@ -242,19 +242,19 @@ describe.skip("CharacterSelectionController", () => {
       },
     ];
 
-    appState.getPlayerFaction.mockReturnValue("alliance");
+    appState.getPlayerFaction.mockReturnValue("valedorn");
 
-    mockGetCharactersByFaction.mockReturnValue(allianceCharacters);
+    mockGetCharactersByFaction.mockReturnValue(valedornCharacters);
 
     characterSelectionController.renderCharacterSelection();
 
-    expect(mockGetCharactersByFaction).toHaveBeenCalledWith("alliance");
+    expect(mockGetCharactersByFaction).toHaveBeenCalledWith("valedorn");
 
     expect(mockPlayerCharacters.querySelector('[data-id="3"]')).toBeTruthy();
   });
 
-  test("renders Horde characters for the enemy when player faction is Alliance", () => {
-    const hordeCharacters = [
+  test("renders ashes characters for the enemy when player faction is valedorn", () => {
+    const ashesCharacters = [
       {
         name: "Thrall",
         id: "1",
@@ -263,11 +263,11 @@ describe.skip("CharacterSelectionController", () => {
       },
     ];
 
-    appState.getPlayerFaction.mockReturnValue("alliance");
+    appState.getPlayerFaction.mockReturnValue("valedorn");
 
     mockGetCharactersByFaction.mockImplementation((faction) => {
-      if (faction === "horde") {
-        return hordeCharacters;
+      if (faction === "ashes") {
+        return ashesCharacters;
       }
 
       return [];
@@ -275,7 +275,7 @@ describe.skip("CharacterSelectionController", () => {
 
     characterSelectionController.renderCharacterSelection();
 
-    expect(mockGetCharactersByFaction).toHaveBeenCalledWith("horde");
+    expect(mockGetCharactersByFaction).toHaveBeenCalledWith("ashes");
 
     expect(mockEnemyCharacters.querySelector('[data-id="1"]')).toBeTruthy();
   });
@@ -290,7 +290,7 @@ describe.skip("CharacterSelectionController", () => {
     mockPlayerCharacters.innerHTML = "";
     mockEnemyCharacters.innerHTML = "";
 
-    appState.getPlayerFaction.mockReturnValue("alliance");
+    appState.getPlayerFaction.mockReturnValue("valedorn");
 
     mockGetCharactersByFaction.mockReturnValue([character]);
 

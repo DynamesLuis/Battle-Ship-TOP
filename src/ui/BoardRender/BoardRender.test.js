@@ -5,17 +5,19 @@ import "@testing-library/jest-dom";
 describe.skip("GameBoardRenderer", () => {
   let renderer;
   let container;
+  let myBoard;
+  let enemyBoard;
 
   beforeEach(() => {
-    renderer = new BoardRender();
     container = document.createElement("div");
+    myBoard = new GameBoard();
+    enemyBoard = new GameBoard();
+    renderer = new BoardRender(myBoard, enemyBoard);
   });
 
-  describe("renderMyBoard", () => {
+  describe.skip("renderMyBoard", () => {
     test("renders the correct number of cells", () => {
-      const board = new GameBoard();
-
-      renderer.renderMyBoard(board, container);
+      renderer.renderMyBoard(container);
 
       const cells = container.querySelectorAll(".cell");
 
@@ -23,9 +25,7 @@ describe.skip("GameBoardRenderer", () => {
     });
 
     test("renders cells with their coordinates", () => {
-      const board = new GameBoard();
-
-      renderer.renderMyBoard(board, container);
+      renderer.renderMyBoard(container);
 
       const cell = container.querySelector('[data-coordinate="3, 0"]');
 
@@ -33,11 +33,11 @@ describe.skip("GameBoardRenderer", () => {
     });
 
     test("marks occupied cells", () => {
-      const board = new GameBoard();
+      myBoard;
 
-      board.placeShip(0, 0, "x", 2);
+      myBoard.placeShip(0, 0, "x", 2);
 
-      renderer.renderMyBoard(board, container);
+      renderer.renderMyBoard(container);
 
       expect(container.querySelector('[data-coordinate="0, 0"]')).toHaveClass(
         "occupied",
@@ -49,11 +49,9 @@ describe.skip("GameBoardRenderer", () => {
     });
 
     test("marks unoccupied cells", () => {
-      const board = new GameBoard();
+      myBoard.placeShip(0, 0, "x", 2);
 
-      board.placeShip(0, 0, "x", 2);
-
-      renderer.renderMyBoard(board, container);
+      renderer.renderMyBoard(container);
 
       expect(
         container.querySelector('[data-coordinate="2, 2"]'),
@@ -61,12 +59,10 @@ describe.skip("GameBoardRenderer", () => {
     });
 
     test("marks attacked cells", () => {
-      const board = new GameBoard();
+      myBoard.receiveAttack(0, 0);
+      myBoard.receiveAttack(2, 2);
 
-      board.receiveAttack(0, 0);
-      board.receiveAttack(2, 2);
-
-      renderer.renderMyBoard(board, container);
+      renderer.renderMyBoard(container);
 
       expect(container.querySelector('[data-coordinate="0, 0"]')).toHaveClass(
         "attacked",
@@ -78,11 +74,9 @@ describe.skip("GameBoardRenderer", () => {
     });
   });
 
-  describe("renderEnemyBoard", () => {
+  describe.skip("renderEnemyBoard", () => {
     test("renders the correct number of cells", () => {
-      const board = new GameBoard();
-
-      renderer.renderEnemyBoard(board, container);
+      renderer.renderEnemyBoard(container);
 
       const cells = container.querySelectorAll(".cell");
 
@@ -90,11 +84,9 @@ describe.skip("GameBoardRenderer", () => {
     });
 
     test("does not reveal occupied cells", () => {
-      const board = new GameBoard();
+      enemyBoard.placeShip(0, 0, "x", 2);
 
-      board.placeShip(0, 0, "x", 2);
-
-      renderer.renderEnemyBoard(board, container);
+      renderer.renderEnemyBoard(container);
 
       expect(
         container.querySelector('[data-coordinate="0, 0"]'),
@@ -106,11 +98,9 @@ describe.skip("GameBoardRenderer", () => {
     });
 
     test("marks attacked cells", () => {
-      const board = new GameBoard();
+      enemyBoard.receiveAttack(2, 2);
 
-      board.receiveAttack(2, 2);
-
-      renderer.renderEnemyBoard(board, container);
+      renderer.renderEnemyBoard(container);
 
       expect(container.querySelector('[data-coordinate="2, 2"]')).toHaveClass(
         "attacked",
@@ -118,11 +108,9 @@ describe.skip("GameBoardRenderer", () => {
     });
 
     test("does not mark unattacked cells as attacked", () => {
-      const board = new GameBoard();
+      enemyBoard.receiveAttack(2, 2);
 
-      board.receiveAttack(2, 2);
-
-      renderer.renderEnemyBoard(board, container);
+      renderer.renderEnemyBoard(container);
 
       expect(
         container.querySelector('[data-coordinate="0, 0"]'),

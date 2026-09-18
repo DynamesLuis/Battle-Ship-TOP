@@ -7,6 +7,7 @@ describe.skip("ScreenController", () => {
   let mockCharacterSelection;
   let mockShipPlacement;
   let mockGame;
+  let mockAudioController;
 
   beforeEach(() => {
     mockStartScreen = document.createElement("main");
@@ -19,15 +20,27 @@ describe.skip("ScreenController", () => {
     mockShipPlacement.classList.add("hidden");
     mockGame.classList.add("hidden");
 
+    mockAudioController = {
+      playSound: jest.fn(),
+      playShot: jest.fn(),
+      playHit: jest.fn(),
+      playMiss: jest.fn(),
+      playSunk: jest.fn(),
+      playVictory: jest.fn(),
+      playMenuMusic: jest.fn(),
+      playBattleMusic: jest.fn(),
+    };
+
     screenController = new ScreenController(
       mockStartScreen,
       mockCharacterSelection,
       mockShipPlacement,
       mockGame,
+      mockAudioController,
     );
   });
 
-  describe.skip("Show screens", () => {
+  describe("Show screens", () => {
     test("can be created", () => {
       expect(screenController).toBeDefined();
     });

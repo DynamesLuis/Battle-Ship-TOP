@@ -134,7 +134,11 @@ describe.skip("AppController", () => {
     UIController.mockReturnValue(uiController);
     ShipPlacementController.mockReturnValue(shipPlacementController);
 
-    appController = new AppController(appState, screenController, audioController);
+    appController = new AppController(
+      appState,
+      screenController,
+      audioController,
+    );
     appController.setCharacterSelectionController(characterSelectionController);
   });
 
@@ -171,12 +175,12 @@ describe.skip("AppController", () => {
       getName: jest.fn().mockReturnValue("Anduin Wrynn"),
     };
 
-    appState.getPlayerFaction.mockReturnValue("alliance");
+    appState.getPlayerFaction.mockReturnValue("valedorn");
     mockCreateCharacter.mockReturnValueOnce(playerCharacter);
 
     appController.startPlaceShips("1", "6");
 
-    expect(mockCreateCharacter).toHaveBeenCalledWith("1", "alliance");
+    expect(mockCreateCharacter).toHaveBeenCalledWith("1", "valedorn");
 
     expect(appState.setCharacter1).toHaveBeenCalledWith(playerCharacter);
   });
@@ -190,11 +194,11 @@ describe.skip("AppController", () => {
       .mockReturnValueOnce({})
       .mockReturnValueOnce(enemyCharacter);
 
-    appState.getPlayerFaction.mockReturnValue("alliance");
+    appState.getPlayerFaction.mockReturnValue("valedorn");
 
     appController.startPlaceShips("1", "7");
 
-    expect(mockCreateCharacter).toHaveBeenNthCalledWith(2, "7", "horde");
+    expect(mockCreateCharacter).toHaveBeenNthCalledWith(2, "7", "ashes");
 
     expect(appState.setCharacter2).toHaveBeenCalledWith(enemyCharacter);
   });
@@ -322,10 +326,15 @@ describe.skip("AppController", () => {
     expect(BoardRender).toHaveBeenCalledWith(playerBoard, computerBoard);
   });
 
-  test("creates a UIController with the Game and BoardRenderer", () => {
+  test("creates a UIController with the Game, BoardRenderer, AudioController and restart callback", () => {
     appController.startBattle();
-
-    expect(UIController).toHaveBeenCalledWith(boardRender, game, player, audioController);
+    expect(UIController).toHaveBeenCalledWith(
+      boardRender,
+      game,
+      player,
+      audioController,
+      expect.any(Function),
+    );
   });
 
   test("initializes the UIController", () => {

@@ -403,7 +403,8 @@ describe.skip("UIController", () => {
       uiController.init();
 
       expect(mockBattleMessage.textContent).toBe(
-        `Your turn! Make your attack. Wait for the enemy to attack before attacking again.`,
+        `Your turn! Make your attack. Wait for the enemy to attack before
+                attacking again.`,
       );
     });
   });
@@ -579,7 +580,7 @@ describe.skip("UIController", () => {
       jest.useRealTimers();
     });
 
-    test("gets a win dialogue when the player wins", async () => {
+    test("gets a sunk dialogue when the player wins", async () => {
       jest.useFakeTimers();
 
       const character = {
@@ -604,7 +605,7 @@ describe.skip("UIController", () => {
 
       await jest.advanceTimersByTimeAsync(250);
 
-      expect(character.getRandomDialogue).toHaveBeenCalledWith("win");
+      expect(character.getRandomDialogue).toHaveBeenCalledWith("sunk");
 
       expect(typeWriter).toHaveBeenCalledWith(mockBattleMessage, "We won!");
 
@@ -671,7 +672,7 @@ describe.skip("UIController", () => {
 
       await jest.advanceTimersByTimeAsync(250);
 
-      expect(character.getRandomDialogue).toHaveBeenCalledWith("win");
+      expect(character.getRandomDialogue).toHaveBeenCalledWith("sunk");
 
       expect(mockCharacterImg.src).toContain("computer.png");
       expect(mockCharacterName.textContent).toBe("Computer:");
