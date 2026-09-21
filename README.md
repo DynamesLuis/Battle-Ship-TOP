@@ -33,17 +33,19 @@ No frameworks or external libraries were used. The project was intentionally bui
 ---
 
 ## 📷 Examples / Screenshots
-# Weather Data
-<img width="1336" height="645" alt="main" src="https://github.com/user-attachments/assets/cd497d26-e456-4910-8dfd-dfa767847951" />
+# Start screen
 
-# Weather Data
+
+# Character selection
 <img width="1345" height="607" alt="main2" src="https://github.com/user-attachments/assets/362ad16e-031f-4d47-90c2-9ea7f3adf48f" />
 
-# Dark Mode
+# Ship Placement
 <img width="1335" height="620" alt="dark" src="https://github.com/user-attachments/assets/5eb0e0ac-b920-4681-b042-a8b619d394d4" />
 
-# Change units presentation
+# Game
 <img width="1348" height="638" alt="units" src="https://github.com/user-attachments/assets/bed6cead-51e6-4371-8c6b-82ef64290e9e" />
+
+# Game over
 
 ---
 
