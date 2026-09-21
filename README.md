@@ -34,18 +34,19 @@ No frameworks or external libraries were used. The project was intentionally bui
 
 ## 📷 Examples / Screenshots
 # Start screen
-
+<img width="1349" height="645" alt="1" src="https://github.com/user-attachments/assets/bca14397-a1c4-4d7e-b417-52ba89e732a8" />
 
 # Character selection
-<img width="1345" height="607" alt="main2" src="https://github.com/user-attachments/assets/362ad16e-031f-4d47-90c2-9ea7f3adf48f" />
+<img width="1343" height="648" alt="2" src="https://github.com/user-attachments/assets/eac268ce-1047-4780-ab9f-6122efbf2c9b" />
 
 # Ship Placement
-<img width="1335" height="620" alt="dark" src="https://github.com/user-attachments/assets/5eb0e0ac-b920-4681-b042-a8b619d394d4" />
+<img width="1351" height="644" alt="3" src="https://github.com/user-attachments/assets/0a37d750-dffa-4e2c-bdc7-ff1bc17ff821" />
 
 # Game
-<img width="1348" height="638" alt="units" src="https://github.com/user-attachments/assets/bed6cead-51e6-4371-8c6b-82ef64290e9e" />
+<img width="1348" height="645" alt="4" src="https://github.com/user-attachments/assets/ca839c2a-4394-4ab9-9b69-a34001c0428a" />
 
 # Game over
+<img width="1350" height="646" alt="5" src="https://github.com/user-attachments/assets/896546e0-e11b-4d1a-9109-6d4759309c9b" />
 
 ---
 
